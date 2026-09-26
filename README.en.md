@@ -5,46 +5,76 @@
   <img src="docs/langues/en-on.png" alt="English, current page" width="150" />
 </p>
 
-<img src="docs/en/banniere.png" alt="ÆSTHETIC, Lyfta-style workout tracking, rebuilt for myself, with no subscription" width="100%">
+<img src="docs/en/banniere.png" alt="ÆSTHETIC, training, nutrition and health, with an AI coach that knows my workouts" width="100%">
 <br><br>
 
 </div>
 
-**The workout tracker I use every day, rebuilt for myself, with everything that used to be paid unlocked.**
+**My own tracker: the gym, the plate, the sleep, and a coach that ties the three together.**
 
-I have been logging my sessions on Lyfta since 2024: more than 460 workouts, programs built with my coach, a sixteen-week streak. The app is very well designed, but the insights I care about most sit behind the subscription. ÆSTHETIC takes its interface and flows, screen by screen, and keeps everything on the phone.
+I train four times a week and have more than 460 workouts behind me. To track them I had one app for lifting, another for calories, and my watch for the rest. None of them saw the whole picture, so none of them could tell me why I was stalling. ÆSTHETIC puts everything in one place, in a deliberately quiet interface.
 
 <img src="docs/en/sections/s01.png" alt="01 The idea" width="100%">
 
-Switching workout apps usually means losing your history and relearning every tap. Here, neither.
+**Simple.** Black and white, big numbers, nothing blinking. Green only shows up to confirm: a ticked set, a goal reached, a step forward. If it is green, it is done.
 
-**Same muscle memory.** The bottom bar, the live workout, the program library and the exercise page are modelled on Lyfta, from more than a hundred screenshots of my own use. Open the app and you already know where to tap.
+**Complete.** Five tabs are enough: Today, Train, Coach, Nutrition, Progress. The today screen says it all at a glance: the planned workout, calories left, protein, steps, recovery.
 
-**Nothing locked.** Muscle split, recovery, per-exercise records, estimated performance, all-time charts: all of it, no tiers.
+**Mine.** No subscription, no locked features. Data stays on the phone, with an automatic backup every night.
 
-**Offline.** Workouts live in a local database. No account to create, no server between me and my data.
+I used Lyfta for a long time, I like it a lot, and I bring its history along. ÆSTHETIC is not a copy of it: it is what I wished I could find there on top.
 
-<img src="docs/en/sections/s02.png" alt="02 What the app does" width="100%">
+<img src="docs/en/sections/s02.png" alt="02 Training" width="100%">
 
-**Training.** Start a routine or an empty workout, tick off your sets, and the rest timer starts on its own. Last time's numbers sit next to every set, and warm-up or drop sets are marked.
+**The workout.** Tick off your sets, the rest timer starts on its own, and last time's load sits next to every set. Warm-ups, drop sets, supersets, RPE and notes are all handled.
 
-**The library.** Programs, routines and exercises, organised the Lyfta way: a program groups the week's routines, and each routine shows its last performance.
+**Progression.** When every set goes through, the app suggests adding weight next time. The plate calculator says what to load on each side.
 
-**Exercises.** Every exercise page has its five tabs: target muscles, set history, progress charts, personal records, and estimated performance using the Epley formula.
+**Programs.** A program groups the week's routines and knows where you are. Start from a template, 5x5, push pull legs, upper and lower, or build your own.
 
-**The profile.** The weekly summary, the streak calendar, muscle-by-muscle recovery, body measurements and progress photos.
+**Exercises.** Each page shows the estimated 1RM curve, the set history, personal records and a form guide.
 
-<img src="docs/en/sections/s03.png" alt="03 Bringing your data along" width="100%">
+<img src="docs/en/sections/s03.png" alt="03 Eating" width="100%">
 
-Lyfta exports its whole history as CSV, from Profile, Settings, Export data. ÆSTHETIC reads that file and rebuilds the workouts, sets, records and programs. Exercise names are matched automatically, and the ambiguous ones are shown for review before importing.
+**The log.** The day's meals, calories left in large type, and three bars for protein, carbs and fat. Targets are worked out from weight, activity and goal: bulk, cut or maintain.
 
-Exports from Hevy, Strong and FitNotes will follow the same path, along with a generic spreadsheet whose columns you map by hand.
+**Add it fast.** Scan a barcode, search a food, reuse a usual meal, or snap the plate and let the AI estimate what is on it. The food database comes from Open Food Facts.
 
-<img src="docs/en/sections/s04.png" alt="04 Where things stand" width="100%">
+**Water.** One button, a quarter litre, a bar that fills up.
 
-The full mockup is done: fifteen interactive screens, from home to settings, taken from the original app. The Android app comes next, in Flutter, with a full version and a demo that install side by side.
+<img src="docs/en/sections/s04.png" alt="04 Health" width="100%">
 
-Lyfta's exercise and muscle illustrations are not reused: they belong to Lyfta. The app will use a free image library.
+**What the watch already knows.** Sleep, steps, resting heart rate and calories burned come in through Health Connect, with nothing to type.
+
+**The body.** Weight, body fat, measurements and progress photos, with their curves.
+
+**Recovery.** Muscle by muscle, worked out from recent workouts, volume and sleep. It tells you what is ready to train today.
+
+**Supplements.** Creatine or anything else, with a reminder and a box to tick.
+
+<img src="docs/en/sections/s05.png" alt="05 The coach" width="100%">
+
+The coach is a tab of its own, in the middle of the bar. It reads your workouts, meals, sleep and recovery, and answers with numbers, not platitudes.
+
+**It points the way.** Every morning, one line on the today screen: what you should do, and why.
+
+**It gets you unstuck.** "I'm stalling on the bench press": it checks the history, spots since when, and suggests a precise two-week plan.
+
+**It acts.** Its suggestions are approved with one tap: apply a change to the program, add a meal to dinner, move a workout.
+
+**It sums up.** Every Sunday, the week in a few lines: volume, records, sleep, distance from targets, and what was missing.
+
+You choose what it is allowed to read, and nothing is sent to it until you open it.
+
+<img src="docs/en/sections/s06.png" alt="06 Bringing your data along" width="100%">
+
+Lyfta exports its whole history as CSV, from Profile, Settings, Export data. ÆSTHETIC reads that file and rebuilds the workouts, sets, records and programs. Exercise names are matched automatically, and the ambiguous ones are shown before importing.
+
+Hevy, Strong and FitNotes go through the same path, along with any spreadsheet whose columns you map by hand. Export works the other way too, as CSV or JSON.
+
+<img src="docs/en/sections/s07.png" alt="07 Where things stand" width="100%">
+
+The mockup is done: twelve interactive screens, from the today screen to the coach, in the final art direction. The Android app comes next, in Flutter, with a full version and a demo that install side by side.
 
 <br>
 

@@ -9,7 +9,7 @@ n=0
 pose () { [ -f "$1" ] || { echo "  manquant : $1"; return; }; cp "$1" "$DEST/$2"; n=$((n+1)); }
 
 pose "png$SUF/f-aesthetic.png" banniere.png
-for i in 01 02 03 04; do pose "sec$SUF/r-aesthetic-$i.png" "sections/s$i.png"; done
+for i in 01 02 03 04 05 06 07; do pose "sec$SUF/r-aesthetic-$i.png" "sections/s$i.png"; done
 
 if [ "$LG" != en ]; then
   mkdir -p "$DEST/langues"

@@ -16,7 +16,7 @@ versionnés. `installer.sh` recopie ensuite les fichiers retenus dans
 
 ## Ce que fait chaque script
 
-- `figures.sh` : la bannière et les quatre bandeaux de section.
+- `figures.sh` : la bannière et les sept bandeaux de section.
 - `cartes.sh` : le gabarit des bannières 1280x320.
 - `bandeaux.sh` : le gabarit des bandeaux de section numérotés.
 - `pastilles.sh` : les deux pastilles du sélecteur de langue.

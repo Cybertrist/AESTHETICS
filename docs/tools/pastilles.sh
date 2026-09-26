@@ -23,7 +23,7 @@ W=300; H=96
 pastille () {
 local pt ct bd fd
 if [ "$3" = allumee ]; then
-  pt='<i></i>'; ct='#F0F4F8'; bd='#4A1C20'; fd='#200709'
+  pt='<i></i>'; ct='#F0F4F8'; bd='#3A3A3A'; fd='#141414'
 else
   pt='';        ct='#7C8894'; bd='#2A333D';             fd='#0C1117'
 fi
@@ -40,7 +40,7 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:transparent}
      letter-spacing:3.2px;color:$ct;white-space:nowrap}
 /* Le point n'est là que sur la langue affichée : il dit « vous êtes ici »
    sans avoir à l'écrire, et laisse l'autre pastille lisible comme un lien. */
-.p i{width:8px;height:8px;border-radius:2px;background:#FF2B2B;
+.p i{width:8px;height:8px;border-radius:2px;background:#FAFAFA;
      transform:rotate(45deg);flex-shrink:0}
 </style></head><body><div class="w"><div class="p">$pt<b>$2</b></div></div></body></html>
 HTML
