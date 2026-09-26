@@ -1,0 +1,28 @@
+# Rendus intermédiaires des scripts de docs/tools : seuls les fichiers
+# reposés dans docs/ sont versionnés.
+docs/tools/html*/
+docs/tools/png*/
+docs/tools/sec*/
+docs/tools/langues/
+
+# Signature de publication
+android/key.properties
+*.jks
+*.keystore
+*.p12
+
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+app.*.symbols
+app.*.map.json
+
+# Android
+android/.gradle/
+android/.kotlin/
+android/local.properties
+android/captures/
