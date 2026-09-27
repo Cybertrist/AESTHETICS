@@ -5,24 +5,22 @@
   <a href="README.en.md"><img src="docs/langues/en-off.png" alt="Read this page in English" width="150" /></a>
 </p>
 
-<img src="docs/banniere.png" alt="ÆSTHETIC, musculation, nutrition et santé, avec un coach IA qui connaît mes séances" width="100%">
+<img src="docs/banniere.png" alt="ÆSTHETIC, ma propre application de santé : musculation, nutrition, sommeil et coach IA" width="100%">
 <br><br>
 
 </div>
 
-**Mon application de suivi : la salle, l'assiette, le sommeil, et un coach qui relie les trois.**
+**Ma propre application de santé : la musculation, la nutrition, le sommeil, et un coach IA qui relie le tout. Pour devenir la meilleure version de moi-même.**
 
 Je m'entraîne quatre fois par semaine et j'ai plus de 460 séances derrière moi. Pour les suivre, j'avais une application pour la muscu, une autre pour les calories, et ma montre pour le reste. Aucune ne voyait l'ensemble, alors aucune ne pouvait me dire pourquoi je stagne. ÆSTHETIC rassemble tout au même endroit, dans une interface volontairement sobre.
 
 <img src="docs/sections/s01.png" alt="01 L'idée" width="100%">
 
-**Simple.** Noir et blanc, de grands chiffres, rien qui clignote. Le vert n'apparaît que pour valider : une série cochée, un objectif atteint, une progression. Si c'est vert, c'est fait.
+**Doux pour les yeux.** Un fond presque noir aux gris chauds, de grands chiffres, rien qui clignote. Chaque domaine a sa couleur, toutes désaturées pour ne jamais piquer : bleu acier pour la salle, miel pour l'assiette, lavande pour le sommeil, rose poudré pour le cœur, sarcelle pour le coach. Le vert sauge ne sert qu'à valider : si c'est vert, c'est fait.
 
 **Complet.** Cinq onglets suffisent : Aujourd'hui, Entraîner, Coach, Nutrition, Progrès. L'écran du jour dit tout en un coup d'œil, la séance prévue, les calories restantes, les protéines, les pas, la récupération.
 
 **À moi.** Pas d'abonnement, pas de fonction verrouillée. Les données restent sur le téléphone, avec une sauvegarde automatique chaque nuit.
-
-J'ai longtemps utilisé Lyfta, que j'aime beaucoup et dont je reprends l'historique. ÆSTHETIC n'en est pas une copie : c'est ce que j'aurais voulu y trouver en plus.
 
 <img src="docs/sections/s02.png" alt="02 S'entraîner" width="100%">
 
@@ -68,14 +66,14 @@ On choisit ce qu'il a le droit de lire, et rien ne lui est envoyé sans qu'on l'
 
 <img src="docs/sections/s06.png" alt="06 Reprendre ses données" width="100%">
 
-Lyfta exporte tout son historique en CSV, depuis Profil, Paramètres, Exporter des données. ÆSTHETIC lit ce fichier et recrée les séances, les séries, les records et les programmes. Les noms d'exercices sont rapprochés automatiquement, et ceux qui restent ambigus sont montrés avant l'import.
+On n'arrive pas les mains vides : l'historique d'une autre application de suivi se reprend depuis son export CSV. ÆSTHETIC recrée les séances, les séries, les records et les programmes. Les noms d'exercices sont rapprochés automatiquement, et ceux qui restent ambigus sont montrés avant l'import.
 
-Hevy, Strong et FitNotes passent par le même chemin, ainsi qu'un tableau quelconque dont on associe les colonnes à la main. L'export se fait dans l'autre sens aussi, en CSV ou en JSON.
+Un tableau quelconque passe aussi, en associant ses colonnes à la main. L'export se fait dans l'autre sens aussi, en CSV ou en JSON.
 
 <img src="docs/sections/s07.png" alt="07 Où en est le projet" width="100%">
 
-La maquette est terminée : douze écrans interactifs, de l'écran du jour au coach, dans la direction artistique définitive. L'application Android arrive ensuite, en Flutter, avec une version complète et une démo installables côte à côte.
+La maquette est terminée : treize écrans interactifs, de l'écran du jour au sommeil et au coach, dans des couleurs douces pensées pour ne jamais fatiguer les yeux. L'application Android arrive ensuite, en Flutter, avec une version complète et une démo installables côte à côte.
 
 <br>
 
-<sub>Projet personnel, sans lien avec Lyfta. Sous licence MIT.</sub>
+<sub>Projet personnel, sous licence MIT.</sub>

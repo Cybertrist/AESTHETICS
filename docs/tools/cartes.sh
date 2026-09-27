@@ -38,7 +38,7 @@ html,body{width:1280px;height:320px;overflow:hidden;background:$4}
 .gl .crop img{position:absolute;width:170px;height:170px;left:50%;top:50%;transform:translate(-50%,-50%)}
 .tx{display:flex;flex-direction:column;gap:12px}
 h1{font-family:Syne,sans-serif;font-weight:800;font-size:52px;line-height:1;letter-spacing:-1px;color:#F1F5F9}
-h1 em{font-style:normal;color:$2}
+h1 em{font-style:normal;color:${EM:-$2};${EMS:-}}
 p{font-family:'Space Grotesk',sans-serif;font-size:18.5px;line-height:1.46;color:#94A3B0;max-width:780px}
 .pl{display:flex;gap:8px;margin-top:4px}
 .pl span{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:500;letter-spacing:.7px;
