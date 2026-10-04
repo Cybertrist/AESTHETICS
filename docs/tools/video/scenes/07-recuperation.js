@@ -1,29 +1,64 @@
-// La récupération, sur le vrai personnage : les muscles passent de l'orange au vert.
-const RECUP_MUSCLES = { face: ['pectoraux', 'deltoidesAnterieurs', 'biceps', 'quadriceps'], dos: ['triceps', 'grandDorsal'] };
+// La récupération, sur le vrai personnage : le corps est le héros. Les muscles
+// travaillés sont orange, puis passent au vert un par un, sur les pieds, pendant
+// que l'anneau monte de 50 à 100 % (il vire au vert à 90 %, le seuil « prêt »).
+const REC_MUSCLES = { face: ['pectoraux', 'deltoidesAnterieurs', 'biceps', 'quadriceps'], dos: ['triceps', 'grandDorsal'] };
+// Le temps (local) où chaque muscle passe au vert : pectoraux, épaules, bras
+// (biceps de face et triceps de dos ensemble), grand dorsal, quadriceps.
+const REC_QUAND = { 'face-0': 2, 'face-1': 3, 'face-2': 4, 'dos-0': 4, 'dos-1': 5, 'face-3': 6 };
+const REC_TOUR = 2 * Math.PI * 97;
 scene({
   id: 'recuperation', de: 36, a: 44,
-  css: `.corps{position:absolute;width:300px;height:660px}.corps img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}`,
+  css: `
+    .rec-corps{position:absolute;top:36px;width:275px;height:648px}
+    .rec-corps img{position:absolute;inset:0;width:100%;height:100%}
+    .rec-halo{position:absolute;left:-90px;right:-90px;top:-30px;bottom:-10px;
+      background:radial-gradient(50% 46% at 50% 38%,rgba(255,255,255,.13) 0,rgba(255,255,255,.04) 55%,rgba(255,255,255,0) 100%)}
+    #rec-titre{position:absolute;left:664px;top:150px;font-size:38px}
+    #rec-sous{position:absolute;left:666px;top:250px;font-size:29px;line-height:1.2;color:#a8a8b0}
+    #rec-anneau{position:absolute;left:664px;top:340px;overflow:visible}
+  `,
   html: `<div class="fond"></div>
-    ${['face', 'dos'].map((vue, n) => `<div class="corps" id="rec-${vue}" style="left:${60 + n * 290}px;top:36px"><img src="${CORPS}${vue}_base.webp">
-      ${RECUP_MUSCLES[vue].map((m, k) => `<img src="${CORPS}${vue}_${m}.webp" style="filter:url(#orange)"><img id="rec-${vue}-${k}" src="${CORPS}${vue}_${m}.webp" style="filter:url(#vert);opacity:0">`).join('')}</div>`).join('')}
-    <div class="titre" id="rec-titre" style="position:absolute;left:690px;top:166px;font-size:37px">La<br>récupération</div>
-    <div class="texte" id="rec-sous" style="position:absolute;left:694px;top:290px">Muscle par muscle.<br>De l’orange au vert.</div>
-    <svg id="rec-anneau" style="position:absolute;left:694px;top:410px" width="170" height="170" viewBox="0 0 170 170">
-      <circle cx="85" cy="85" r="70" fill="none" stroke="#1d1d20" stroke-width="14"/>
-      <circle id="rec-arc" cx="85" cy="85" r="70" fill="none" stroke="#22D85F" stroke-width="14" stroke-linecap="round" transform="rotate(-90 85 85)" stroke-dasharray="0 440"/>
-      <text id="rec-pct" x="85" y="98" text-anchor="middle" font-family="Space Grotesk" font-size="38" font-weight="700" fill="#fff">0 %</text></svg>`,
+    ${['face', 'dos'].map((vue, n) => `<div class="rec-corps" id="rec-${vue}" style="left:${56 + n * 264}px">
+      <div class="rec-halo"></div><img src="${CORPS}${vue}_base.webp">
+      ${REC_MUSCLES[vue].map((m, k) => `<img src="${CORPS}${vue}_${m}.webp" style="filter:url(#orange)"><img id="rec-${vue}-${k}" src="${CORPS}${vue}_${m}.webp" style="filter:url(#vert);opacity:0">`).join('')}</div>`).join('')}
+    <div class="titre" id="rec-titre">La<br>récupération</div>
+    <div id="rec-sous">Muscle par muscle.</div>
+    <svg id="rec-anneau" width="230" height="230" viewBox="0 0 230 230">
+      <circle cx="115" cy="115" r="97" fill="none" stroke="#1d1d20" stroke-width="16"/>
+      <circle id="rec-arc" cx="115" cy="115" r="97" fill="none" stroke="#FFA928" stroke-width="16" stroke-linecap="round" transform="rotate(-90 115 115)" stroke-dasharray="0 ${REC_TOUR.toFixed(1)}"/>
+      <text id="rec-pct" class="mono" x="115" y="132" text-anchor="middle" font-size="46" font-weight="700" fill="#fff"><tspan id="rec-nb">50</tspan><tspan dx="8">%</tspan></text></svg>`,
   rendre(l) {
-    for (const [vue, de] of [['face', 0], ['dos', 0.5]]) {
-      const k = sortie((l - de) / 1.2);
-      $('rec-' + vue).style.opacity = k; $('rec-' + vue).style.transform = `translateY(${(1 - k) * 50}px)`;
+    // 0 : le corps de face entre, avec le titre ; 1 : le dos, la ligne et l'anneau.
+    for (const [vue, de] of [['face', 0], ['dos', 1]]) {
+      const k = sortie((l - de) / 0.9), e = $('rec-' + vue);
+      e.style.opacity = borne((l - de) / 0.5);
+      e.style.transform = `translateY(${((1 - k) * 46).toFixed(2)}px) scale(${(1.05 - 0.05 * k).toFixed(4)})`;
     }
-    $('rec-titre').style.opacity = borne((l - 1) / 0.5); $('rec-sous').style.opacity = borne((l - 1.6) / 0.5);
-    $('rec-anneau').style.opacity = borne((l - 2) / 0.5);
-    const p = Math.round(33 + 67 * borne((l - 2.2) / 4.6));
-    $('rec-arc').setAttribute('stroke-dasharray', `${(440 * p / 100).toFixed(1)} 440`);
-    $('rec-arc').setAttribute('stroke', p >= 90 ? '#22D85F' : '#FFA928');
-    $('rec-pct').textContent = `${p} %`;
-    const SEUILS = { 'face-0': 5.6, 'face-1': 3.8, 'face-2': 3.2, 'face-3': 6.2, 'dos-0': 3.8, 'dos-1': 3.2 };
-    for (const [cle, quand] of Object.entries(SEUILS)) $('rec-' + cle).style.opacity = borne((l - quand) / 0.6);
+    const kt = sortie(l / 0.8);
+    $('rec-titre').style.opacity = borne(l / 0.4);
+    $('rec-titre').style.transform = `translateX(${((1 - kt) * 30).toFixed(2)}px)`;
+    const ks = sortie((l - 1) / 0.8);
+    $('rec-sous').style.opacity = borne((l - 1) / 0.4);
+    $('rec-sous').style.transform = `translateX(${((1 - ks) * 30).toFixed(2)}px)`;
+
+    // Les muscles : un par pied, avec un éclat qui retombe.
+    for (const [cle, q] of Object.entries(REC_QUAND)) {
+      const e = $('rec-' + cle), f = l >= q ? Math.exp(-(l - q) * 3.2) : 0;
+      e.style.opacity = borne((l - q) / 0.22);
+      e.style.filter = `url(#vert) brightness(${(1 + 0.85 * f).toFixed(3)}) drop-shadow(0 0 ${(22 * f).toFixed(1)}px rgba(34,216,95,${(0.9 * f).toFixed(3)}))`;
+    }
+
+    // L'anneau : 50 % à son arrivée, puis dix points par pied, de 2 à 6.
+    const pas = Math.floor(borne(l, 2, 6.999)) - 1;                 // 1 au temps 2 … 5 au temps 6
+    const cible = l < 2 ? 50 : 50 + 10 * pas;
+    const p = l < 2 ? 50 * sortie((l - 1) / 0.8) : cible - 10 + 10 * sortie((l - (pas + 1)) / 0.4);
+    const pret = cible >= 90;
+    const f = l >= 2 ? Math.exp(-(l - Math.floor(l)) * 4) : 0;       // l'éclat de chaque pied
+    $('rec-anneau').style.opacity = borne((l - 1) / 0.4);
+    $('rec-anneau').style.transform = `scale(${(1 + (l >= 6 ? 0.06 : 0.035) * f).toFixed(4)})`;
+    $('rec-arc').setAttribute('stroke-dasharray', `${(REC_TOUR * p / 100).toFixed(1)} ${REC_TOUR.toFixed(1)}`);
+    $('rec-arc').setAttribute('stroke', pret ? '#22D85F' : '#FFA928');
+    $('rec-arc').style.filter = `drop-shadow(0 0 ${(6 + 16 * f).toFixed(1)}px ${pret ? 'rgba(34,216,95,.75)' : 'rgba(255,169,40,.6)'})`;
+    $('rec-nb').textContent = Math.round(p);
   },
 });
