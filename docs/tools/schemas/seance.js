@@ -69,7 +69,10 @@ module.exports = (O) => {
       ${t(cx, cy + r * 0.3, 'PR', { taille: r * 0.82, couleur: OR_VIF, poids: 800, ancre: 'middle' })}`;
   };
   /// La vignette d'un exercice : une barre et ses disques, ou deux haltères.
-  const vignette = (x, y, s, halteres = false) => {
+  const vignette = (x, y, s, halteres = false, nom = null) => {
+    // La vraie pose de l'exercice, si elle est dans docs/exercices/vignettes.
+    const vraie = nom && O.photo(nom, x, y, s, { rayon: s * 0.23 });
+    if (vraie) return vraie;
     const m = y + s / 2;
     const barre = (bx, l) => `<path d="M${bx} ${m} h${l}" stroke="${APP.second}" stroke-width="2" stroke-linecap="round"/>`;
     const disque = (dx, h) => `<rect x="${dx}" y="${m - h / 2}" width="4" height="${h}" rx="1.5" fill="${APP.texte}"/>`;
@@ -122,7 +125,7 @@ module.exports = (O) => {
   s += chiffres(4, T.coche2, T.mini, [['Durée', vDuree(T.coche2 - 0.01, T.mini + 0.02, 12.5)], ['Volume', '1 300 kg'], ['Séries', '2'],
     ['Records', (cx) => `${ecusson(cx - 9, EY + 36, 8)}${t(cx + 8, EY + 41, '2', { taille: 12.5, couleur: APP.texte, poids: 700, ancre: 'middle' })}`]]);
   // L'exercice ouvert.
-  s += `${vignette(SX + 14, SY + 138, 44)}
+  s += `${vignette(SX + 14, SY + 138, 44, false, 'bench-press')}
     ${t(SX + 70, SY + 165, 'Développé couché', { taille: 14, couleur: APP.texte, poids: 700 })}
     ${points(SX + SL - 22, SY + 160)}
     ${t(SX + 16, SY + 204, 'Ajouter une note…', { taille: 11.5, couleur: APP.discret })}
@@ -164,7 +167,7 @@ module.exports = (O) => {
   s += `${repere(y3, '3')}${precedent(y3, '80 kg × 7')}${valeur(COL.kg, y3, '80', ENCRE)}${valeur(COL.reps, y3, '7', ENCRE)}${coche(y3, POIGNEE)}`;
   s += bouton(SX + 14, SY + 402, SL - 28, 34, '+ Ajouter une série', APP.carte2, APP.texte);
   // L'exercice suivant, replié, et les deux boutons du bas.
-  s += `${vignette(SX + 14, SY + 450, 40, true)}
+  s += `${vignette(SX + 14, SY + 450, 40, true, 'cable-fly')}
     ${t(SX + 66, SY + 467, 'Écarté à la poulie', { taille: 13, couleur: APP.texte, poids: 700 })}
     ${t(SX + 66, SY + 484, '0/3 effectués', { taille: 11.5, couleur: APP.second })}
     ${points(SX + SL - 22, SY + 470)}
@@ -174,7 +177,7 @@ module.exports = (O) => {
   const BY = EY + 3, BC = SX + SL / 2, BL = 252;
   s += g(T.coche2 + 0.003, T.ligne1, `<rect x="${BC - 24}" y="${BY}" width="48" height="48" rx="24" fill="#0E0E10" stroke="${OR_PALE}" stroke-opacity="0.35" stroke-width="1.2"/>${ecusson(BC, BY + 24, 15)}`, 0.006);
   s += g(T.ligne1, T.finBandeau, `<rect x="${BC - BL / 2}" y="${BY}" width="${BL}" height="48" rx="24" fill="#0E0E10" stroke="${OR_PALE}" stroke-opacity="0.35" stroke-width="1.2"/>
-    ${vignette(BC - BL / 2 + 8, BY + 7, 34)}
+    ${vignette(BC - BL / 2 + 8, BY + 7, 34, false, 'bench-press')}
     ${t(BC - BL / 2 + 52, BY + 21, 'Développé couché', { taille: 11.5, couleur: APP.texte, poids: 700 })}
     ${g(T.ligne1, T.ligne2, t(BC - BL / 2 + 52, BY + 37, 'Charge maximale · 82,5 kg', { taille: 11, couleur: OR_PALE, poids: 600 }), 0.006)}
     ${g(T.ligne2, T.finBandeau, t(BC - BL / 2 + 52, BY + 37, '1RM estimé · 103,5 kg', { taille: 11, couleur: OR_PALE, poids: 600 }), 0.006)}

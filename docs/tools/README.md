@@ -39,6 +39,10 @@ Chaque commande fait la version française, puis l'anglaise dans `docs/en/`.
   Pas de police externe : un SVG en `<img>` n'a pas le droit d'aller la
   chercher. `SEUL=seance,tests node docs/tools/anime.js` ne rend que ces
   schémas-là.
+- `corps.sh` : recopie depuis l'application le vrai personnage (le corps
+  de face et de dos, un calque par muscle) et la pose des exercices cités,
+  dans `docs/exercices/`. Les schémas les intègrent au SVG ; sans elles,
+  ils gardent leurs dessins de secours. À lancer avant `anime.js`.
 - `image.js` : une image fixe d'un schéma animé à un instant donné, pour
   le vérifier sans attendre qu'il tourne.
 - `jpeg.js` : convertit l'aperçu social en JPEG, sous le mégaoctet de GitHub.

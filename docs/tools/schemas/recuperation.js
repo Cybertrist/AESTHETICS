@@ -167,11 +167,38 @@ module.exports = (O) => {
   };
   const FORME_DE = { pectoraux: 'pectoraux', deltoidesAnterieurs: 'deltoides', deltoidesLateraux: 'deltoides', deltoidesPosterieurs: 'deltoides', triceps: 'bras', biceps: 'bras', quadriceps: 'quadriceps', grandDorsal: 'grandDorsal' };
   const teinte = (m) => parEtat('fill', (e) => couleur(e.pct[m]));
-  const figure = (x, y, k, muscles, legende) => `<g transform="translate(${x},${y}) scale(${k})">${silhouette('#2B2E36')}
-    ${muscles.map((m) => FORME[FORME_DE[m]](`fill="${PRET}"`, teinte(m))).join('')}</g>
+
+  // Le vrai personnage de l'application, quand ses calques sont rangés dans
+  // docs/exercices/corps/ : le corps de face et de dos, et un calque par
+  // muscle, intégrés au SVG. Chaque calque est reteint, en orange tant que le
+  // muscle récupère, en vert dès qu'il est prêt, comme sur l'écran. Sans ces
+  // fichiers, le schéma garde la silhouette dessinée ci-dessus.
+  const fs = require('fs'), chemin = require('path');
+  const CORPS = chemin.join(__dirname, '..', '..', 'exercices', 'corps');
+  const CALQUE_DE = { pectoraux: ['face', 'pectoraux'], deltoidesAnterieurs: ['face', 'deltoidesAnterieurs'], deltoidesLateraux: ['face', 'deltoidesAnterieurs'],
+    deltoidesPosterieurs: ['face', 'deltoidesAnterieurs'], triceps: ['dos', 'triceps'], biceps: ['face', 'biceps'], quadriceps: ['face', 'quadriceps'], grandDorsal: ['dos', 'grandDorsal'] };
+  const FICHIERS = ['face_base', 'dos_base', ...new Set(Object.values(CALQUE_DE).map(([v, m]) => `${v}_${m}`))];
+  const VRAI = FICHIERS.every((f) => fs.existsSync(chemin.join(CORPS, `${f}.webp`)));
+  // Reteindre un calque : sa clarté devient la couleur voulue, son modelé reste.
+  const hex = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16) / 255);
+  const reteinte = (id, c, gain = 2.1) => `<filter id="${id}" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="${hex(c)
+    .map((v) => [0.2126, 0.7152, 0.0722].map((l) => (l * gain * v).toFixed(3)).join(' ') + ' 0 0').join(' ')} 0 0 0 1 0"/></filter>`;
+  if (VRAI) {
+    corps += `<defs>${reteinte('recupOrange', ORANGE)}${reteinte('recupVert', PRET)}
+      ${FICHIERS.map((f) => `<symbol id="recup-${f}" viewBox="0 0 100 220"><image width="100" height="220" preserveAspectRatio="xMidYMid meet" href="data:image/webp;base64,${fs.readFileSync(chemin.join(CORPS, `${f}.webp`)).toString('base64')}"/></symbol>`).join('')}</defs>`;
+  }
+  const pose = (f, extra = '') => `<use href="#recup-${f}" width="100" height="220" ${extra}/>`;
+  /// Un muscle sur le vrai corps : orange dessous, vert dessus quand il est prêt.
+  const calque = (m, pct) => {
+    const f = CALQUE_DE[m].join('_');
+    return `${pose(f, 'filter="url(#recupOrange)"')}<use href="#recup-${f}" width="100" height="220" filter="url(#recupVert)" opacity="1">${parEtat('opacity', (e) => (pct(e) >= SEUIL ? 1 : 0))}</use>`;
+  };
+  const figure = (x, y, k, muscles, legende, vue = 'face') => `<g transform="translate(${x},${y}) scale(${k})">${VRAI
+    ? pose(`${vue}_base`) + muscles.map((m) => calque(m, (e) => e.pct[m])).join('')
+    : silhouette('#2B2E36') + muscles.map((m) => FORME[FORME_DE[m]](`fill="${PRET}"`, teinte(m))).join('')}</g>
     ${t(x + 50 * k, y + 220 * k + 16, legende, { taille: 11, couleur: DISCRET, ancre: 'middle' })}`;
   corps += figure(AX + 26, KY + 40, 0.76, ['pectoraux', 'deltoidesAnterieurs', 'quadriceps'], 'de face');
-  corps += figure(AX + 122, KY + 40, 0.76, ['triceps'], 'de dos');
+  corps += figure(AX + 122, KY + 40, 0.76, ['triceps'], 'de dos', 'dos');
   const LX = AX + 222;
   corps += `<circle cx="${LX}" cy="${KY + 76}" r="6" fill="${ORANGE}"/>${t(LX + 13, KY + 80, 'en récupération', { taille: 11.5, couleur: TITRE })}
     <circle cx="${LX}" cy="${KY + 104}" r="6" fill="${PRET}"/>${t(LX + 13, KY + 108, 'prêt : 90 %', { taille: 11.5, couleur: TITRE })}
@@ -317,8 +344,9 @@ module.exports = (O) => {
     const k = 0.64, [haut] = CADRE[forme];
     ecran += `<rect x="${x}" y="${y}" width="${VL}" height="${VH}" rx="14" fill="${APP.carte}"/>
       <clipPath id="recupVignette${i}"><rect x="${x + 8}" y="${y + 10}" width="${VL - 16}" height="62" rx="8"/></clipPath>
-      <g clip-path="url(#recupVignette${i})"><g transform="translate(${x + VL / 2 - 50 * k},${y + 12 - haut * k}) scale(${k})">${silhouette(APP.carte3)}
-        ${FORME[forme](`fill="${PRET}"`, parEtat('fill', (e) => couleur(e.vignettes[i][1] ? e.pct[e.vignettes[i][1]] : 100)))}</g></g>
+      <g clip-path="url(#recupVignette${i})"><g transform="translate(${x + VL / 2 - 50 * k},${y + 12 - haut * k}) scale(${k})">${VRAI
+        ? pose(`${CALQUE_DE[ETATS[1].vignettes[i][1]][0]}_base`) + calque(ETATS[1].vignettes[i][1], (e) => (e.vignettes[i][1] ? e.pct[e.vignettes[i][1]] : 100))
+        : silhouette(APP.carte3) + FORME[forme](`fill="${PRET}"`, parEtat('fill', (e) => couleur(e.vignettes[i][1] ? e.pct[e.vignettes[i][1]] : 100)))}</g></g>
       ${t(x + VL / 2, y + 90, label, { taille: 11.5, couleur: APP.texte, poids: 600, ancre: 'middle' })}
       <rect x="${x + VL / 2 - 25}" y="${y + 100}" width="50" height="22" rx="11" fill="${PRET}" fill-opacity="0.14">${parEtat('fill', (e) => (e.pct[e.vignettes[i][1]] >= SEUIL ? PRET : ALERTE))}</rect>`;
     ETATS.forEach((e, n) => {

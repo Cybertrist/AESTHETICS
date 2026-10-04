@@ -46,7 +46,7 @@ module.exports = (O) => {
     <rect x="${PX + PL / 2 - 34}" y="${PY + 6}" width="68" height="5" rx="2.5" fill="#1B222C"/>`;
   const quand = (de, a, contenu) => `<g opacity="0">${visible(C, de, a, 0.004)}${contenu}</g>`;
   const X = (v) => SX + v, Y = (v) => SY + v;
-  const haltere = (x, y) => `<rect x="${x}" y="${y}" width="36" height="36" rx="10" fill="${APP.carte2}"/>
+  const haltere = (x, y, nom) => (nom && O.photo(nom, x, y, 36)) || `<rect x="${x}" y="${y}" width="36" height="36" rx="10" fill="${APP.carte2}"/>
     <path d="M${x + 8} ${y + 18} H${x + 28}" stroke="${APP.second}" stroke-width="2" stroke-linecap="round"/>
     <rect x="${x + 9}" y="${y + 11}" width="4" height="14" rx="2" fill="${APP.second}"/><rect x="${x + 23}" y="${y + 11}" width="4" height="14" rx="2" fill="${APP.second}"/>`;
   const coche = (cx, cy, fond) => `<rect x="${cx - 17}" y="${cy - 12}" width="34" height="24" rx="12" fill="${fond}"/>
@@ -91,7 +91,7 @@ module.exports = (O) => {
   ecran += quand(REDESSIN, 0.988, valeurs('1 280 kg', '2'));
   // L'exercice ouvert.
   ecran += `<rect x="${X(12)}" y="${Y(146)}" width="${SL - 24}" height="300" rx="16" fill="${APP.carte}"/>
-    ${haltere(X(24), Y(158))}
+    ${haltere(X(24), Y(158), 'bench-press')}
     ${t(X(70), Y(181), 'Développé couché', { taille: 14, couleur: APP.texte, poids: 700 })}
     <circle cx="${X(SL - 40)}" cy="${Y(176)}" r="1.8" fill="${APP.second}"/><circle cx="${X(SL - 33)}" cy="${Y(176)}" r="1.8" fill="${APP.second}"/><circle cx="${X(SL - 26)}" cy="${Y(176)}" r="1.8" fill="${APP.second}"/>
     ${minuteur(X(32), Y(215), APP.minuteur)}
@@ -107,7 +107,7 @@ module.exports = (O) => {
     <rect x="${X(12)}" y="${Y(72)}" width="${SL - 24}" height="62" rx="16" fill="none" stroke="${VERT}" stroke-width="1.5" filter="url(#halo)" opacity="0">${visible(C, REDESSIN, REDESSIN + 0.07, 0.006)}</rect>`;
   // L'exercice suivant, replié, et les deux boutons du bas.
   ecran += `<rect x="${X(12)}" y="${Y(458)}" width="${SL - 24}" height="64" rx="16" fill="${APP.carte}"/>
-    ${haltere(X(24), Y(472))}
+    ${haltere(X(24), Y(472), 'incline-db-press')}
     ${t(X(70), Y(487), 'Développé incliné aux haltères', { taille: 12.5, couleur: APP.texte, poids: 700 })}
     ${t(X(70), Y(505), '0/3 effectués', { taille: 11.5, couleur: APP.second })}
     <rect x="${X(14)}" y="${Y(544)}" width="182" height="44" rx="22" fill="#FFFFFF"/>

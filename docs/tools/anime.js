@@ -210,11 +210,33 @@ const pastille = (x, y, initiales, couleur) =>
   `<circle cx="${x}" cy="${y}" r="15" fill="${couleur}" fill-opacity="0.16" stroke="${couleur}" stroke-opacity="0.6"/>
   ${t(x, y + 4.5, initiales, { taille: 11, couleur, poids: 800, ancre: 'middle' })}`;
 
+/// La vraie vignette d'un exercice, telle que l'application la montre : une
+/// pose rangée dans docs/exercices/vignettes/, intégrée au SVG (un SVG
+/// affiché en <img> ne peut pas aller chercher une image). L'image n'est
+/// écrite qu'une fois par schéma, les suivantes la réutilisent. Rend null
+/// si la pose n'est pas là : le schéma garde alors son dessin.
+const VIGNETTES = path.join(__dirname, '..', 'exercices', 'vignettes');
+let _photos = new Set();
+function photo(nom, x, y, c, { rayon = 10, fond = APP.carte2 } = {}) {
+  if (!fs.existsSync(VIGNETTES)) return null;
+  const f = fs.readdirSync(VIGNETTES).sort().find((g) => g.replace(/\.[a-z]+$/, '') === nom);
+  if (!f) return null;
+  const id = `photo-${nom}`;
+  let def = '';
+  if (!_photos.has(id)) {
+    _photos.add(id);
+    const type = { webp: 'image/webp', png: 'image/png', jpg: 'image/jpeg' }[f.split('.').pop()];
+    const donnees = fs.readFileSync(path.join(VIGNETTES, f)).toString('base64');
+    def = `<defs><symbol id="${id}" viewBox="0 0 100 100"><image width="100" height="100" preserveAspectRatio="xMidYMid slice" href="data:${type};base64,${donnees}"/></symbol></defs>`;
+  }
+  return `${def}<rect x="${x}" y="${y}" width="${c}" height="${c}" rx="${rayon}" fill="${fond}"/><use href="#${id}" x="${x}" y="${y}" width="${c}" height="${c}"/>`;
+}
+
 // ------------------------------------------------------------------------
 // Les autres schémas, un fichier chacun dans schemas/ : chaque module
 // reçoit les outils de celui-ci et appelle svg() lui-même.
 const OUTILS = {
-  EN, tr, esc, svg, t, paliers, fondu, visible, carte, bille, fil, P, APP, toucher, frappe, pilule, pastille,
+  EN, tr, esc, svg, t, paliers, fondu, visible, carte, bille, fil, P, APP, toucher, frappe, pilule, pastille, photo,
   MONO, SANS, FOND, CARTE, BORD, TITRE, TEXTE, DISCRET, FIL, ACCENT, VERT, NEON, BLEU, OR, ROSE, ROUGE, INTERNE,
 };
 const DOSSIER = path.join(__dirname, 'schemas');
@@ -237,6 +259,7 @@ const SEUL = (process.env.SEUL || '').split(',').filter(Boolean);
 for (const f of fs.existsSync(DOSSIER) ? fs.readdirSync(DOSSIER).filter((f) => f.endsWith('.js')).sort() : []) {
   if (SEUL.length && !SEUL.includes(f.replace(/\.js$/, ''))) continue;
   dicoPour(f.replace(/\.js$/, ''));
+  _photos = new Set();
   require(path.join(DOSSIER, f))(OUTILS);
 }
 
