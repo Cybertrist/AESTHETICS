@@ -3,9 +3,8 @@
 #
 # GitHub retire le JavaScript et le CSS des README : rien ne peut basculer
 # la page sur place. Ce sont donc deux liens vers deux fichiers, dessinés
-# pour se lire comme un sélecteur. La langue courante est allumée dans
-# l'accent du profil, l'autre éteinte, reprenant exactement le cartouche
-# gris des cartes de projet, celui qui porte « PRIVÉ ».
+# pour se lire comme un sélecteur, repris de SmartBudget. La langue courante
+# est allumée, marquée du rouge de l'application, l'autre éteinte.
 #
 # Les quatre images servent les deux pages : le français monte fr-on et
 # en-off, l'anglais monte en-on et fr-off. Elles ne dépendent donc pas de
@@ -13,7 +12,7 @@
 #
 # Leur fond est opaque : GitHub rend les README sur blanc comme sur noir,
 # et un sélecteur qui disparaît sur l'un des deux ne sert à rien.
-D="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; mkdir -p "$D/html" "$D/langues"
+D="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; mkdir -p "$D/html" "$D/../langues"
 CH="${CHROME:-/c/Program Files/Google/Chrome/Application/chrome.exe}"
 B="$(cd "$D" && pwd -W 2>/dev/null || pwd)"
 
@@ -23,9 +22,9 @@ W=300; H=96
 pastille () {
 local pt ct bd fd
 if [ "$3" = allumee ]; then
-  pt='<i></i>'; ct='#F0F4F8'; bd='#3A3A3A'; fd='#141414'
+  pt='<i></i>'; ct='#F5F5F7'; bd='#4A4A52'; fd='#17181C'
 else
-  pt='';        ct='#7C8894'; bd='#2A333D';             fd='#0C1117'
+  pt='';        ct='#7E7E84'; bd='#2A2A2E';             fd='#0E0F12'
 fi
 cat > "$D/html/lg-$1.html" <<HTML
 <!doctype html><html lang="fr"><head><meta charset="utf-8">
@@ -40,13 +39,13 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:transparent}
      letter-spacing:3.2px;color:$ct;white-space:nowrap}
 /* Le point n'est là que sur la langue affichée : il dit « vous êtes ici »
    sans avoir à l'écrire, et laisse l'autre pastille lisible comme un lien. */
-.p i{width:8px;height:8px;border-radius:2px;background:#FAFAFA;
+.p i{width:8px;height:8px;border-radius:2px;background:#E0393E;
      transform:rotate(45deg);flex-shrink:0}
 </style></head><body><div class="w"><div class="p">$pt<b>$2</b></div></div></body></html>
 HTML
 "$CH" --headless=new --disable-gpu --hide-scrollbars --virtual-time-budget=10000 \
   --force-device-scale-factor=3 --default-background-color=00000000 \
-  --screenshot="$B/langues/$1.png" --window-size=$W,$H "file:///$B/html/lg-$1.html" >/dev/null 2>&1
+  --screenshot="$B/../langues/$1.png" --window-size=$W,$H "file:///$B/html/lg-$1.html" >/dev/null 2>&1
 echo "  $1.png  à afficher sur 150 px"
 }
 

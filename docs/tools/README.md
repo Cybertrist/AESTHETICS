@@ -1,41 +1,57 @@
 # Les outils qui dessinent ce README
 
-Aucune image de ce dépôt n'est un export d'un logiciel de dessin. Chacune
-est une page HTML que Chrome capture en mode headless, au double de la
-taille d'affichage pour rester nette sur un écran dense. Un texte de figure
-se corrige donc en modifiant une ligne de script.
+Aucune image de ce dépôt ne sort d'un logiciel de dessin. Les figures fixes
+sont des pages HTML que Chrome capture sans affichage, deux fois plus
+denses que leur taille à l'écran ; les schémas animés sont des SVG écrits
+par un script. Changer un texte, c'est changer une ligne. Le moteur vient
+de SmartBudget.
 
-## Refaire toutes les images
+## Refaire les images
 
-    bash docs/tools/tout.sh
+    bash docs/tools/figures.sh     # bannière, bandeaux, sommaire, fonctionnalités, palette
+    bash docs/tools/captures.sh    # la planche de captures
+    node docs/tools/anime.js       # les schémas animés
+    bash docs/tools/pastilles.sh   # les pastilles FRANÇAIS et ENGLISH, dans docs/langues
+    bash docs/tools/social.sh      # l'aperçu social (JPEG), à déposer dans Settings > Social preview
 
-Cela rend les deux langues. Les scripts écrivent dans `docs/tools/png/`,
-`sec/` et `langues/`, suffixés `-en` pour l'anglais, qui ne sont pas
-versionnés. `installer.sh` recopie ensuite les fichiers retenus dans
-`docs/` et `docs/en/`.
+Chaque commande fait la version française, puis l'anglaise dans `docs/en/`.
 
-## Ce que fait chaque script
+## Ce que fait chaque fichier
 
-- `figures.sh` : la bannière et les sept bandeaux de section.
-- `cartes.sh` : le gabarit des bannières 1280x320.
-- `bandeaux.sh` : le gabarit des bandeaux de section numérotés.
-- `pastilles.sh` : les deux pastilles du sélecteur de langue.
-- `langue.sh` : la bascule `LANGUE` et la fonction `t <français> <anglais>`.
-- `installer.sh` : repose les images rendues dans `docs/` ou `docs/en/`.
-- `tout.sh` : enchaîne tout ce qui précède, dans les deux langues.
+- `rendu.sh` : le moteur commun. La page écrit sa hauteur réelle dans son
+  `<title>` une fois les polices chargées, `--dump-dom` la lit, la capture
+  suit à cette hauteur. `--virtual-time-budget` est indispensable, sinon
+  Chrome capture avant l'arrivée des polices.
+- `figures.sh` : tout le texte des figures fixes. C'est le seul fichier à
+  ouvrir pour corriger une phrase.
+- `captures.sh` : la planche du téléphone, à partir de `src-captures/`.
+- `rogner.js` : prépare les captures brutes de l'émulateur. Il retire la
+  barre d'état et la barre de navigation d'après un `barres.txt` posé à
+  côté, réduit et écrit en JPEG, par un canvas de Chrome.
+- `anglais.json` : la traduction de chaque texte des figures. Un texte
+  absent du dictionnaire arrête le rendu anglais et s'affiche : aucune
+  figure anglaise ne garde une phrase française par oubli.
+- `traduire.js` : applique `anglais.json` à une page, appelé par `rendu.sh`
+  quand `LANGUE=en`.
+- `anime.js` : les outils communs des SVG animés. Chaque schéma a son
+  fichier dans `schemas/`, avec sa traduction à côté (`<nom>.en.json`).
+  Les animations sont en SMIL, que GitHub joue dans une balise `<img>`.
+  Pas de police externe : un SVG en `<img>` n'a pas le droit d'aller la
+  chercher. `SEUL=seance,tests node docs/tools/anime.js` ne rend que ces
+  schémas-là.
+- `image.js` : une image fixe d'un schéma animé à un instant donné, pour
+  le vérifier sans attendre qu'il tourne.
+- `jpeg.js` : convertit l'aperçu social en JPEG, sous le mégaoctet de GitHub.
 
-## Le logo
+## Les captures
 
-`docs/logo.png` porte son propre badge sombre, qui n'occupe que 80 % du
-fichier. Sur la bannière, il est agrandi à 184 px dans une plaque de 142
-pour que la plaque coupe à l'intérieur du badge : sans cela, on voit une
-marge morte et un double contour. La valeur a été choisie en comparant
-172, 184 et 196 px côte à côte.
+Elles viennent de l'émulateur, dans la démo de l'application
+(`--dart-define=DEMO=true`), qui se remplit d'un jeu d'essai au premier
+lancement. Aucune vraie séance ne doit jamais entrer dans `src-captures/`.
 
 ## Ce dont ils dépendent
 
-Chrome est cherché dans `C:\Program Files\Google\Chrome\Application`. La
-variable d'environnement `CHROME` prend le dessus s'il est ailleurs.
-
-Les polices, Syne, Space Grotesk et JetBrains Mono, sont chargées depuis
-Google Fonts au moment du rendu : il faut une connexion.
+Chrome, cherché dans `C:\Program Files\Google\Chrome\Application` ; la
+variable `CHROME` prend le dessus. Les polices, Syne, Space Grotesk,
+JetBrains Mono et Material Symbols, viennent de Google Fonts au moment du
+rendu : il faut une connexion.

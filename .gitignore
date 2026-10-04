@@ -5,6 +5,10 @@ docs/tools/png*/
 docs/tools/sec*/
 docs/tools/langues/
 
+# Captures brutes de l'émulateur et celles qui ne servent à aucune figure
+docs/tools/src-captures/brut/
+docs/tools/src-captures/reserve/
+
 # Signature de publication
 android/key.properties
 *.jks
@@ -26,3 +30,17 @@ android/.gradle/
 android/.kotlin/
 android/local.properties
 android/captures/
+
+# Références visuelles privées (captures d autres applis), jamais publiées
+mobile/refs/
+
+# Pack d exercices sous licence (données, images, animations) : jamais publié
+repdb-bundle*.zip
+mobile/assets/data/exercises.json
+mobile/assets/exercises/anim/
+mobile/assets/exercises/poses/
+mobile/assets/exercises/materiel/
+mobile/tools/repdb/node_modules/
+
+# Personnage issu du pack sous licence
+mobile/assets/body/pack/

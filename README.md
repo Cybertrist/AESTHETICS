@@ -1,79 +1,199 @@
 <div align="center">
 
 <p>
-  <img src="docs/langues/fr-on.png" alt="Français, page affichée" width="150" />
-  <a href="README.en.md"><img src="docs/langues/en-off.png" alt="Read this page in English" width="150" /></a>
+  <img src="docs/langues/fr-on.png" alt="Français" width="150" />
+  <a href="README.en.md"><img src="docs/langues/en-off.png" alt="English" width="150" /></a>
 </p>
 
-<img src="docs/banniere.png" alt="ÆSTHETIC, ma propre application de santé : musculation, nutrition, sommeil et coach IA" width="100%">
-<br><br>
-
-</div>
-
-**Ma propre application de santé : la musculation, la nutrition, le sommeil, et un coach IA qui relie le tout. Pour devenir la meilleure version de moi-même.**
-
-Je m'entraîne quatre fois par semaine et j'ai plus de 460 séances derrière moi. Pour les suivre, j'avais une application pour la muscu, une autre pour les calories, et ma montre pour le reste. Aucune ne voyait l'ensemble, alors aucune ne pouvait me dire pourquoi je stagne. ÆSTHETIC rassemble tout au même endroit, dans une interface volontairement sobre.
-
-<img src="docs/sections/s01.png" alt="01 L'idée" width="100%">
-
-**Doux pour les yeux.** Un fond presque noir aux gris chauds, de grands chiffres, rien qui clignote. Chaque domaine a sa couleur, toutes désaturées pour ne jamais piquer : bleu acier pour la salle, miel pour l'assiette, lavande pour le sommeil, rose poudré pour le cœur, sarcelle pour le coach. Le vert sauge ne sert qu'à valider : si c'est vert, c'est fait.
-
-**Complet.** Cinq onglets suffisent : Aujourd'hui, Entraîner, Coach, Nutrition, Progrès. L'écran du jour dit tout en un coup d'œil, la séance prévue, les calories restantes, les protéines, les pas, la récupération.
-
-**À moi.** Pas d'abonnement, pas de fonction verrouillée. Les données restent sur le téléphone, avec une sauvegarde automatique chaque nuit.
-
-<img src="docs/sections/s02.png" alt="02 S'entraîner" width="100%">
-
-**La séance.** On coche ses séries, le minuteur de repos démarre tout seul, et la charge de la dernière fois est rappelée à côté de chaque série. Échauffement, séries dégressives, supersets, RPE et notes sont gérés.
-
-**La progression.** Quand toutes les séries passent, l'application propose d'ajouter du poids la fois suivante. Le calculateur de disques dit quoi charger de chaque côté.
-
-**Les programmes.** Un programme regroupe les routines de la semaine et sait où on en est. On peut partir d'un modèle, 5x5, push pull legs, haut et bas du corps, ou construire le sien.
-
-**Les exercices.** Chaque fiche montre la courbe du 1RM estimé, l'historique des séries, les records personnels et un guide d'exécution.
-
-<img src="docs/sections/s03.png" alt="03 Manger" width="100%">
-
-**Le journal.** Les repas de la journée, les calories restantes en grand, et trois barres pour les protéines, les glucides et les lipides. Les objectifs se calculent à partir du poids, de l'activité et du but : prise de muscle, sèche ou maintien.
-
-**Ajouter vite.** Scanner un code-barres, chercher un aliment, reprendre un repas habituel, ou prendre l'assiette en photo et laisser l'IA estimer ce qu'elle contient. La base alimentaire vient d'Open Food Facts.
-
-**L'eau.** Un bouton, un quart de litre, une barre qui se remplit.
-
-<img src="docs/sections/s04.png" alt="04 La santé" width="100%">
-
-**Ce que la montre sait déjà.** Sommeil, pas, fréquence cardiaque au repos et calories brûlées arrivent par Health Connect, sans rien saisir.
-
-**Le corps.** Poids, masse grasse, mensurations et photos d'évolution, avec leurs courbes.
-
-**La récupération.** Muscle par muscle, calculée à partir des séances récentes, du volume et du sommeil. Elle dit ce qui est prêt à être travaillé aujourd'hui.
-
-**Les compléments.** Créatine ou autre, avec un rappel et une case à cocher.
-
-<img src="docs/sections/s05.png" alt="05 Le coach" width="100%">
-
-Le coach est un onglet à part entière, au centre de la barre. Il lit les séances, les repas, le sommeil et la récupération, et répond avec des chiffres, pas des généralités.
-
-**Il oriente.** Chaque matin, une phrase sur l'écran du jour : ce qu'il faudrait faire, et pourquoi.
-
-**Il débloque.** « Je stagne au développé couché » : il regarde l'historique, repère depuis quand, et propose un plan précis sur deux semaines.
-
-**Il agit.** Ses propositions se valident d'un geste : appliquer un changement au programme, ajouter un repas au dîner, déplacer une séance.
-
-**Il fait le bilan.** Chaque dimanche, la semaine en quelques lignes : volume, records, sommeil, écart aux objectifs, et ce qui a manqué.
-
-On choisit ce qu'il a le droit de lire, et rien ne lui est envoyé sans qu'on l'ait ouvert.
-
-<img src="docs/sections/s06.png" alt="06 Reprendre ses données" width="100%">
-
-On n'arrive pas les mains vides : l'historique d'une autre application de suivi se reprend depuis son export CSV. ÆSTHETIC recrée les séances, les séries, les records et les programmes. Les noms d'exercices sont rapprochés automatiquement, et ceux qui restent ambigus sont montrés avant l'import.
-
-Un tableau quelconque passe aussi, en associant ses colonnes à la main. L'export se fait dans l'autre sens aussi, en CSV ou en JSON.
-
-<img src="docs/sections/s07.png" alt="07 Où en est le projet" width="100%">
-
-La maquette est terminée : treize écrans interactifs, de l'écran du jour au sommeil et au coach, dans des couleurs douces pensées pour ne jamais fatiguer les yeux. L'application Android arrive ensuite, en Flutter, avec une version complète et une démo installables côte à côte.
+<img src="docs/banniere.png" alt="AESTHETICS : chaque série, chaque record, chaque progrès. Pour devenir la meilleure version de moi-même. Android, musculation, hors ligne. Flutter, 608 exercices, 116 programmes, aucun compte, Fold." width="100%">
 
 <br>
 
-<sub>Projet personnel, sous licence MIT.</sub>
+**Mon application de musculation, sur Android : la séance, le minuteur, les records, et tout ce qu'ils racontent au fil des mois.**
+
+</div>
+
+Je m'entraîne quatre fois par semaine et j'ai plus de 460 séances derrière moi. Pour les suivre, je voulais une application à moi, sans abonnement ni fonction verrouillée. AESTHETICS fait ce dont j'ai besoin à la salle : noter une série en un geste, savoir quoi charger, voir un record tomber, et comprendre après coup ce que le mois a donné.
+
+Tout reste sur le téléphone, dans des fichiers que je peux lire : aucun compte à créer, aucun serveur, aucune fonction verrouillée. Fond noir, cartes grises, boutons blancs ; la couleur ne sert qu'à dire quelque chose.
+
+<img src="docs/sections/s00.png" alt="00 Sommaire" width="100%">
+
+<p align="center">
+<a href="#fonctionnalites"><img src="docs/sommaire/01.png" alt="01 Fonctionnalités" width="31%"></a>
+<a href="#ecrans"><img src="docs/sommaire/02.png" alt="02 Les écrans" width="31%"></a>
+<a href="#seance"><img src="docs/sommaire/03.png" alt="03 La séance" width="31%"></a>
+<br>
+<a href="#records"><img src="docs/sommaire/04.png" alt="04 1RM et records" width="31%"></a>
+<a href="#programmes"><img src="docs/sommaire/05.png" alt="05 Programmes et progression" width="31%"></a>
+<a href="#exercices"><img src="docs/sommaire/06.png" alt="06 Les exercices" width="31%"></a>
+<br>
+<a href="#recuperation"><img src="docs/sommaire/07.png" alt="07 La récupération" width="31%"></a>
+<a href="#serie"><img src="docs/sommaire/08.png" alt="08 La série" width="31%"></a>
+<a href="#resume"><img src="docs/sommaire/09.png" alt="09 Le résumé mensuel" width="31%"></a>
+<br>
+<a href="#badges"><img src="docs/sommaire/10.png" alt="10 Les badges" width="31%"></a>
+<a href="#import"><img src="docs/sommaire/11.png" alt="11 Reprendre son historique" width="31%"></a>
+<a href="#donnees"><img src="docs/sommaire/12.png" alt="12 Mes données" width="31%"></a>
+<br>
+<a href="#architecture"><img src="docs/sommaire/13.png" alt="13 Architecture" width="31%"></a>
+<a href="#tests"><img src="docs/sommaire/14.png" alt="14 Les tests" width="31%"></a>
+<a href="#construire"><img src="docs/sommaire/15.png" alt="15 Construire et licences" width="31%"></a>
+</p>
+
+<a id="fonctionnalites"></a>
+<img src="docs/sections/s01.png" alt="01 Fonctionnalités" width="100%">
+
+<img src="docs/schemas/fonctionnalites.png" alt="Quinze fonctionnalités. La séance : un tableau par exercice, la charge de la dernière fois à côté de chaque série, douze types de série ; on coche, la ligne passe au vert. Le minuteur de repos, qui part tout seul à chaque série validée : 90 secondes par défaut, réglable exercice par exercice, plus ou moins dix secondes d'un toucher. Les records : poids, 1RM estimé, meilleure série, répétitions, volume, annoncés pendant la séance avec un écusson doré PR. Programmes et progression : 116 idées de programmes, quatre façons de faire monter les charges, et une routine suggérée quand l'habitude est claire. 608 exercices, dont 496 animés : vingt muscles, une recherche en français ou en anglais, un filtre par matériel, et ses propres exercices. Disques et échauffement : quoi charger de chaque côté de la barre, et les paliers d'échauffement. La récupération : dix-huit muscles suivis, de l'orange au vert, et le groupe conseillé aujourd'hui. La série, comptée en semaines. Le résumé mensuel : dix pages à faire défiler, le volume du mois converti en objets, et un résumé annuel. Les badges : neuf à paliers, six secrets, dix-huit étapes, ni points d'expérience ni rang. Le corps : poids, taux de gras, huit mensurations, photos sous trois angles. Le partage : cinq cartes à la fin d'une séance, une de plus s'il y a un record. Reprendre son historique depuis un export CSV. À toi : des fichiers sur le téléphone, aucun compte, aucun serveur. L'écran déplié : un rail et deux colonnes dès 840 points de large." width="100%">
+
+Quatre onglets suffisent : **Accueil**, **Entraîner**, **Progrès**, **Profil**. La nutrition, le sommeil et un coach existent dans le code, rangés derrière un drapeau de construction : je veux d'abord une application de musculation solide.
+
+<a id="ecrans"></a>
+<img src="docs/sections/s02.png" alt="02 Les écrans" width="100%">
+
+Une barre de quatre onglets en bas, et la séance en cours qui reste à portée, réduite en une barre fine, tant qu'elle n'est pas terminée. Toutes les captures viennent de la démo de l'application, remplie d'un jeu d'essai.
+
+<img src="docs/schemas/captures-telephone.png" alt="Seize écrans sur téléphone. L'accueil : la série en semaines, la semaine en cours, les dernières séances. Les routines : la routine suggérée du jour, puis les siennes, en cartes de jour. Une routine : les muscles visés, les exercices, les séries prévues. La séance : on coche, la ligne passe au vert, un record se dore. Le repos : l'anneau bleu, dix secondes de plus ou de moins. La fin de séance : le volume, l'écart avec la dernière fois, les records battus. Le partage : des cartes à faire défiler. Les exercices : les muscles en tuiles, 608 exercices, la recherche. Une fiche : l'animation, les muscles ciblés, comment faire. Ses records, avec l'écusson PR. Les progrès : le volume du mois, semaine par semaine. La récupération, muscle par muscle, et le groupe conseillé. Les mensurations, chaque zone reliée au corps. Le résumé mensuel : le volume du mois converti en neuf camions de pompiers. Le profil : l'objectif, le calendrier du mois, les badges. Les badges : neuf à paliers, et des secrets. Toutes viennent de la démo." width="100%">
+
+<img src="docs/schemas/palette.png" alt="Palette : fond #000000, cartes #131315, bouton #FFFFFF, muscles #E0393E, série validée #228B22, minuteur #1E9BF0, record #FFBE0B, flamme #FF9A00." width="100%">
+
+Chaque couleur a un seul métier. Le vert forêt valide une série, le bleu est réservé au minuteur de repos, l'or aux records, l'orange à la série, et le rouge aux muscles travaillés sur le personnage. Les boutons principaux sont blancs, à texte noir. La police est Figtree ; Montserrat ne sert qu'aux gros titres du résumé.
+
+<a id="seance"></a>
+<img src="docs/sections/s03.png" alt="03 La séance" width="100%">
+
+<img src="docs/schemas/seance.svg" alt="La séance, sur un téléphone animé, en six étapes. L’écran de séance montre la barre du haut (réduire, pilule du minuteur, Terminer), l’encadré Durée, Volume, Séries, et l’exercice Développé couché avec son tableau : Série, Précédent, Kg, Reps, trois séries dont le précédent vaut 80 kg × 8, 80 kg × 8 et 80 kg × 7. Étape 1 : un toucher sur la coche valide la première série, 80 kg × 8 ; la ligne passe au vert, le volume monte à 640 kg et le compteur à 1 série. Étape 2 : le minuteur de repos part seul, 90 secondes par défaut, 60 au plus après un échauffement, jamais au milieu d’un superset ni après la dernière série ; la pilule bleue affiche le temps qui reste. Étape 3 : un toucher sur la pilule ouvre le minuteur en plein écran, un anneau bleu qui se vide, avec les boutons −10, +10 et Arrêter ; +10 ajoute dix secondes. Étape 4 : à la fin du repos, le vibreur donne un tic à 3, 2 et 1 seconde, puis un coup plus long avec le son de fin ; en arrière-plan, une notification Repos terminé prend le relais. Étape 5 : la deuxième série passe à 82,5 kg × 8 et bat deux records, la charge maximale (80 kg avant) et le 1RM estimé (100,3 kg avant, 103,5 kg maintenant) ; la ligne passe à l’or, l’écusson PR s’ouvre en haut de l’écran et annonce chaque record, et l’encadré gagne une colonne Records. Étape 6 : le chevron réduit la séance en une barre Entraînement en cours posée au-dessus des onglets, avec le chrono et les boutons Reprendre et Abandonner. Chaque geste est écrit sur le téléphone." width="100%">
+
+Pendant la séance, tout tient sur un écran : on coche une série, le repos part seul et prévient quand il se termine. Une série qui dépasse ce que tu as déjà fait sur l'exercice passe à l'or, et l'application l'annonce tout de suite. La séance peut se réduire en une barre au-dessus des onglets sans s'arrêter, et chaque geste est écrit sur le téléphone au fur et à mesure : fermer l'application ne perd rien.
+
+Chaque série porte un type, douze en tout : normale, échauffement, dégressive, échec, gauche, droite, négative, partielles, myo-reps, feeder, top set, back-off. Seul l'échauffement ne compte ni dans le volume ni dans les records. Un exercice se note de sept façons, du poids et des répétitions à la distance et la durée, et le tableau change de colonnes avec lui. Le RPE ou le RIR s'ajoutent en colonne si on les active.
+
+<details>
+<summary><b>Disques et échauffement</b></summary>
+
+La page **Disques et échauffement** s'ouvre depuis le menu d'un exercice. Elle dit quoi charger de chaque côté de la barre : la charge visée moins la barre, divisée par deux, puis les disques pris du plus lourd au plus léger parmi ceux qu'on possède, sans jamais dépasser la cible. Si elle n'est pas atteignable, la page donne le plus proche avec ce matériel. Barres et disques se règlent une fois, dans les réglages.
+
+Elle propose aussi l'échauffement : la barre seule pour dix répétitions, puis 40 % pour huit, 60 % pour cinq et 80 % pour trois, arrondis au pas du matériel. **Ajouter à l'exercice** pose ces paliers en tête, en séries d'échauffement.
+
+</details>
+
+<a id="records"></a>
+<img src="docs/sections/s04.png" alt="04 Le 1RM et les records" width="100%">
+
+<img src="docs/schemas/records.svg" alt="Le 1RM estimé et les records. Le 1RM estimé d’une série cochée, hors échauffement, se calcule par deux formules : Epley, poids × (1 + reps / 30), et Brzycki, poids × 36 / (37 − reps). Pour 80 kg × 8, Epley donne 101,33 kg et Brzycki 99,31 kg ; jusqu’à 10 répétitions on retient leur moyenne, 100,32 kg. Pour 60 kg × 12, au-delà de 10 répétitions, Brzycki (86,40 kg) est écartée et Epley seul donne 84,00 kg. À 1 répétition, le 1RM est la charge elle-même. À la fin de la séance, cinq types de record sont comparés aux meilleures valeurs des séances d’avant. Sur le développé couché, la séance du jour compte un échauffement de 40 kg × 10, puis 82,5 kg × 8, 82,5 kg × 6 et 80 kg × 8, soit 1 795 kg. Charge maximale : 80 kg avant, 82,5 kg aujourd’hui, record de 2,5 kg. 1RM estimé : 100,3 kg avant, 103,5 kg aujourd’hui, record de 3,1 kg. Meilleure série en volume : 640 kg avant, 660 kg aujourd’hui, record de 20 kg. Répétitions maximales : 8 contre 8, égalité, pas de record. Volume en une séance : 1 840 kg avant, 1 795 kg aujourd’hui, pas de record. Quatre règles : il faut dépasser strictement l’ancienne valeur ; l’échauffement ne compte ni dans le volume, ni dans le 1RM, ni dans les records ; le record de répétitions ne vaut que pour un exercice qui n’a jamais eu de charge ; un exercice fait pour la première fois ne bat aucun record. Pendant la séance, l’alerte de record suit la charge maximale, le 1RM estimé et les répétitions à une charge donnée." width="100%">
+
+Le 1RM estimé vient de deux formules classiques, Epley et Brzycki : l'application en garde la moyenne jusqu'à dix répétitions, puis Epley seul au-delà. À la fin de chaque séance, cinq valeurs par exercice sont comparées aux meilleures des séances d'avant, et il faut dépasser l'ancienne, pas l'égaler. L'échauffement ne compte nulle part, et un exercice fait pour la première fois ne bat aucun record.
+
+<a id="programmes"></a>
+<img src="docs/sections/s05.png" alt="05 Programmes et progression" width="100%">
+
+Une **routine** est une séance type : ses exercices, ses séries, ses fourchettes de répétitions. Un **programme** range des routines dans un cycle, sait où l'on en est, et fait monter les charges. La bibliothèque propose 116 idées de programmes, rangées par rayons : pour débuter, prendre du muscle, gagner en force, à la maison sans matériel, avec des haltères, quand le temps manque. En ajouter une crée ses routines, prêtes à lancer.
+
+<img src="docs/schemas/progression.svg" alt="La progression des charges d’un programme, en quatre exemples chiffrés. Le réglage se fait par programme : quatre modes, Aucune, Charge progressive, Double progression et Ondulée par semaine, un incrément de charge, ici 2,5 kg, et une semaine de décharge, ici toutes les 4 semaines. Charge progressive, au développé couché, 3 séries de 8 : à 60 kg tout est réussi, la séance suivante passe à 62,5 kg ; là, la troisième série s’arrête à 6 répétitions, la même charge revient ; réussie cette fois, elle monte à 65 kg. Double progression, au rowing barre, 3 séries de 8 à 10 répétitions à 50 kg : la cible passe de 8 à 9 puis à 10 répétitions, une de plus par séance ; le haut de la fourchette atteint partout, la charge monte à 52,5 kg et la cible revient à 8. Ondulée par semaine, au squat : la dernière séance, 80 kg pour 8 répétitions, donne un 1RM estimé de 100,3 kg, et la charge vaut le 1RM divisé par 1 plus les répétitions sur 30, multiplié par 0,92 et arrondi au pas ; semaine lourde, 5 répétitions à RPE 8,5, 80 kg ; semaine moyenne, 8 répétitions à RPE 8, 72,5 kg ; semaine légère, 12 répétitions à RPE 7, 65 kg ; la quatrième semaine repart sur une lourde. Semaine de décharge, la quatrième et la huitième : sur 4 séries de 8 à 80 kg et RPE 8, il en reste 2, à 72,5 kg, soit 90 % arrondis au pas, et RPE 6 ; les échauffements restent. Avec le mode Aucune, les séries restent celles de la routine. La semaine du programme avance avec les séances terminées, pas avec le calendrier." width="100%">
+
+Chaque programme choisit comment ses charges évoluent : « Aucune », « Charge progressive », « Double progression » ou « Ondulée par semaine », avec un incrément de charge et, si tu veux, une semaine de décharge toutes les N semaines. Au lancement d'une séance du programme, l'application repart de la dernière fois où chaque exercice a été fait et règle les séries en conséquence. La semaine du programme avance avec les séances terminées, pas avec le calendrier. Sans programme, la routine part telle quelle.
+
+<img src="docs/schemas/suggestion.svg" alt="La routine suggérée du jour, sur huit semaines de séances et un téléphone animé. Aujourd’hui, vendredi 2 octobre. La lecture descend la colonne des huit derniers vendredis, du 7 août au 25 septembre, et compte les fois où la même routine y a été faite : Bas volume six fois, Haut force une fois, et un vendredi sans séance. Le seuil est de 6 fois sur 8 : Bas volume est proposée. Sur le téléphone, le volet Routines de l’onglet Entraîner affiche, sous « Suggéré pour ce vendredi », la carte Bas volume du programme Haut/Bas 4 jours, 7 exercices, 50 minutes, avec sa raison : « Tu as fait cette séance 6 des 8 derniers vendredis. Dernière fois : le 25 septembre. », et deux boutons, Commencer et Une autre. Le doigt touche Une autre, et la file avance en trois rangs. 1, les habitudes du jour, même une seule fois sur 8, les plus régulières d’abord : Haut force. 2, la suite du programme en cours, la routine qui suit dans le cycle la dernière faite : Haut volume, « La suite de ton programme. Dernière fois : le 24 septembre. ». 3, les autres, celle qui attend depuis le plus longtemps d’abord et les jamais faites à la fin : Abdos, « Pas faite depuis le 18 juillet. ». Rien n’est proposé d’emblée si aucune routine n’atteint 6 sur 8, si elle a déjà été faite aujourd’hui ou si elle n’existe plus. La file épuisée, l’appli écrit : « Pas d’autre suggestion pour aujourd’hui : choisis une routine ci-dessous. ». Une autre écarte la routine jusqu’au lendemain ; ni la récupération des muscles ni les jours prévus du programme n’entrent dans ce choix." width="100%">
+
+En tête du volet Routines, l'application ne propose une routine que si elle est sûre d'elle : la même routine doit avoir été faite ce jour de la semaine au moins 6 fois sur les 8 dernières semaines. « Une autre » l'écarte jusqu'au lendemain et fait avancer une file : les habitudes du jour, puis la suite du programme en cours, puis la routine qui attend depuis le plus longtemps. Chaque proposition affiche sa raison, et « Commencer » lance la séance.
+
+<a id="exercices"></a>
+<img src="docs/sections/s06.png" alt="06 Les exercices" width="100%">
+
+Le catalogue compte **608 exercices**, dont **496 animés** ; les 112 autres sont des maintiens et des étirements, montrés par leur pose. Chacun a son nom en français et en anglais, ses muscles principaux et secondaires parmi vingt, son matériel, ses étapes et ses conseils.
+
+- **Chercher.** La recherche ignore les accents et la casse, et comprend le français comme l'anglais, les surnoms (« pecs », « dorsaux », « quads ») et le matériel. À égalité, l'exercice le plus pratiqué passe devant.
+- **Filtrer.** Une rangée de tuiles par groupe musculaire, plus Favoris, Cardio et Étirements ; un panneau **Filtrer** par matériel, en images, à plusieurs choix ; et les puces Récents et Mes exercices.
+- **Lire une fiche.** Quatre onglets : **À propos** (l'animation, les muscles ciblés sur le corps, comment faire, les exercices alternatifs), **Historique**, **Progrès** (la courbe du 1RM estimé, de la charge, du volume, sur un mois à tout l'historique) et **Records**.
+- **Créer le sien.** Un nom, une façon de noter, les muscles touchés sur le personnage, le matériel, une photo ou une vidéo. Une variante personnelle se copie d'un exercice du catalogue en un geste.
+
+<a id="recuperation"></a>
+<img src="docs/sections/s07.png" alt="07 La récupération" width="100%">
+
+<img src="docs/schemas/recuperation.svg" alt="La récupération, muscle par muscle. Une séance de 4 séries de développé couché (pectoraux en principal, deltoïdes antérieurs et triceps en secondaire) et de 3 séries de leg extension (quadriceps) charge la fatigue de chaque muscle : séries × pondération × reste ÷ 6, avec une pondération de 1 en principal et de 0,5 en secondaire, six séries saturant le muscle. Juste après, les pectoraux sont à 0,67 de fatigue, soit 33 % de récupération, les quadriceps à 0,50, soit 50 %, les deltoïdes antérieurs et les triceps à 0,33, soit 67 %. La fatigue s’efface ensuite en ligne droite, chaque muscle à sa durée : 60 heures pour les pectoraux, 72 pour les quadriceps, 48 pour les deltoïdes et les triceps. Toutes les douze heures, la frise relève les pourcentages : à 12 heures, 47, 58 et 75 % ; à 24 heures, 60, 67 et 83 % ; à 36 heures, 73, 75 et 92 % ; à 48 heures, 87, 83 et 100 % ; à 60 heures, 100, 92 et 100 % ; à 72 heures, 100, 100 et 100 %. Un muscle passe de l’orange au vert au seuil « prêt » de l’écran, 90 % : vers 33 heures pour les triceps et les deltoïdes, 51 heures pour les pectoraux, 57 heures pour les quadriceps. Sur le téléphone, la page Récupération montre l’anneau global, moyenne des 18 muscles suivis, qui tombe à 90 % après la séance, six vignettes de muscles et la carte « Conseillé aujourd’hui » : avant la séance, les jambes ; après, le dos, dont le grand dorsal est récupéré à 100 %. Le groupe conseillé est celui dont le muscle le moins récupéré l’est le plus ; à égalité, celui qui n’a pas travaillé depuis le plus longtemps." width="100%">
+
+Chaque série validée fatigue les muscles de l'exercice, en entier pour un muscle principal, à moitié pour un secondaire ; six séries suffisent à saturer un muscle. La fatigue s'efface ensuite en ligne droite, sur 48, 60 ou 72 heures selon le muscle, et seules les séances des 96 dernières heures comptent. La page Récupération de l'onglet Progrès en tire un pourcentage par muscle, vert à partir de 90 %, orange en dessous, et conseille le groupe dont le muscle le moins récupéré l'est le plus.
+
+<a id="serie"></a>
+<img src="docs/sections/s08.png" alt="08 La série" width="100%">
+
+<img src="docs/schemas/serie.svg" alt="La série, la flamme comptée en semaines, sur un calendrier de six semaines et un téléphone animé. Aujourd’hui avance du 31 août au 6 octobre 2026. Mercredi 2 septembre, une première séance : la série vaut 1, et la page Série écrit « Première semaine de ta série. Reviens la semaine prochaine pour la faire grandir. ». Vendredi 11 septembre, trois séances dans la semaine : 2, car trois séances ne font qu’une semaine. Dimanche 20 septembre, une seule séance, le dimanche : 3. Lundi 21 septembre, la semaine en cours est encore vide : elle ne casse rien, la série reste à 3. Jeudi 24 septembre, une séance : 4, « Tu as tenu 4 semaines d’affilée. Bien vu ! ». Mercredi 30 septembre, toujours rien cette semaine : encore 4. Lundi 5 octobre, la semaine vide est passée derrière : le compte s’arrête, la série tombe à 0, la flamme pâlit et la page écrit « Une séance cette semaine et ta série démarre. ». Mardi 6 octobre, une séance : la série repart à 1. Sur la page Série, le grand chiffre et la flamme suivent, et le calendrier de la série souligne d’une bande chaque semaine qui compte, avec un disque orange par jour de séance. Trois règles : une séance suffit pour qu’une semaine compte ; la semaine en cours, encore vide, ne casse rien ; la première semaine vide passée derrière remet à zéro. L’objectif de séances par semaine n’entre pas dans la série, et c’est le début de la séance qui la date. La même flamme se retrouve en tête de l’accueil, sur le profil et sur la carte de partage d’une séance." width="100%">
+
+La série se compte en semaines, pas en jours : une seule séance suffit pour qu'une semaine compte, et l'objectif de séances par semaine n'y entre pas. Le compte remonte depuis la semaine en cours, qui ne casse rien tant qu'elle est encore vide, et s'arrête à la première semaine sans séance. La page « Série » montre le chiffre, la flamme et un calendrier où chaque semaine tenue est soulignée d'une bande.
+
+<a id="resume"></a>
+<img src="docs/sections/s09.png" alt="09 Le résumé mensuel" width="100%">
+
+<img src="docs/schemas/resume.svg" alt="Le résumé mensuel, façon story, sur un téléphone animé. Dix pages se suivent, une touche sur l’écran pour avancer, son tiers gauche pour revenir, sans minuterie : l’ouverture ; les séances de septembre 2026, une ligne chacune avec sa durée et son volume, puis le total, 12 h 53 et 70 910 kg ; la régularité, 12 entraînements, 20 % de plus qu’en août, et neuf mois de cases ; le volume, 70 910 kg, 12 % de plus qu’en août, et douze mois en barres ; le volume en objets ; la série, 11 semaines d’affilée ; les muscles, une toile à neuf axes devant celle du mois d’avant ; les records, 3 nouveaux ; les cinq exercices favoris ; le résumé à partager. La cinquième page convertit le volume en un objet parmi 25, du burger de 250 g à la statue de la Liberté de 225 tonnes. Un objet est gardé si le volume divisé par sa masse va de 0,93 à 99,5 : ici 14 objets, de 713 kg à 76 t. Le multiple est arrondi à l’entier s’il s’écarte de 8 % au plus ou dès 10, sinon à une décimale ; les entiers passent d’abord, du plus juste au moins juste, puis le plus petit multiple ; la statue de la Liberté, en pourcentage, ferme la liste. La graine du mois, 2026 × 12 + 9 = 24 321, désigne le choix n° 4 sur 15 : × 12 éléphants, « C’est comme soulever 12 éléphants ! ». Une graine sur six sort un burger ou une baguette. Le résumé annuel suit la même mécanique, avec l’année pour graine : pour 2026 jusqu’ici, 545 610 kg, soit × 68 tyrannosaures." width="100%">
+
+Chaque mois fini a son résumé en dix pages plein écran, qu'on feuillette au toucher et dont chaque page se partage en image. La cinquième pèse le volume du mois dans un objet tiré d'une échelle de vingt-cinq, du burger à la statue de la Liberté : l'objet est choisi par une graine tirée du mois, si bien que le même résumé rouvre toujours sur le même objet. Le résumé annuel reprend les mêmes dix pages pour l'année entière.
+
+<a id="badges"></a>
+<img src="docs/sections/s10.png" alt="10 Les badges" width="100%">
+
+<img src="docs/schemas/badges.svg" alt="Les badges d’AESTHETICS. Neuf badges à paliers, en écussons hexagonaux de leur couleur, gris avec un cadenas tant que rien n’est gagné : Semaine parfaite (semaines où ton objectif de séances est atteint ; paliers 1, 3, 5, 10, 15, 20, 30, 40, 50, 75), Lève-tôt (séances commencées entre 4 h et 7 h ; 1, 5, 10, 25, 50, 75, 100, 150, 200, 300), Série (ta plus longue suite de semaines avec une séance ; 2, 4, 8, 12, 15, 20, 26, 39, 52, 104), Guerrier du week-end (séances commencées un samedi ou un dimanche ; mêmes paliers que Lève-tôt), Collectionneur de routines (routines dans ta bibliothèque ; 1, 3, 5, 10, 25), Explorateur d’exercices (exercices différents avec au moins une série faite ; 5, 10, 25, 50, 75, 100, 150, 200, 300, 400), Marathon (séances de deux heures ou plus, et de moins de douze ; 1, 5, 10, 25, 50), Noctambule (séances finies après 23 h ou avant 4 h ; mêmes paliers que Lève-tôt) et Chasseur de records (exercices où tu tiens un record de charge ; mêmes paliers). Après 42 séances, huit sont gagnés sur neuf et chaque écusson porte en gros son dernier palier atteint ; Marathon reste gris. Le détail de Lève-tôt, comme dans l’appli : « Niveau 1 · 4 séances », une jauge, « Encore 1 séance pour le niveau 2 ». Un mardi à 6 h 42, une cinquième séance commence avant 7 h : le seuil est atteint, l’écusson passe de 1 à 5, « Niveau 2 · 5 séances », « Encore 5 séances pour le niveau 3 ». Six badges secrets s’affichent « ??? » tant que leur compteur est à zéro et ne donnent qu’un indice ; une deuxième séance le même mardi révèle « Doublé », deux séances le même jour. Les étapes importantes, en boucliers, comptent les séances terminées : 1, 10 et 25 sont atteintes, il en reste 6 avant celle des 50. Ni points d’expérience, ni rang." width="100%">
+
+Les badges ne se réclament pas : ils sont recomptés à partir des séances terminées, et un badge monte d'un niveau quand son compteur atteint le seuil suivant. Neuf badges ont des paliers, six restent secrets jusqu'à leur première fois, et les étapes ne comptent que les séances, de 1 à 2 000. Il n'y a ni points ni rang : un écusson dit seulement ce que tu as fait.
+
+<a id="import"></a>
+<img src="docs/sections/s11.png" alt="11 Reprendre son historique" width="100%">
+
+<img src="docs/schemas/import.svg" alt="Reprendre son historique dans AESTHETICS depuis le fichier CSV exporté par une autre appli. Le fichier export.csv a cinq colonnes, séparées par des points-virgules : Date, Séance, Exercice, Charge (kg) et Répétitions. Chacune est reconnue : la date, le nom de la séance, l’exercice, la charge en kilos, les répétitions. Ses six lignes sont lues l’une après l’autre et deviennent deux séances : « Haut du corps », le 2 mars 2026 à 18 h 30, avec deux séries de Développé couché barre à 80 kg et une de Tirage horizontal poulie à 55 kg, puis « Jambes », le 4 mars à 18 h 45, avec une série de Squats à 100 kg et deux de Squat avant barre, à 60 et 62,5 kg. Même date et même titre font une séance ; les lignes qui se suivent pour un même exercice font ses séries. Chaque nom est ensuite rapproché du catalogue, dans l’ordre : tes choix passés, la table de synonymes, le nom identique, puis la ressemblance. « Développé couché barre », normalisé en « bench press barbell », est dans la table de 85 entrées : Développé couché, reconnu automatiquement. « Squats » devient « squat », nom identique à Squat. « Tirage horizontal poulie » obtient 0,97 pour Tirage horizontal, le suivant 0,85 : au-dessus du seuil de 0,90 avec un écart d’au moins 0,05, il est reconnu automatiquement. « Squat avant barre » obtient 0,84 pour Squat et 0,70 pour Squat avant : aucun n’atteint 0,90, le nom est à confirmer. Sur le téléphone, après « Parcourir » et l’analyse, l’étape 3 sur 5, « Exercices », affiche ce nom avec ses suggestions « Squat · 84 % », « Squat avant · 70 % » et « Exercice perso », et le bouton « Encore 1 à confirmer » reste bloqué. Un toucher sur « Squat avant · 70 % » : tout est associé, quatre noms reconnus, « Continuer ». Le score vaut 0,8 fois les mots communs pondérés plus 0,2 fois les lettres ; sous 0,60, rien n’est proposé. Le choix est retenu pour les prochains imports." width="100%">
+
+L'historique d'une autre application se reprend depuis son export CSV : les colonnes sont reconnues d'après leurs en-têtes, en français ou en anglais, et chaque ligne devient une série dans sa séance. Les noms d'exercices sont ensuite rapprochés du catalogue, d'abord par une table de synonymes, puis par un score de ressemblance. Un nom n'est accepté seul qu'à partir de 0,90, avec 0,05 d'avance sur le suivant ; tout le reste t'est montré avant d'importer, et tes choix sont retenus pour la fois d'après. Un tableau quelconque passe aussi, en indiquant quelle colonne contient quoi, et chaque import peut être revu ou annulé.
+
+<a id="donnees"></a>
+<img src="docs/sections/s12.png" alt="12 Mes données" width="100%">
+
+<img src="docs/schemas/donnees.svg" alt="Mes données, dans AESTHETICS. Tout vit sur le téléphone, dans le dossier de l’appli : un fichier JSON par collection (profil, réglages, séances, routines, programmes, mesures…), les photos à part, et chaque écriture passe par un fichier temporaire puis un renommage. L’appli le dit elle-même : « Aucun compte, aucun serveur, aucune publicité. » Sur le téléphone, la page « Mes données » des réglages affiche ce qu’il y a sur ce téléphone (1,8 Mo, 44 séances, 6 routines, 12 mesures) et quatre groupes : mettre mes données à l’abri, venir d’une autre appli, utiliser mes données ailleurs, zone sensible. Trois gestes en partent. Un : « Exporter en tableau », en CSV ou en JSON, pour les séances, les exercices personnels et les mesures ; le fichier aesthetic-seances-2026-10-04.csv a une ligne par série et se réimporte tel quel, avec une virgule ou un point-virgule, en UTF-8 ; plusieurs tableaux sont réunis dans un ZIP. Deux : « Faire une sauvegarde », complète (une archive ZIP avec donnees.json, manifeste.json et les photos) ou en données seules (un fichier JSON) ; le fichier aesthetic-sauvegarde-2026-10-04.zip se restaure sur un autre téléphone, où son contenu s’affiche avant de confirmer ; elle remplace tout, rien n’est fusionné, et elle est refusée si elle vient d’une version plus récente de l’appli. Trois : « Copies du téléphone » ; « Sauvegarder maintenant » range aesthetic-20261004-1830.json dans le dossier des copies, à côté des données, sans les photos, et les dix dernières sont gardées. Une copie n’est faite que sur demande, ou avant « Tout effacer » si l’option reste cochée : il n’y a aucune sauvegarde automatique. Si un fichier ne se relit plus au démarrage, il est mis de côté sous le nom seances.json.abime, jamais écrasé, et l’appli affiche l’alerte « Un fichier de données est abîmé » : rien n’a été effacé, et elle indique où est la copie de secours." width="100%">
+
+Tes données sont des fichiers JSON rangés sur le téléphone, un par collection : aucun compte, aucun serveur. La page « Mes données » permet de les exporter en CSV ou en JSON, d'en faire une sauvegarde complète à restaurer sur un autre téléphone, et de garder des copies rapides sur l'appareil. Aucune sauvegarde n'est automatique : une copie se fait quand tu la demandes, ou juste avant « Tout effacer ». Si un fichier ne se relit plus, il est mis de côté sans être écrasé et l'application te le dit à l'ouverture.
+
+<a id="architecture"></a>
+<img src="docs/sections/s13.png" alt="13 Architecture" width="100%">
+
+<img src="docs/schemas/stack.svg" alt="La pile d’AESTHETICS. En socle, Flutter 3 : l’application entière, en Dart, un seul code pour le téléphone et l’écran déplié, sans génération de code. Dessus, cinq prises, ce que la musculation demande, et chaque paquet s’empile sur la sienne. L’écran : provider pour l’état, les dépôts fournis à tout l’arbre et l’écran qui les écoute ; go_router pour toutes les routes, chaque module apportant les siennes ; fl_chart pour les courbes de la fiche d’exercice et les graphiques de Progrès ; path_drawing pour les pictogrammes, dessinés depuis des tracés ; intl et flutter_localizations pour les dates, les nombres et les textes du système en français. Les données, des fichiers JSON sur le téléphone : path_provider, le dossier de l’appli où chaque collection a son fichier ; uuid, un identifiant v4 par séance, par exercice, par série ; archive, la sauvegarde complète et l’export dans une archive ZIP ; collection, pour chercher et regrouper dans les listes des dépôts ; shared_preferences, une seule clé dans tout le code. La séance : wakelock_plus, l’écran reste allumé tant que la séance est ouverte ; flutter_local_notifications, la fin du repos, la séance en cours et les rappels ; audioplayers, le son de fin de repos, le décompte vocal et le son d’un record ; vibration, un tic par seconde sur les trois dernières secondes puis un coup plus long ; timezone et flutter_timezone, l’heure locale des notifications planifiées. Les médias : image_picker, les photos de séance, de profil, d’évolution et d’exercice personnalisé ; video_player, les vidéos d’exercice et de séance ; cached_network_image, les images d’exercice données par une adresse ; path, les noms de fichiers des médias de séance. Le partage : share_plus, pour partager une carte de séance, un export ou une sauvegarde ; file_picker, pour choisir le fichier à importer ou à restaurer ; url_launcher, pour ouvrir un lien ; permission_handler, l’autorisation des notifications à l’inscription ; health, l’envoi d’une séance terminée vers Health Connect, à la demande. Sous le socle, à part : mobile_scanner, http et flutter_markdown_plus sont rangés pour plus tard, importés seulement par nutrition et coach, deux modules cachés par défaut ; flutter_svg et csv sont déclarés mais jamais importés, l’import CSV ayant son propre lecteur. Deux trajets traversent la pile. En séance, l’écran reste allumé, la série cochée s’écrit, et la fin du repos vibre, sonne, ou te prévient si l’appli est en arrière-plan. Pour une sauvegarde complète, les fichiers JSON et les photos entrent dans une archive, qu’on partage ; pour restaurer, tu choisis le fichier." width="100%">
+
+AESTHETICS est écrite en Flutter, sans génération de code. Vingt-six paquets sont importés par la partie musculation ; le schéma les range par ce qu'ils servent, de l'état de l'écran jusqu'au son de fin de repos. Trois autres ne servent qu'aux modules rangés, et deux sont déclarés sans être importés.
+
+<img src="docs/schemas/couches.svg" alt="Les couches d’AESTHETICS, traversées par une écriture, étape par étape : cocher une série pendant la séance. Les dossiers réels de l’application, de haut en bas. lib/features/seance : un dossier par module, dix en tout, chacun avec ses routes ; l’écran de séance lit le dépôt et lui confie chaque geste par SeanceEditeur, il n’ouvre jamais lui-même le fichier de la séance. lib/core/models : des objets qu’on recopie au lieu de les modifier, avec toJson et fromJson écrits à la main. lib/core/data : SessionRepo, un ChangeNotifier, garde la séance en mémoire, prévient qui l’écoute, puis écrit par Store, un fichier JSON par collection, d’un coup ou pas du tout. seance_active.json : la séance en cours, dans le dossier donnees de l’appli, elle survit à la fermeture. lib/core/logic : du Dart pur, sans écran, pour les dates, le 1RM estimé, les records, la récupération et les unités. lib/core/theme et lib/core/ui : jetons, couleurs et composants partagés, d’où vient le vert sombre d’une série validée. lib/app : AestheticApp fournit les dépôts à tout l’arbre, par provider, et le routeur assemble les routes des modules ; il est hors de ce trajet. Sur le téléphone, la séance en cours : Développé couché, trois séries de 80 kg × 8, la première déjà validée ; l’encadré dit Durée 0:12:40, Volume 640 kg, Séries 1. Le trajet, dans l’ordre du code. 1, en vert, le doigt touche la coche de la deuxième série. 2, l’écran appelle validerSerie(), qui construit une nouvelle série, validée. 3, il la confie à SessionRepo.updateActive(). 4, en bleu, le dépôt appelle notifyListeners(). 5, l’écran se redessine : la ligne passe au vert, Séries 2, Volume 1 280 kg. 6, en vert, le dépôt écrit par Store.write() : un fichier .tmp, puis un renommage, et seance_active.json contient la série, poids 80, reps 8, fait vrai. 7, en or, l’écriture finie, l’écran cherche un record par Strength.oneRepMax(). 8, en bleu, le repos démarre : la pilule du haut affiche 1:30. L’écran est donc prévenu avant que le fichier soit écrit. L’état : provider et ChangeNotifier, sans génération de code ; neuf dépôts fournis à la racine, et chaque collection écrite par Store." width="100%">
+
+Cocher une série traverse toute l'application. L'écran confie le geste à `SessionRepo`, qui garde la séance en mémoire, prévient l'écran, puis l'écrit dans `seance_active.json` par une écriture atomique : un fichier temporaire, puis un renommage. La séance en cours survit donc à la fermeture de l'application, et l'écran n'attend jamais le disque. L'état repose sur `provider` et `ChangeNotifier`.
+
+**L'écran déplié.** Sous 600 points de large, l'application reste en portrait, comme un téléphone. Au-delà, l'écran tourne librement, et dès 840 points la barre du bas devient un rail à gauche : la séance passe en deux colonnes, la bibliothèque montre la liste à gauche et la fiche à droite, l'historique met le calendrier à côté des séances.
+
+<a id="tests"></a>
+<img src="docs/sections/s14.png" alt="14 Les tests" width="100%">
+
+<img src="docs/schemas/tests.svg" alt="Les tests d’AESTHETICS, comptés fichier par fichier. Un compteur monte de 0 à 905 et un ruban de 98 cases s’allume, une case par fichier de test, groupées par sous-dossier de mobile/test : d’abord les 92 fichiers et 875 cas de la musculation et de son socle, puis, à part, les 6 fichiers et 30 cas des modules rangés. Ce sont des cas de test écrits, comptés dans le texte par grep, pas le résultat d’un lancement. Chaque dossier s’allume à son tour, avec ce qu’il vérifie et un vrai nom de test. test/seance, 18 fichiers, 133 cas : la saisie des séries, le repos, les disques, la fin et l’enregistrement, le partage ; par exemple, deux appuis coup sur coup sur la coche valident la série une seule fois. test/entrainer, 15 fichiers, 166 cas : la bibliothèque d’exercices, les routines, les programmes et leurs éditeurs ; exercice au poids du corps, seules les répétitions comptent. test/progres, 13 fichiers, 193 cas : les calculs, les statistiques, les objectifs, le résumé de l’année, la navigation ; une séance encore ouverte ne compte nulle part. test/profil, 9 fichiers, 114 cas : les badges, les unités, les mesures, les photos, les écrans du profil ; la séance en cours ne compte pas, les étapes suivent le nombre de séances. test/import, 8 fichiers, 81 cas : la lecture des CSV, le rapprochement des noms d’exercices, les doublons ; matériel différent, jamais accepté seul. test/aujourdhui, 8 fichiers, 53 cas : l’accueil, vide, étroit ou large, et le résumé du jour ; deux séances le même jour, la pastille montre la première, comme le calendrier. test/inscription, 6 fichiers, 16 cas : le premier lancement, le brouillon, un profil abîmé à la bienvenue ; le profil créé efface le brouillon, même si une sauvegarde était en attente. test/parcours, 4 fichiers, 47 cas : la navigation d’un écran à l’autre et les parcours de bout en bout ; Reprendre rouvre la séance, le retour la réduit sans la perdre. test/core, 6 fichiers, 43 cas : les formats d’écriture, les modèles et leur relecture, les équivalents ; douze types de série, anciens noms relus. test/data, 2 fichiers, 16 cas : le catalogue d’exercices et le stockage, écritures et fichiers abîmés ; atomique, aucun fichier temporaire ne reste, le contenu est complet. test/body, 1 fichier, 4 cas : la carte du corps, avec la seule comparaison à une image de référence ; chaque muscle du contrat a un masque sur au moins une vue du corps. test/fondation_rendu, 2 fichiers, 9 cas : le socle commun, contrastes, tailles des zones à toucher, rendu ; le texte secondaire passe 4,5 sur le fond, la carte et la surface. Modules rangés, 6 fichiers, 30 cas : test/coach, test/nutrition et test/sante, les tests de trois modules cachés par défaut, écrits et comptés à part. Comptés, pas lancés : des appels lus dans le texte, 543 test( et 362 testWidgets( ; huit portent un skip, trois pour des défauts connus, cinq sous condition." width="100%">
+
+La suite compte 905 cas de test écrits dans 98 fichiers, rangés comme le code : un dossier par module. 875 portent sur la musculation et son socle, 30 sur les modules rangés. Ces nombres sont des comptages dans le code (543 `test(` et 362 `testWidgets(`) ; huit cas sont marqués `skip`, dont trois pour des défauts connus.
+
+<a id="construire"></a>
+<img src="docs/sections/s15.png" alt="15 Construire, licences et auteur" width="100%">
+
+AESTHETICS n'est pas sur le Play Store, et aucun APK n'est publié ici : l'application embarque un catalogue d'exercices sous licence, que je n'ai pas le droit de redistribuer.
+
+**Le code.** Ce dépôt porte pour l'instant la présentation du projet : le code de l'application n'y est pas encore publié. C'est une application Flutter, pour Android 8 ou plus, qui se construit en une commande :
+
+```
+flutter build apk --release --target-platform android-arm64
+# la démo : six mois de séances inventées, dans un dossier de données à part
+flutter build apk --release --target-platform android-arm64 --dart-define=DEMO=true
+```
+
+La démo se remplit d'un jeu d'essai au premier lancement, sans jamais toucher aux vraies données : c'est elle qui a servi aux captures de cette page.
+
+**Les licences.** Le code est sous licence [MIT](LICENSE). Le reste appartient à ses auteurs :
+
+- **Les exercices** : le catalogue, les animations, les poses et le personnage viennent d'un pack acheté, sous licence commerciale. Il est embarqué dans l'application mais ne sera jamais dans ce dépôt : `.gitignore` refuse le catalogue, les animations, les poses et le personnage.
+- **Les objets en 3D** du résumé et des cartes de fin de séance : [Fluent Emoji](https://github.com/microsoft/fluentui-emoji) de Microsoft, licence MIT.
+- **Les pictogrammes des badges** : [Phosphor Icons](https://phosphoricons.com), licence MIT.
+- **Les polices** : Figtree et Montserrat, licence SIL Open Font 1.1.
+- **Les sons** du minuteur et du record : [Pixabay](https://pixabay.com), sous sa licence de contenu.
+
+Conçu et écrit par **Tristan Joncour**, élève ingénieur en cyberdéfense à l'ENSIBS, pour ses propres séances. Mes autres applications : [SmartBudget](https://github.com/Cybertrist/SmartBudget), [BodyCount](https://github.com/Cybertrist/BodyCount), [Serenity](https://github.com/Cybertrist/Serenity).
+
+<br>
+
+<sub>Les images de cette page ne sortent d'aucun logiciel de dessin : ce sont des pages HTML que Chrome capture, et des SVG animés écrits par <code>anime.js</code> et les modules de <code>schemas/</code>. Les captures viennent d'un émulateur, dans la démo de l'application. Tout est dans <a href="docs/tools/">docs/tools</a>.</sub>
