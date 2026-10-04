@@ -9,6 +9,8 @@
 //   node docs/tools/video/capture.js             la vidéo entière
 //   node docs/tools/video/capture.js --apercu    des images fixes de toute la vidéo, pour relire
 //   node docs/tools/video/capture.js --apercu --scene seance    six images d'une seule scène
+//   node docs/tools/video/capture.js --bande seance    une image par demi-temps de la scène, en planche
+//   node docs/tools/video/capture.js --bande tout      une image par temps de toute la vidéo
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
@@ -19,6 +21,7 @@ const DOCS = path.join(__dirname, '..', '..');
 const SORTIE = path.join(__dirname, '..', 'html', 'video');
 const CHROME = process.env.CHROME || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const APERCU = process.argv.includes('--apercu');
+const BANDE = process.argv.includes('--bande') ? process.argv[process.argv.indexOf('--bande') + 1] : null;
 const SCENE = process.argv.includes('--scene') ? process.argv[process.argv.indexOf('--scene') + 1] : null;
 // Un port par lancement : plusieurs captures peuvent tourner en même temps.
 const PORT = 9300 + Math.floor(Math.random() * 600);
@@ -65,7 +68,27 @@ const attendre = (ms) => new Promise((ok) => setTimeout(ok, ms));
     return Buffer.from((await cdp('Page.captureScreenshot', { format: 'jpeg', quality: 93 })).data, 'base64');
   };
 
-  if (APERCU) {
+  if (BANDE) {
+    // La bande : la scène image par image, une par demi-temps, pour juger le rythme.
+    // Quatre images par ligne : une ligne fait deux temps. Pour toute la vidéo, une image
+    // par temps et huit par ligne : une ligne fait deux mesures.
+    const { execFileSync } = require('child_process');
+    let de = 0, a = 64, pas = 1, colonnes = 8;
+    if (BANDE !== 'tout') {
+      const bornes = await js(`(() => { const s = SCENES.find((x) => x.id === ${JSON.stringify(BANDE)}); return s ? [s.de, s.a] : null; })()`);
+      if (!bornes) throw new Error(`Scène inconnue : ${BANDE}`);
+      [de, a] = bornes; pas = 0.5; colonnes = 4;
+    }
+    const dossier = fs.mkdtempSync(path.join(os.tmpdir(), 'bande-'));
+    let n = 0;
+    // Un dixième de temps après le temps : on voit ce que le pied vient de déclencher.
+    for (let b = de; b < a - 1e-9; b += pas) fs.writeFileSync(path.join(dossier, `${String(++n).padStart(3, '0')}.jpg`), await image((b + 0.1) * 0.4));
+    const sortie = path.join(SORTIE, `bande-${BANDE}.jpg`);
+    execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', path.join(dossier, '%03d.jpg'), '-vf',
+      `scale=480:270,tile=${colonnes}x${Math.ceil(n / colonnes)}:margin=6:padding=6:color=0x333333`, '-frames:v', '1', '-q:v', '3', sortie]);
+    fs.rmSync(dossier, { recursive: true, force: true });
+    console.log(`  bande-${BANDE}.jpg  ${n} images, de ${de} à ${a}, une tous les ${pas} temps, ${colonnes} par ligne`);
+  } else if (APERCU) {
     let instants = [0.5, 2.6, 4.6, 5.8, 7.4, 9.6, 11.2, 13.0, 15.6, 16.8, 18.6, 20.8, 21.8, 24.6], prefixe = 'apercu';
     if (SCENE) {
       const bornes = await js(`(() => { const s = SCENES.find((x) => x.id === ${JSON.stringify(SCENE)}); return s ? [s.de, s.a] : null; })()`);

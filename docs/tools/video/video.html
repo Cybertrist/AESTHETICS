@@ -12,17 +12,23 @@ html,body{width:1280px;height:720px;overflow:hidden;background:#000;color:#fff;f
 /* une scène : un calque plein cadre, que rendre() montre ou cache */
 .s{position:absolute;inset:0;opacity:0;overflow:hidden}
 .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.fond{position:absolute;inset:0;background:radial-gradient(60% 80% at 50% 45%,#1c1c20 0,#000 70%)}
+.fond{position:absolute;inset:0;background:radial-gradient(60% 80% at 50% 45%,#17171a 0,#000 72%)}
 .titre{font-family:Syne,sans-serif;font-weight:800;letter-spacing:1px;line-height:1.02;text-transform:uppercase}
 .texte{font-size:27px;color:#a8a8b0;line-height:1.4}
 .mono{font-family:'JetBrains Mono',monospace}
 /* le téléphone : une capture brute de 1080 px, ses barres masquées par le cadre.
    --l est la largeur de l'écran ; tout le reste en découle. */
-.tel{--l:290px;position:absolute;padding:calc(var(--l)*.031);border-radius:calc(var(--l)*.158);
-  background:linear-gradient(160deg,#3a3b41,#0e0f12 45%,#26272c);
-  box-shadow:0 0 0 1px #4a4a52,0 50px 90px -20px rgba(0,0,0,.9),0 0 90px -10px rgba(255,255,255,.18)}
+.tel{--l:300px;position:absolute;padding:calc(var(--l)*.031);border-radius:calc(var(--l)*.158);
+  background:linear-gradient(160deg,#3a3b41,#0e0f12 45%,#26272c);box-shadow:0 0 0 1px #4a4a52}
 .tel .v{position:relative;width:var(--l);height:calc(var(--l)*2.038);border-radius:calc(var(--l)*.131);overflow:hidden;background:#000}
 .tel img{position:absolute;left:0;top:calc(var(--l)*-.1259);width:var(--l)}
+/* LA CHARTE, commune aux scènes du plein : un objet à gauche, centré sur (352, 360) dans une
+   zone de 560 px ; le mot-clé à droite, toujours à la même place et à la même taille. */
+.zone{position:absolute;left:72px;top:40px;width:560px;height:640px;display:flex;align-items:center;justify-content:center}
+.mc{position:absolute;left:684px;top:296px;font-family:Syne,sans-serif;font-weight:800;font-size:62px;line-height:1.02;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+.mc .mc1{display:block;color:#8e8e93}
+.mc .mc2{display:block;color:#fff;transform-origin:left center}
+.mc-sous{position:absolute;left:688px;top:444px;font-size:32px;font-weight:500;color:#d8d8de;white-space:nowrap}
 #eclair{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
 </style>
 <style id="styles-scenes"></style>
@@ -69,6 +75,49 @@ function dessiner(canvas, nom, t) {
   x.drawImage(images[Math.floor(t * 20) % images.length], 0, 0, canvas.width, canvas.height);
 }
 
+/// Les vrais enregistrements de l'appli, tournés sur l'émulateur et découpés en images :
+/// await clip('seance-coches') dans init, puis dessinerClip(canvas, 'seance-coches', s) dans
+/// rendre, où s est l'instant voulu DANS le clip, en secondes. On peut donc ralentir,
+/// accélérer, figer ou sauter : c'est la scène qui choisit quelle image du clip elle montre.
+/// CLIPS[nom] donne { ips, images, duree, reperes } ; reperes = { nom: secondes } pour caler
+/// un geste du clip sur un temps de la musique. telClip() pose le clip dans un téléphone.
+const CLIPS = {};
+async function clip(nom) {
+  if (CLIPS[nom]) return CLIPS[nom];
+  const base = `../html/video/clips/${nom}/`;
+  const m = await (await fetch(`${base}clip.json`)).json();
+  const images = await Promise.all(Array.from({ length: m.images }, (x, i) => new Promise((ok, ko) => {
+    const im = new Image(); im.onload = () => ok(im); im.onerror = ko; im.src = `${base}${String(i + 1).padStart(4, '0')}.jpg`;
+  })));
+  return (CLIPS[nom] = { ips: m.ips, duree: m.images / m.ips, reperes: m.reperes || {}, images });
+}
+function dessinerClip(canvas, nom, s) {
+  const c = CLIPS[nom]; if (!c) return;
+  const im = c.images[Math.max(0, Math.min(c.images.length - 1, Math.floor(s * c.ips)))];
+  // La barre d'état et la barre de navigation de l'émulateur restent hors champ.
+  const haut = im.naturalHeight * 136 / 2400, bas = im.naturalHeight * 2337 / 2400;
+  canvas.getContext('2d').drawImage(im, 0, haut, im.naturalWidth, bas - haut, 0, 0, canvas.width, canvas.height);
+}
+/// Un téléphone qui joue un clip : telClip('left:…;top:…', 290, 'sea-ecran') puis dessinerClip($('sea-ecran'), …).
+const telClip = (style = '', largeur = 290, idCanvas = '', id = '') =>
+  `<div class="tel" ${id ? `id="${id}"` : ''} style="--l:${largeur}px;${style}"><div class="v"><canvas id="${idCanvas}" width="${Math.round(largeur * 2)}" height="${Math.round(largeur * 2.038 * 2)}" style="width:100%;height:100%;display:block"></canvas></div></div>`;
+
+/// Une frappe : l'élément est là, entier, sur l'image même du temps, un peu trop grand, et se
+/// pose en 0,3 temps. frappe(l - 2) vaut 0 avant le temps 2, puis l'échelle de 1,15 à 1.
+/// S'emploie ainsi : e.opacity = l >= 2 ? 1 : 0 ; e.transform = `scale(${frappe(l - 2)})`.
+const frappe = (x, exces = 0.15, duree = 0.3) => (x < 0 ? 1 : 1 + exces * (1 - sortie(x / duree)));
+const la = (x) => (x >= -1e-6 ? 1 : 0); // là ou pas là, sans fondu : la(l - 2)
+/// Le mot-clé des scènes du plein, toujours au même endroit : motCle('ser', 'Chaque', 'série.').
+/// Dans rendre : rendreMotCle('ser', l). La première ligne est là dès le temps 0, la seconde
+/// frappe au temps 1 ([quand]). Les deux lignes ont les id `<p>-mc1` et `<p>-mc2`.
+const motCle = (p, ligne1, ligne2) =>
+  `<div class="mc" id="${p}-mc"><span class="mc1" id="${p}-mc1">${ligne1}</span><span class="mc2" id="${p}-mc2">${ligne2}</span></div>`;
+function rendreMotCle(p, l, quand = 1) {
+  const a = $(`${p}-mc1`).style, b2 = $(`${p}-mc2`).style;
+  a.opacity = 1; a.transform = `translateX(${((1 - sortie(l / 0.3)) * 28).toFixed(1)}px)`;
+  b2.opacity = la(l - quand); b2.transform = `scale(${frappe(l - quand).toFixed(4)})`;
+}
+
 // ------------------------------------------------------------ les scènes
 // scene({ id, de, a, html, css, init, rendre }) : [de] et [a] en temps (0 à 64).
 // rendre(l, b, t) reçoit le temps local à la scène (l = b - de), le temps global b, et t en secondes.
@@ -83,24 +132,28 @@ const ECLAIRS = [0, 16, 56];
 function rendre(t) {
   const b = t / T;
   for (const s of SCENES) {
-    const fin = s.a >= 64 ? 1 : borne((s.a - b) / 0.2);
-    const o = borne((b - s.de) / 0.2) * fin;
+    // Coupe franche : une scène est là, entière, de son premier temps à son dernier.
+    // Un fondu ferait tomber le pied de la coupe sur une image noire.
+    const o = b >= s.de - 1e-6 && (b < s.a - 1e-6 || s.a >= 64) ? 1 : 0;
     $(`s-${s.id}`).style.opacity = o;
     if (o > 0) s.rendre(b - s.de, b, t);
   }
-  $('eclair').style.opacity = Math.max(...ECLAIRS.map((c) => (b >= c ? Math.max(0, 0.7 - (b - c) * 1.6) : 0)));
+  $('eclair').style.opacity = Math.max(...ECLAIRS.map((c) => (b >= c && !(c === 0 && b < 0.05) ? Math.max(0, 0.45 - (b - c) * 1.5) : 0)));
 }
 </script>
 <script src="scenes/01-ouverture.js"></script>
-<script src="scenes/02-phrases.js"></script>
-<script src="scenes/03-seance.js"></script>
-<script src="scenes/04-repos.js"></script>
-<script src="scenes/05-record.js"></script>
-<script src="scenes/06-exercices.js"></script>
-<script src="scenes/07-recuperation.js"></script>
-<script src="scenes/08-resume.js"></script>
-<script src="scenes/09-badges.js"></script>
-<script src="scenes/10-fin.js"></script>
+<script src="scenes/02-qui.js"></script>
+<script src="scenes/03-phrases.js"></script>
+<script src="scenes/04-serie.js"></script>
+<script src="scenes/05-repos.js"></script>
+<script src="scenes/06-record.js"></script>
+<script src="scenes/07-exercices.js"></script>
+<script src="scenes/08-badges.js"></script>
+<script src="scenes/09-muscle.js"></script>
+<script src="scenes/10-semaine.js"></script>
+<script src="scenes/11-mois.js"></script>
+<script src="scenes/12-progres.js"></script>
+<script src="scenes/13-fin.js"></script>
 <script>
 // Prête quand les polices, les images et les préparatifs de chaque scène sont là.
 (async () => {
