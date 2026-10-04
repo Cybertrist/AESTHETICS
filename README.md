@@ -13,8 +13,6 @@
 
 </div>
 
-Sept séances par semaine, muscu et cardio. Plus de 460 derrière moi, et ce n'est que le début.
-
 Le nom vient d'un mouvement que j'adore : l'*aesthetics*. Zyzz, David Laid, et une idée simple : un physique se construit, série après série, jusqu'à ressembler à ce qu'on a en tête. AESTHETICS est mon application de musculation sur Android, faite pour ça : belle, propre, pratique, avec le corps en 3D.
 
 Elle fait ce dont j'ai besoin à la salle : noter une série en un geste, savoir quoi charger, voir un record tomber, et comprendre après coup ce que le mois a donné.
@@ -74,6 +72,16 @@ Une barre de quatre onglets en bas, et la séance en cours qui reste à portée,
 <img src="docs/schemas/palette.png" alt="Palette : fond #000000, cartes #131315, bouton #FFFFFF, muscles #E0393E, série validée #228B22, minuteur #1E9BF0, record #FFBE0B, flamme #FF9A00." width="100%">
 
 Chaque couleur a un seul métier. Le vert forêt valide une série, le bleu est réservé au minuteur de repos, l'or aux records, l'orange à la série, et le rouge aux muscles travaillés sur le personnage. Les boutons principaux sont blancs, à texte noir. La police est Figtree ; Montserrat ne sert qu'aux gros titres du résumé.
+
+Et sept widgets pour l'écran d'accueil du téléphone. C'est l'application qui les dessine, avec ses propres composants : mêmes icônes, mêmes couleurs, même personnage. Elle en prépare sept jours d'avance, pour que la routine du jour et le jour entouré restent justes sans la rouvrir.
+
+<img src="docs/schemas/widgets.png" alt="Sept widgets pour l'écran d'accueil du téléphone, dessinés par l'application avec les données de la démo. Lancer ma séance : la routine du jour, un appui la démarre. Ma semaine : les séances sur l'objectif, le temps, le volume et les sept jours. Ma série : les semaines d'affilée, le record, et les sept jours, où un jour fait devient une braise. Récupération : le personnage de face et de dos, les muscles prêts en vert, l'anneau et le groupe conseillé. Mon dernier record : le personnage refait l'exercice du record, avec la pastille dorée PR, la charge et le gain. Le même, en carré. Mon mois : le calendrier du mois, les jours d'entraînement, la flamme." width="100%">
+
+Dans le widget du record, le personnage refait l'exercice en boucle : douze images de son animation, qui défilent.
+
+<div align="center">
+<img src="docs/schemas/widget-record.webp" alt="Le widget Mon dernier record, animé : le personnage du pack fait des mollets debout à la machine, 75 kg × 13, plus 5 %." width="58%">
+</div>
 
 <a id="seance"></a>
 <img src="docs/sections/s03.png" alt="03 La séance" width="100%">

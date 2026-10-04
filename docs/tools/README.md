@@ -10,6 +10,7 @@ de SmartBudget.
 
     bash docs/tools/figures.sh     # bannière, bandeaux, sommaire, fonctionnalités, palette
     bash docs/tools/captures.sh    # la planche de captures
+    bash docs/tools/widgets.sh     # la planche des widgets de l'écran d'accueil
     node docs/tools/anime.js       # les schémas animés
     bash docs/tools/pastilles.sh   # les pastilles FRANÇAIS et ENGLISH, dans docs/langues
     bash docs/tools/social.sh      # l'aperçu social (JPEG), à déposer dans Settings > Social preview
@@ -26,6 +27,11 @@ Chaque commande fait la version française, puis l'anglaise dans `docs/en/`.
 - `figures.sh` : tout le texte des figures fixes. C'est le seul fichier à
   ouvrir pour corriger une phrase.
 - `captures.sh` : la planche du téléphone, à partir de `src-captures/`.
+- `widgets.sh` : la planche des widgets, à partir de `src-captures/widgets/`.
+  Ces images sont les widgets tels que l'application les dessine : le test
+  `mobile/test/ecran_accueil/vues_rendu_test.dart` les écrit dans
+  `mobile/build/rendus/ecran_accueil/`, avec les douze images du widget
+  animé (`recordl-aNN.png`), d'où vient `docs/schemas/widget-record.webp`.
 - `rogner.js` : prépare les captures brutes de l'émulateur. Il retire la
   barre d'état et la barre de navigation d'après un `barres.txt` posé à
   côté, réduit et écrit en JPEG, par un canvas de Chrome.

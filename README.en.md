@@ -13,8 +13,6 @@
 
 </div>
 
-Seven workouts a week, lifting and cardio. More than 460 behind me, and this is only the beginning.
-
 The name comes from a movement I love: aesthetics. Zyzz, David Laid, and one simple idea: a physique is built, set after set, until it looks like what you have in mind. AESTHETICS is my strength training app on Android, made for that: beautiful, clean, practical, with the body in 3D.
 
 It does what I need at the gym: log a set in one tap, know what to load, watch a record fall, and understand afterwards what the month added up to.
@@ -74,6 +72,16 @@ A bar of four tabs at the bottom, and the workout in progress always within reac
 <img src="docs/en/schemas/palette.png" alt="Palette: background #000000, cards #131315, button #FFFFFF, muscles #E0393E, completed set #228B22, timer #1E9BF0, record #FFBE0B, streak #FF9A00." width="100%">
 
 Each colour has one job. Forest green validates a set, blue is reserved for the rest timer, gold for records, orange for the streak, and red for the muscles worked on the character. Main buttons are white with black text. The typeface is Figtree; Montserrat is only used for the big titles of the recap.
+
+And seven widgets for the phone's home screen. The app draws them itself, with its own components: same icons, same colours, same character. It prepares seven days ahead, so today's routine and the circled day stay right without reopening it.
+
+<img src="docs/en/schemas/widgets.png" alt="Seven widgets for the phone's home screen, drawn by the app with the demo data. Start my workout: today's routine, one tap starts it. My week: workouts against the goal, time, volume and the seven days. My streak: weeks in a row, the best streak, and the seven days, where a day done turns into an ember. Recovery: the character from the front and the back, ready muscles in green, the ring and the suggested group. My latest record: the character repeats the record's exercise, with the golden PR pill, the load and the gain. The same, as a square. My month: the month's calendar, the training days, the flame." width="100%">
+
+In the record widget, the character repeats the exercise on a loop: twelve frames of its animation, played in turn.
+
+<div align="center">
+<img src="docs/schemas/widget-record.webp" alt="The My latest record widget, animated: the pack's character does standing calf raises on the machine, 75 kg × 13, up 5%." width="58%">
+</div>
 
 <a id="seance"></a>
 <img src="docs/en/sections/s03.png" alt="03 The workout" width="100%">
