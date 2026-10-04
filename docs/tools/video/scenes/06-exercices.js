@@ -3,7 +3,7 @@
 // tombe sur le pied 4.
 const EXO_TUILES = [['bench-press', 'Développé couché'], ['barbell-row', 'Rowing barre'], ['bulgarian-split-squat', 'Fente bulgare']];
 scene({
-  id: 'exercices', de: 30, a: 36,
+  id: 'exercices', de: 32, a: 40,
   css: `
     #exo-nombre{position:absolute;left:64px;top:56px;font-size:196px;line-height:.86;letter-spacing:-4px;transform-origin:0 60%}
     #exo-mot{position:absolute;left:0;top:62px;font-size:66px;line-height:1;transform-origin:0 50%}

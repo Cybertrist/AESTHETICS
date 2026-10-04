@@ -23,7 +23,7 @@
   }).join('');
 
   scene({
-    id: 'seance', de: 16, a: 22,
+    id: 'seance', de: 16, a: 24,
     css: `
       .sea-carte{position:absolute;left:80px;top:${Math.round((720 - H) / 2)}px;width:${L}px;height:${H}px;border-radius:34px;
         box-shadow:0 0 0 1px #4a4a52,0 0 0 10px #101013,0 0 0 11px #2c2c32,0 50px 90px -20px rgba(0,0,0,.9),0 0 90px -10px rgba(255,255,255,.16)}

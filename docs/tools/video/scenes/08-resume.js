@@ -5,14 +5,14 @@
   const PAGES = [
     { capture: '16a-resume-titre', rang: 1, de: 0 },
     { capture: '16e-resume-comparaison', rang: 5, de: 1 },
-    { capture: '16g-resume-muscles', rang: 7, de: 3 },
-    { capture: '16j-resume-bilan', rang: 10, de: 5 },
+    { capture: '16g-resume-muscles', rang: 7, de: 2 },
+    { capture: '16j-resume-bilan', rang: 10, de: 3 },
   ];
   const GLISSE = 0.45; // durée d'un changement de page, en temps
   const deux = (n) => String(n).padStart(2, '0');
 
   scene({
-    id: 'resume', de: 44, a: 50,
+    id: 'resume', de: 48, a: 52,
     css: `
       #res-mot{position:absolute;left:580px;top:214px;font-size:70px}
       #res-tirets{position:absolute;left:584px;top:400px;display:flex;gap:8px}

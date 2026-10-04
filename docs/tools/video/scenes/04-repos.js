@@ -5,7 +5,7 @@
   const R = 218, EP = 24, C = 2 * Math.PI * R, DUREE = 90, TEMPS = 4;
   const chiffre = (i) => `<span class="rep-ch" id="rep-c${i}">0</span>`;
   scene({
-    id: 'repos', de: 22, a: 26,
+    id: 'repos', de: 24, a: 28,
     css: `
       #rep-anneau{position:absolute;left:96px;top:116px;width:488px;height:488px}
       #rep-anneau svg{position:absolute;inset:0;overflow:visible}

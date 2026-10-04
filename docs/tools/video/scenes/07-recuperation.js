@@ -7,7 +7,7 @@ const REC_MUSCLES = { face: ['pectoraux', 'deltoidesAnterieurs', 'biceps', 'quad
 const REC_QUAND = { 'face-0': 2, 'face-1': 3, 'face-2': 4, 'dos-0': 4, 'dos-1': 5, 'face-3': 6 };
 const REC_TOUR = 2 * Math.PI * 97;
 scene({
-  id: 'recuperation', de: 36, a: 44,
+  id: 'recuperation', de: 40, a: 48,
   css: `
     .rec-corps{position:absolute;top:36px;width:275px;height:648px}
     .rec-corps img{position:absolute;inset:0;width:100%;height:100%}

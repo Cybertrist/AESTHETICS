@@ -20,7 +20,7 @@
     `<line id="rcd-trait-${i}" x1="0" y1="0" x2="0" y2="0" stroke="#FFBE0B" stroke-width="1.5" stroke-linecap="round"/>`).join('');
 
   scene({
-    id: 'record', de: 26, a: 30,
+    id: 'record', de: 28, a: 32,
     css: `
       #rcd-svg{position:absolute;left:64px;top:74px;width:572px;height:572px;overflow:visible}
       #rcd-mot{position:absolute;left:640px;top:240px;font-size:70px;white-space:nowrap}

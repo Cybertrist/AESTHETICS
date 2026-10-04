@@ -17,7 +17,7 @@
       `left:${GX + (i % 3) * PAS}px;top:${GY + Math.floor(i / 3) * PAS}px`)).join('');
 
   scene({
-    id: 'badges', de: 50, a: 56,
+    id: 'badges', de: 52, a: 56,
     css: `
       .bad-detail{position:absolute;overflow:hidden;mix-blend-mode:screen}
       .bad-detail img{position:absolute}
@@ -30,23 +30,23 @@
       <div class="titre bad-mot" id="bad-mot2"><span style="color:#8e8e93">LES</span><br>BADGES.</div>`,
     rendre(l, b) {
       // ---- la série : la flamme et son chiffre au temps 0, le mot au temps 1, sortie avant 3
-      const part = 1 - borne((l - 2.6) / 0.4);
+      const part = 1 - borne((l - 1.7) / 0.3);
       const s = $('bad-serie');
       s.style.opacity = borne(l / 0.25) * part;
       s.style.transform = `scale(${lerp(0.8, 1, rebond(l / 0.8)) * pouls(b, 0.025)})`;
       const m1 = $('bad-mot1');
-      m1.style.opacity = borne((l - 1) / 0.3) * part;
-      m1.style.transform = `translateX(${(1 - sortie((l - 1) / 0.7)) * -60}px)`;
+      m1.style.opacity = borne((l - 0.1) / 0.3) * part;
+      m1.style.transform = `translateX(${(1 - sortie((l - 0.1) / 0.7)) * -60}px)`;
 
       // ---- les badges : le mot et le premier rang au temps 3, le second rang au temps 4
       const m2 = $('bad-mot2');
-      m2.style.opacity = borne((l - 3) / 0.3);
-      m2.style.transform = `translateX(${(1 - sortie((l - 3) / 0.7)) * -60}px)`;
+      m2.style.opacity = borne((l - 2) / 0.3);
+      m2.style.transform = `translateX(${(1 - sortie((l - 2) / 0.7)) * -60}px)`;
       for (let i = 0; i < 6; i++) {
-        const d = 3 + Math.floor(i / 3) + (i % 3) * 0.1;   // un rang par temps, léger décalé
+        const d = 2 + Math.floor(i / 3) + (i % 3) * 0.1;   // un rang par temps, léger décalé
         const e = $(`bad-e${i}`);
         e.style.opacity = borne((l - d) / 0.2);
-        e.style.transform = `scale(${lerp(0.5, 1, rebond((l - d) / 0.7)) * (l >= 5 ? pouls(b, 0.03) : 1)})`;
+        e.style.transform = `scale(${lerp(0.5, 1, rebond((l - d) / 0.7)) * (l >= 3 ? pouls(b, 0.03) : 1)})`;
       }
     },
   });
