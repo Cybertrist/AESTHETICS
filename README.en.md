@@ -172,7 +172,7 @@ The suite holds 905 test cases written in 98 files, laid out like the code: one 
 <a id="construire"></a>
 <img src="docs/en/sections/s15.png" alt="15 Building, licences and author" width="100%">
 
-AESTHETICS is not on the Play Store, and no APK is published here: the app ships an exercise catalogue under licence, which I am not allowed to redistribute.
+AESTHETICS is not on the Play Store, and no APK is published here for now.
 
 **The code.** For now this repository holds the presentation of the project: the app's code is not published here yet. It is a Flutter app, for Android 8 or later, built with one command:
 
@@ -186,7 +186,7 @@ The demo fills itself with sample data on first launch, without ever touching re
 
 **Licences.** The code is under the [MIT](LICENSE) licence. The rest belongs to its authors:
 
-- **The exercises**: the catalogue, the animations, the poses and the character come from a purchased pack, under a commercial licence. It is bundled in the app but will never be in this repository: `.gitignore` refuses the catalogue, the animations, the poses and the character.
+- **The exercises**: the catalogue, the animations, the poses and the character come from a professional pack, used under a commercial Enterprise licence that I purchased. The illustrations shown on this page are shown under that licence: they are not covered by the code's MIT licence and may not be reused.
 - **The 3D objects** of the recap and the end-of-workout cards: Microsoft's [Fluent Emoji](https://github.com/microsoft/fluentui-emoji), MIT licence.
 - **The badge pictograms**: [Phosphor Icons](https://phosphoricons.com), MIT licence.
 - **The typefaces**: Figtree and Montserrat, SIL Open Font License 1.1.

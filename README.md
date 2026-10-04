@@ -172,7 +172,7 @@ La suite compte 905 cas de test écrits dans 98 fichiers, rangés comme le code 
 <a id="construire"></a>
 <img src="docs/sections/s15.png" alt="15 Construire, licences et auteur" width="100%">
 
-AESTHETICS n'est pas sur le Play Store, et aucun APK n'est publié ici : l'application embarque un catalogue d'exercices sous licence, que je n'ai pas le droit de redistribuer.
+AESTHETICS n'est pas sur le Play Store, et aucun APK n'est publié ici pour l'instant.
 
 **Le code.** Ce dépôt porte pour l'instant la présentation du projet : le code de l'application n'y est pas encore publié. C'est une application Flutter, pour Android 8 ou plus, qui se construit en une commande :
 
@@ -186,7 +186,7 @@ La démo se remplit d'un jeu d'essai au premier lancement, sans jamais toucher a
 
 **Les licences.** Le code est sous licence [MIT](LICENSE). Le reste appartient à ses auteurs :
 
-- **Les exercices** : le catalogue, les animations, les poses et le personnage viennent d'un pack acheté, sous licence commerciale. Il est embarqué dans l'application mais ne sera jamais dans ce dépôt : `.gitignore` refuse le catalogue, les animations, les poses et le personnage.
+- **Les exercices** : le catalogue, les animations, les poses et le personnage viennent d'un pack professionnel, utilisé sous une licence commerciale Enterprise que j'ai acquise. Les illustrations montrées sur cette page le sont à ce titre : elles ne sont pas couvertes par la licence MIT du code et ne peuvent pas être reprises.
 - **Les objets en 3D** du résumé et des cartes de fin de séance : [Fluent Emoji](https://github.com/microsoft/fluentui-emoji) de Microsoft, licence MIT.
 - **Les pictogrammes des badges** : [Phosphor Icons](https://phosphoricons.com), licence MIT.
 - **Les polices** : Figtree et Montserrat, licence SIL Open Font 1.1.
