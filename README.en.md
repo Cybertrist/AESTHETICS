@@ -17,6 +17,18 @@ I train four times a week and have more than 460 workouts behind me. To track th
 
 Everything stays on the phone, in files I can read: no account to create, no server, no locked feature. Black background, grey cards, white buttons; colour is only there to say something.
 
+<p align="center">
+<img src="docs/exercices/bench-press.webp" alt="Bench press" width="24%">
+<img src="docs/exercices/barbell-row.webp" alt="Barbell row" width="24%">
+<img src="docs/exercices/arnold-press.webp" alt="Arnold press" width="24%">
+<img src="docs/exercices/bulgarian-split-squat.webp" alt="Bulgarian split squat" width="24%">
+<br>
+<img src="docs/exercices/barbell-curl.webp" alt="Barbell curl" width="24%">
+<img src="docs/exercices/cable-fly.webp" alt="Cable fly" width="24%">
+<img src="docs/exercices/cable-lateral-raise.webp" alt="Cable lateral raise" width="24%">
+<img src="docs/exercices/back-extension.webp" alt="Back extension" width="24%">
+</p>
+
 <img src="docs/en/sections/s00.png" alt="00 Contents" width="100%">
 
 <p align="center">
@@ -109,6 +121,8 @@ The catalogue holds **608 exercises**, **496 of them animated**; the other 112 a
 
 <a id="recuperation"></a>
 <img src="docs/en/sections/s07.png" alt="07 Recovery" width="100%">
+
+<p align="center"><img src="docs/schemas/recuperation-ecran.jpg" alt="The app's Recovery screen: the overall ring at 75%, six muscles on the real character, orange while they recover and green once ready, and the group recommended today." width="340"></p>
 
 <img src="docs/en/schemas/recuperation.svg" alt="Recovery, muscle by muscle. A workout of 4 sets of bench press (chest as the primary muscle, front delts and triceps as secondary ones) and 3 sets of leg extension (quads) loads each muscle with fatigue: sets × weight × remainder ÷ 6, with a weight of 1 for a primary muscle and 0.5 for a secondary one, six sets saturating the muscle. Right afterwards the chest stands at 0.67 fatigue, that is 33 % recovered, the quads at 0.50, that is 50 %, the front delts and triceps at 0.33, that is 67 %. Fatigue then fades in a straight line, each muscle over its own duration: 60 hours for the chest, 72 for the quads, 48 for the delts and triceps. Every twelve hours the timeline reads the percentages: at 12 hours, 47, 58 and 75 %; at 24 hours, 60, 67 and 83 %; at 36 hours, 73, 75 and 92 %; at 48 hours, 87, 83 and 100 %; at 60 hours, 100, 92 and 100 %; at 72 hours, 100, 100 and 100 %. A muscle turns from orange to green at the screen’s “ready” threshold, 90 %: around 33 hours for the triceps and delts, 51 hours for the chest, 57 hours for the quads. On the phone, the Recovery page shows the overall ring, the average of the 18 tracked muscles, which drops to 90 % after the workout, six muscle tiles and the “Recommended today” card: before the workout, legs; afterwards, back, whose lats are 100 % recovered. The recommended group is the one whose least recovered muscle is the most recovered; on a tie, the one that has gone longest without work." width="100%">
 

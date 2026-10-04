@@ -17,6 +17,18 @@ Je m'entraîne quatre fois par semaine et j'ai plus de 460 séances derrière mo
 
 Tout reste sur le téléphone, dans des fichiers que je peux lire : aucun compte à créer, aucun serveur, aucune fonction verrouillée. Fond noir, cartes grises, boutons blancs ; la couleur ne sert qu'à dire quelque chose.
 
+<p align="center">
+<img src="docs/exercices/bench-press.webp" alt="Développé couché" width="24%">
+<img src="docs/exercices/barbell-row.webp" alt="Rowing barre" width="24%">
+<img src="docs/exercices/arnold-press.webp" alt="Développé Arnold" width="24%">
+<img src="docs/exercices/bulgarian-split-squat.webp" alt="Fente bulgare" width="24%">
+<br>
+<img src="docs/exercices/barbell-curl.webp" alt="Curl barre" width="24%">
+<img src="docs/exercices/cable-fly.webp" alt="Écarté à la poulie" width="24%">
+<img src="docs/exercices/cable-lateral-raise.webp" alt="Élévation latérale à la poulie" width="24%">
+<img src="docs/exercices/back-extension.webp" alt="Extension lombaire" width="24%">
+</p>
+
 <img src="docs/sections/s00.png" alt="00 Sommaire" width="100%">
 
 <p align="center">
@@ -109,6 +121,8 @@ Le catalogue compte **608 exercices**, dont **496 animés** ; les 112 autres son
 
 <a id="recuperation"></a>
 <img src="docs/sections/s07.png" alt="07 La récupération" width="100%">
+
+<p align="center"><img src="docs/schemas/recuperation-ecran.jpg" alt="L'écran Récupération de l'application : l'anneau global à 75 %, six muscles sur le vrai personnage, en orange tant qu'ils récupèrent et en vert quand ils sont prêts, et le groupe conseillé aujourd'hui." width="340"></p>
 
 <img src="docs/schemas/recuperation.svg" alt="La récupération, muscle par muscle. Une séance de 4 séries de développé couché (pectoraux en principal, deltoïdes antérieurs et triceps en secondaire) et de 3 séries de leg extension (quadriceps) charge la fatigue de chaque muscle : séries × pondération × reste ÷ 6, avec une pondération de 1 en principal et de 0,5 en secondaire, six séries saturant le muscle. Juste après, les pectoraux sont à 0,67 de fatigue, soit 33 % de récupération, les quadriceps à 0,50, soit 50 %, les deltoïdes antérieurs et les triceps à 0,33, soit 67 %. La fatigue s’efface ensuite en ligne droite, chaque muscle à sa durée : 60 heures pour les pectoraux, 72 pour les quadriceps, 48 pour les deltoïdes et les triceps. Toutes les douze heures, la frise relève les pourcentages : à 12 heures, 47, 58 et 75 % ; à 24 heures, 60, 67 et 83 % ; à 36 heures, 73, 75 et 92 % ; à 48 heures, 87, 83 et 100 % ; à 60 heures, 100, 92 et 100 % ; à 72 heures, 100, 100 et 100 %. Un muscle passe de l’orange au vert au seuil « prêt » de l’écran, 90 % : vers 33 heures pour les triceps et les deltoïdes, 51 heures pour les pectoraux, 57 heures pour les quadriceps. Sur le téléphone, la page Récupération montre l’anneau global, moyenne des 18 muscles suivis, qui tombe à 90 % après la séance, six vignettes de muscles et la carte « Conseillé aujourd’hui » : avant la séance, les jambes ; après, le dos, dont le grand dorsal est récupéré à 100 %. Le groupe conseillé est celui dont le muscle le moins récupéré l’est le plus ; à égalité, celui qui n’a pas travaillé depuis le plus longtemps." width="100%">
 
