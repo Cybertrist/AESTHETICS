@@ -4,7 +4,7 @@
 # GitHub retire le JavaScript et le CSS des README : rien ne peut basculer
 # la page sur place. Ce sont donc deux liens vers deux fichiers, dessinés
 # pour se lire comme un sélecteur, repris de SmartBudget. La langue courante
-# est allumée, marquée du rouge de l'application, l'autre éteinte.
+# est allumée, marquée d'un point blanc, l'autre éteinte.
 #
 # Les quatre images servent les deux pages : le français monte fr-on et
 # en-off, l'anglais monte en-on et fr-off. Elles ne dépendent donc pas de
@@ -39,7 +39,7 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:transparent}
      letter-spacing:3.2px;color:$ct;white-space:nowrap}
 /* Le point n'est là que sur la langue affichée : il dit « vous êtes ici »
    sans avoir à l'écrire, et laisse l'autre pastille lisible comme un lien. */
-.p i{width:8px;height:8px;border-radius:2px;background:#E0393E;
+.p i{width:8px;height:8px;border-radius:2px;background:#FFFFFF;
      transform:rotate(45deg);flex-shrink:0}
 </style></head><body><div class="w"><div class="p">$pt<b>$2</b></div></div></body></html>
 HTML

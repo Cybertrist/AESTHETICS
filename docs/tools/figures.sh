@@ -10,28 +10,28 @@ LOGO="file:///$DOCS/logo.png"
 ICONES='<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,1,0" rel="stylesheet">'
 
 # ------------------------------------------------------------- bannière
-# Le nom est tout en blanc, comme dans l'application. Le rouge des muscles
-# ne sert que de liseré : les vignettes, le trait du bas, la lueur.
+# Le nom est tout en blanc, comme dans l'application : la bannière est en noir
+# et blanc, sans couleur d'accent.
 { entete 1280; cat <<HTML
 <style>
 .w{width:1280px;height:340px;position:relative;overflow:hidden;
-   background:radial-gradient(52% 140% at 9% 0%,#E0393E24 0%,transparent 60%),linear-gradient(135deg,#0B0C0F 0%,#0B0C0F 55%,#040405 100%)}
+   background:radial-gradient(52% 140% at 9% 0%,#FFFFFF12 0%,transparent 60%),linear-gradient(135deg,#0B0C0F 0%,#0B0C0F 55%,#040405 100%)}
 .grille{position:absolute;inset:0;opacity:.5;
   background-image:linear-gradient(#FFFFFF0B 1px,transparent 1px),linear-gradient(90deg,#FFFFFF0B 1px,transparent 1px);
   background-size:46px 46px;-webkit-mask-image:radial-gradient(70% 100% at 8% 50%,#000 0%,transparent 72%)}
 .cat{position:absolute;top:26px;right:30px;display:flex;gap:8px}
 .cat b{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:12px;letter-spacing:2.2px;
-  color:#F0A3A5;border:1px solid #E0393E55;background:#E0393E14;border-radius:5px;padding:7px 13px}
+  color:#E6E6EA;border:1px solid #FFFFFF3A;background:#FFFFFF10;border-radius:5px;padding:7px 13px}
 .in{position:absolute;inset:0;display:flex;align-items:center;gap:48px;padding:0 66px}
 .logo{width:150px;height:150px;flex-shrink:0;border-radius:34px;
-  box-shadow:0 0 0 1px #FFFFFF24,0 0 44px #E0393E40,0 16px 34px #000C}
+  box-shadow:0 0 0 1px #FFFFFF24,0 0 44px #FFFFFF24,0 16px 34px #000C}
 h1{font-family:Syne,sans-serif;font-weight:800;font-size:60px;line-height:1;letter-spacing:1px;color:#FFFFFF}
 .sl{font-family:'Space Grotesk',sans-serif;font-size:23px;line-height:1.55;color:#9A9AA2;margin-top:18px}
 .sl b{font-weight:500;color:#EDEDF0}
 .pl{display:flex;gap:8px;margin-top:18px}
 .pl span{font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:500;letter-spacing:.6px;
   color:#D8D8DE;border:1px solid #FFFFFF2A;background:#FFFFFF0C;border-radius:6px;padding:6px 11px}
-.ln{position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#E0393E 0%,#F5F5F7 38%,transparent 90%)}
+.ln{position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#FFFFFF 0%,#8A8A92 40%,transparent 90%)}
 </style></head><body>
 <div class="w"><div class="grille"></div>
 <div class="cat"><b>ANDROID</b><b>MUSCULATION</b><b>HORS LIGNE</b></div>
@@ -51,9 +51,9 @@ bandeau () {
 .w{height:118px;display:flex;flex-direction:column;justify-content:center;gap:18px;padding:0 60px}
 .l{display:flex;align-items:center;gap:20px;height:40px}
 .ix{width:52px;height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;
-  font-size:15px;color:#F5F5F7;border:1.5px solid #E0393E80;background:#E0393E24;border-radius:6px}
+  font-size:15px;color:#F5F5F7;border:1.5px solid #FFFFFF66;background:#FFFFFF14;border-radius:6px}
 h2{font-family:Syne,sans-serif;font-weight:800;font-size:29px;letter-spacing:5px;text-transform:uppercase;white-space:nowrap}
-.r{height:2px;display:flex}.r .a{width:52px;background:#E0393E}.r .b{flex:1;background:linear-gradient(90deg,#4A4A52,#26282E 42%,transparent)}
+.r{height:2px;display:flex}.r .a{width:52px;background:#FFFFFF}.r .b{flex:1;background:linear-gradient(90deg,#4A4A52,#26282E 42%,transparent)}
 </style></head><body>
 <div class="w"><div class="l"><div class="ix">$1</div><h2>$2</h2></div><div class="r"><i class="a"></i><i class="b"></i></div></div>
 <script>
@@ -74,8 +74,8 @@ tuile () {
 <style>
 .c{height:64px;display:flex;align-items:center;gap:13px;padding:0 14px;background:var(--carte);border:1px solid var(--bord);border-radius:14px}
 .ic{font-family:'Material Symbols Rounded';font-size:22px;width:38px;height:38px;flex-shrink:0;border-radius:11px;
-  display:flex;align-items:center;justify-content:center;color:#F5F5F7;background:#E0393E26;border:1px solid #E0393E66;box-shadow:0 0 16px #E0393E26}
-.n{font-family:'JetBrains Mono',monospace;font-size:11px;color:#E8787B;letter-spacing:1px}
+  display:flex;align-items:center;justify-content:center;color:#F5F5F7;background:#FFFFFF14;border:1px solid #FFFFFF40;box-shadow:0 0 16px #FFFFFF14}
+.n{font-family:'JetBrains Mono',monospace;font-size:11px;color:#B4B4BC;letter-spacing:1px}
 h3{font-family:'Space Grotesk',sans-serif;font-size:14.5px;font-weight:600;line-height:1.2;margin-top:2px}
 </style></head><body>
 <div class="c"><span class="ic">$2</span><div><div class="n">$1</div><h3>$3</h3></div></div>
@@ -98,8 +98,8 @@ done
 .w{padding:22px 56px;display:grid;grid-template-columns:repeat($cols,1fr);gap:14px}
 .c{background:var(--carte);border:1px solid var(--bord);border-radius:14px;padding:18px;display:flex;gap:15px;align-items:flex-start}
 .ic{font-family:'Material Symbols Rounded';font-size:24px;width:46px;height:46px;flex-shrink:0;border-radius:13px;
-  display:flex;align-items:center;justify-content:center;color:#F5F5F7;background:#E0393E26;border:1px solid #E0393E66;
-  box-shadow:0 0 18px #E0393E22}
+  display:flex;align-items:center;justify-content:center;color:#F5F5F7;background:#FFFFFF14;border:1px solid #FFFFFF40;
+  box-shadow:0 0 18px #FFFFFF12}
 h3{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;margin:2px 0 5px}
 p{font-family:'Space Grotesk',sans-serif;font-size:13.5px;line-height:1.5;color:var(--texte)}
 code{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#C9C9D0}
