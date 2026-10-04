@@ -62,12 +62,8 @@ module.exports = (O) => {
   corps += t(210, 52, 'Un exercice, trois séries : cocher, souffler, battre un record, réduire.', { taille: 14 });
 
   // ---------------------------------------------------------------- outils
-  /// L'écusson « PR » : un hexagone doré.
-  const ecusson = (cx, cy, r) => {
-    const pts = [0, 1, 2, 3, 4, 5].map((k) => `${(cx + r * Math.sin(k * Math.PI / 3)).toFixed(1)},${(cy - r * Math.cos(k * Math.PI / 3)).toFixed(1)}`).join(' ');
-    return `<polygon points="${pts}" fill="${OR_VIF}" fill-opacity="0.2" stroke="${OR_VIF}" stroke-width="1.4" stroke-linejoin="round"/>
-      ${t(cx, cy + r * 0.3, 'PR', { taille: r * 0.82, couleur: OR_VIF, poids: 800, ancre: 'middle' })}`;
-  };
+  /// L'écusson « PR » : celui de l'application, doré et en relief.
+  const ecusson = (cx, cy, r) => O.ecussonPR(cx, cy, r * 1.15);
   /// La vignette d'un exercice : une barre et ses disques, ou deux haltères.
   const vignette = (x, y, s, halteres = false, nom = null) => {
     // La vraie pose de l'exercice, si elle est dans docs/exercices/vignettes.

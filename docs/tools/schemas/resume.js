@@ -94,7 +94,7 @@ module.exports = (O) => {
   // La toile : les séries par muscle du mois et du mois d'avant.
   const TOILE = [['Pectoraux', 64, 54], ['Épaules', 52, 44], ['Triceps', 58, 50], ['Grand dorsal', 60, 52], ['Biceps', 46, 40], ['Abdominaux', 24, 20], ['Quadriceps', 56, 44], ['Ischios', 38, 30], ['Trapèzes', 30, 26]];
   const RECORDS = [['Squat', '110 kg × 5'], ['Développé couché', '85 kg × 6'], ['Tirage vertical', '70 kg × 8']];
-  const FAVORIS = [['Développé couché', 16], ['Squat', 16], ['Tirage vertical', 16], ['Développé militaire', 12], ['Rowing barre', 12]];
+  const FAVORIS = [['Développé couché', 16], ['Squat', 16], ['Tirage vertical', 16], ['Soulevé de terre', 12], ['Rowing barre', 12]];
   const GRAINE = AN * 12 + MOIS;
   const EQ = equivalent(VOLUME, GRAINE);
   // L'année, jusqu'ici : la graine devient l'année.
@@ -151,6 +151,7 @@ module.exports = (O) => {
   const FONDS = [['#000000', '#000000'], ['#2C2C30', '#050506'], ['#226640', '#000000'], ['#175673', '#000000'], [EQ.o.couleur, '#000000'],
     ['#8A3B14', '#000000'], ['#0D1838', '#02040A'], ['#7D5C12', '#000000'], ['#0E2B2B', '#020606'], ['#8A3B14', '#000000']];
   corps += `<defs>${FONDS.map(([h, b], k) => `<linearGradient id="resumeFond${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${h}"/><stop offset="0.68" stop-color="${b}"/></linearGradient>`).join('')}
+    <filter id="resumeRouge" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0.41 1.38 0.14 0 0  0.10 0.35 0.04 0 0  0.11 0.38 0.04 0 0  0 0 0 1 0"/></filter>
     <radialGradient id="resumeHalo"><stop offset="0" stop-color="${EQ.o.accent}" stop-opacity="0.5"/><stop offset="1" stop-color="${EQ.o.accent}" stop-opacity="0"/></radialGradient>
     <clipPath id="ecranResume"><rect x="${SX}" y="${SY}" width="${SL}" height="${SH}" rx="30"/></clipPath></defs>`;
   corps += `<rect x="${PX}" y="${PY}" width="${PL}" height="${PH}" rx="42" fill="#07090C" stroke="#2F3A47" stroke-width="2"/>
@@ -160,7 +161,7 @@ module.exports = (O) => {
   const b = (x, y, s, taille, o = {}) => t(x, y, s, { taille, couleur: BLANC, poids: 800, ...o });
   // « Série » veut dire ailleurs une série d'exercice : ici la série de semaines se traduit avec son voisin, d'un bloc.
   const brut = (x, y, s, taille, { couleur = BLANC, poids = 800, ancre = 'start' } = {}) => `<text x="${x}" y="${y}" font-family="${SANS}" font-size="${taille}" font-weight="${poids}" fill="${couleur}" text-anchor="${ancre}">${O.esc(s)}</text>`;
-  const haltere = (x, y, k = 1) => `<g transform="translate(${x},${y}) scale(${k})" fill="none" stroke="${BLANC}" stroke-width="2.6" stroke-linecap="round"><path d="M-12 0 H12 M-15 -10 V10 M-21 -6 V6 M15 -10 V10 M21 -6 V6"/></g>`;
+  const haltere = (x, y, k = 1) => `<g transform="translate(${x},${y}) scale(${k}) rotate(-45)" fill="none" stroke="${BLANC}" stroke-width="2.6" stroke-linecap="round"><path d="M-12 0 H12 M-15 -10 V10 M-21 -6 V6 M15 -10 V10 M21 -6 V6"/></g>`;
   const ecartLigne = (x, y, e, suite, ancre = 'middle') => {
     const l = (`${e} % ${tr(suite)}`.length * 5.9 + 14) * (ancre === 'middle' ? 0.5 : 0);
     return `<path d="M${x - l} ${y} h9 l-4.5 -7 z" fill="${HAUSSE}"/>
@@ -215,7 +216,9 @@ module.exports = (O) => {
     });
     page.push(s);
   }
-  // 5 · l'équivalent : un pictogramme dessiné ici, pas l'image de l'appli.
+  // 5 · l'équivalent : le vrai objet en 3D de l'appli s'il est dans
+  // docs/exercices/objets/, sinon un pictogramme dessiné ici.
+  const OBJET_3D = `objets/${{ 'éléphant': 'elephant_3d' }[EQ.o.nom || EQ.o[0]] || 'absent'}.png`;
   const elephant = (c, ombre) => `<ellipse cx="14" cy="2" rx="60" ry="42" fill="${c}"/>
     <rect x="42" y="26" width="22" height="46" rx="10" fill="${ombre}"/><rect x="-30" y="26" width="22" height="46" rx="10" fill="${ombre}"/>
     <rect x="22" y="30" width="22" height="46" rx="10" fill="${c}"/><rect x="-12" y="30" width="22" height="46" rx="10" fill="${c}"/>
@@ -230,9 +233,12 @@ module.exports = (O) => {
     let s = b(CX, y0, 'Poids soulevé en septembre', 12, { poids: 700, ancre: 'middle' });
     s += grandVolume(y0 + 50, 41);
     s += `<ellipse cx="${CX}" cy="${oy}" rx="${W * 0.5}" ry="92" fill="url(#resumeHalo)"/>
-      <g transform="translate(${CX - 96},${oy - 62}) rotate(-16) scale(0.36)" opacity="0.45">${elephant(EQ.o.accent, '#A892EA')}</g>
+      ${!require('fs').existsSync(require('path').join(__dirname, '..', '..', 'exercices', OBJET_3D)) ? `<g transform="translate(${CX - 96},${oy - 62}) rotate(-16) scale(0.36)" opacity="0.45">${elephant(EQ.o.accent, '#A892EA')}</g>
       <g transform="translate(${CX + 92},${oy + 66}) rotate(14) scale(-0.28,0.28)" opacity="0.4">${elephant(EQ.o.accent, '#A892EA')}</g>
-      <g transform="translate(${CX + 6},${oy - 4}) rotate(-6) scale(0.94)">${elephant(EQ.o.accent, '#A892EA')}</g>
+      <g transform="translate(${CX + 6},${oy - 4}) rotate(-6) scale(0.94)">${elephant(EQ.o.accent, '#A892EA')}</g>`
+    : `<g transform="translate(${CX - 96},${oy - 62}) rotate(-16)" opacity="0.5">${O.image(OBJET_3D, -27, -27, 54, 54)}</g>
+      <g transform="translate(${CX + 92},${oy + 66}) rotate(14)" opacity="0.45">${O.image(OBJET_3D, -22, -22, 44, 44)}</g>
+      <g transform="translate(${CX + 4},${oy - 2}) rotate(-6)">${O.image(OBJET_3D, -84, -84, 168, 168)}</g>`}
       <g transform="translate(${D - 34},${oy - 78}) rotate(8)"><rect x="-38" y="-17" width="76" height="34" rx="17" fill="#FFFFFF"/>${t(0, 6.5, EQ.etiquette, { taille: 18, couleur: '#000000', poids: 900, ancre: 'middle' })}</g>`;
     s += b(CX, y0 + 300, 'C’est comme soulever', 17, { ancre: 'middle' });
     s += `<text x="${CX}" y="${y0 + 322}" text-anchor="middle" font-family="${SANS}" font-size="17" font-weight="800" fill="${EQ.o.accent}">${O.esc(tr(EQ.fort))}<tspan fill="${BLANC}">${O.EN ? '!' : ' !'}</tspan></text>`;
@@ -246,6 +252,10 @@ module.exports = (O) => {
       ${tr('Série|hebdomadaire !').split('|').map((l, i) => brut(CX, y0 + 124 + i * 26, l, 22, { ancre: 'middle' })).join('')}`);
   }
   // 7 · les muscles
+  // Un axe, une figurine : le fond (buste ou jambes, de face ou de dos) et le calque du muscle.
+  const FIGURINE = [['face_buste_base', 'face_buste_pectoraux'], ['face_buste_base', 'face_buste_deltoidesLateraux'], ['dos_buste_base', 'dos_buste_triceps'],
+    ['dos_buste_base', 'dos_buste_grandDorsal'], ['face_buste_base', 'face_buste_biceps'], ['face_buste_base', 'face_buste_abdominaux'],
+    ['face_jambes_base', 'face_jambes_quadriceps'], ['dos_jambes_base', 'dos_jambes_ischios'], ['dos_buste_base', 'dos_buste_trapezes']];
   {
     const cy = MIL - 22, r = 84, n = TOILE.length, max = Math.max(...TOILE.flatMap((a) => [a[1], a[2]]));
     const pt = (i, k) => { const a = -Math.PI / 2 + i * 2 * Math.PI / n; return `${(CX + Math.cos(a) * r * k).toFixed(1)} ${(cy + Math.sin(a) * r * k).toFixed(1)}`; };
@@ -256,7 +266,12 @@ module.exports = (O) => {
       <path d="${poly((a) => a[1] / max)}" fill="#4D8DFF" fill-opacity="0.3" stroke="#4D8DFF" stroke-width="2" stroke-linejoin="round"/>`;
     TOILE.forEach((a, i) => {
       const ang = -Math.PI / 2 + i * 2 * Math.PI / n, x = CX + Math.cos(ang) * (r + 22), y = cy + Math.sin(ang) * (r + 18);
-      s += b(x, y + 3.5, a[0], 9.6, { poids: 700, ancre: 'middle' });
+      // Comme dans l'appli : le buste ou les jambes du personnage, le muscle en rouge.
+      const [base, calque] = FIGURINE[i] || [];
+      const fx = CX + Math.cos(ang) * (r + 30), fy = cy + Math.sin(ang) * (r + 30);
+      const corpsFig = base && O.image(`corps/${base}.webp`, fx - 20, fy - 20, 40, 40);
+      const muscleFig = corpsFig && O.image(`corps/${calque}.webp`, fx - 20, fy - 20, 40, 40, 'filter="url(#resumeRouge)"');
+      s += muscleFig ? corpsFig + muscleFig : b(x, y + 3.5, a[0], 9.6, { poids: 700, ancre: 'middle' });
     });
     const ly = cy + r + 62;
     s += `<circle cx="${CX - 92}" cy="${ly - 4.5}" r="4" fill="#4D8DFF"/>${b(CX - 82, ly, 'Septembre', 13, { poids: 700 })}
@@ -267,7 +282,7 @@ module.exports = (O) => {
   {
     const y0 = MIL - 130;
     let s = titreMois(G, y0, 27);
-    s += `<path d="M${G + 20} ${y0 + 44} l17 10 v20 l-17 10 l-17 -10 v-20 z" fill="#FFC857"/><path d="M${G + 12} ${y0 + 65} l6 6 l11 -12" fill="none" stroke="#3A2A00" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+    s += O.ecussonPR(G + 20, y0 + 62, 22);
     s += b(G + 50, y0 + 71, `${RECORDS.length} nouveaux records`, 19);
     s += `<rect x="${G}" y="${y0 + 100}" width="100" height="2" fill="${BLANC}"/>`;
     s += b(G, y0 + 130, 'Exercice', 12.6) + b(D, y0 + 130, 'Meilleure série', 12.6, { ancre: 'end' });
@@ -281,7 +296,9 @@ module.exports = (O) => {
     FAVORIS.forEach(([nom, n], i) => {
       const y = y0 + 100 + i * 57;
       s += b(G + 7, y + 31, String(i + 1), 18, { ancre: 'middle' });
-      s += `<rect x="${G + 26}" y="${y}" width="48" height="48" rx="9" fill="#E9FBF8"/><g transform="translate(${G + 50},${y + 24}) scale(0.72)" fill="none" stroke="#0D2A2A" stroke-width="2.8" stroke-linecap="round"><path d="M-12 0 H12 M-15 -10 V10 M-21 -6 V6 M15 -10 V10 M21 -6 V6"/></g>`;
+      const POSES = ['bench-press', 'squat', 'lat-pulldown', 'deadlift', 'barbell-row'];
+      const posee = O.photo(POSES[i], G + 26, y, 48, { rayon: 9, fond: '#E9FBF8' });
+      s += posee || `<rect x="${G + 26}" y="${y}" width="48" height="48" rx="9" fill="#E9FBF8"/><g transform="translate(${G + 50},${y + 24}) scale(0.72)" fill="none" stroke="#0D2A2A" stroke-width="2.8" stroke-linecap="round"><path d="M-12 0 H12 M-15 -10 V10 M-21 -6 V6 M15 -10 V10 M21 -6 V6"/></g>`;
       s += b(G + 86, y + 22, nom, 12.4, { poids: 700 }) + b(G + 86, y + 38, `${n} séries`, 10, { poids: 600, couleur: ENCRE2 });
     });
     page.push(s);

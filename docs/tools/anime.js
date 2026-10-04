@@ -232,11 +232,41 @@ function photo(nom, x, y, c, { rayon = 10, fond = APP.carte2 } = {}) {
   return `${def}<rect x="${x}" y="${y}" width="${c}" height="${c}" rx="${rayon}" fill="${fond}"/><use href="#${id}" x="${x}" y="${y}" width="${c}" height="${c}"/>`;
 }
 
+/// L'écusson doré « PR » de l'application : un hexagone en relief, une
+/// coupe blanche, et « PR » cerné en bas. [r] est le rayon de l'hexagone.
+function ecussonPR(cx, cy, r) {
+  const k = r / 24;
+  return `<g transform="translate(${cx},${cy}) scale(${k.toFixed(3)})">
+    <path d="M0 -24 L20.8 -12 V12 L0 24 L-20.8 12 V-12 Z" fill="#9A6400" transform="translate(0,2.6)"/>
+    <path d="M0 -24 L20.8 -12 V12 L0 24 L-20.8 12 V-12 Z" fill="#FFBE0B" stroke="#C98A00" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M0 -19.5 L16.9 -9.8 V-2 L-16.9 -2 V-9.8 Z" fill="#FFD95A" opacity="0.75"/>
+    <path d="M-7 -14 H7 V-9 A7 7 0 0 1 -7 -9 Z M-2 -2.4 H2 V1.6 H-2 Z M-5 1.6 H5 V4.4 H-5 Z" fill="#FFFFFF"/>
+    <path d="M-7 -12.4 H-10.4 A4.2 4.2 0 0 0 -6.4 -6.4 M7 -12.4 H10.4 A4.2 4.2 0 0 1 6.4 -6.4" fill="none" stroke="#FFFFFF" stroke-width="1.8"/>
+    <text x="0" y="20" text-anchor="middle" font-family="${SANS}" font-size="13" font-weight="900" fill="#FFFFFF" stroke="#8A5A00" stroke-width="2.8" paint-order="stroke" stroke-linejoin="round">PR</text>
+  </g>`;
+}
+
+/// Une image de docs/exercices/ (un calque du personnage, un objet en 3D,
+/// une pose), intégrée au SVG et posée dans une boîte. Écrite une fois par
+/// schéma, réutilisée ensuite. Rend null si le fichier n'est pas là.
+function image(fichier, x, y, l, h, extra = '') {
+  const f = path.join(__dirname, '..', 'exercices', fichier);
+  if (!fs.existsSync(f)) return null;
+  const id = `img-${fichier.replace(/[^a-zA-Z0-9]/g, '-')}`;
+  let def = '';
+  if (!_photos.has(id)) {
+    _photos.add(id);
+    const type = { webp: 'image/webp', png: 'image/png', jpg: 'image/jpeg' }[fichier.split('.').pop()];
+    def = `<defs><symbol id="${id}" viewBox="0 0 100 100"><image width="100" height="100" preserveAspectRatio="xMidYMid meet" href="data:${type};base64,${fs.readFileSync(f).toString('base64')}"/></symbol></defs>`;
+  }
+  return `${def}<use href="#${id}" x="${x}" y="${y}" width="${l}" height="${h}" ${extra}/>`;
+}
+
 // ------------------------------------------------------------------------
 // Les autres schémas, un fichier chacun dans schemas/ : chaque module
 // reçoit les outils de celui-ci et appelle svg() lui-même.
 const OUTILS = {
-  EN, tr, esc, svg, t, paliers, fondu, visible, carte, bille, fil, P, APP, toucher, frappe, pilule, pastille, photo,
+  EN, tr, esc, svg, t, paliers, fondu, visible, carte, bille, fil, P, APP, toucher, frappe, pilule, pastille, photo, image, ecussonPR,
   MONO, SANS, FOND, CARTE, BORD, TITRE, TEXTE, DISCRET, FIL, ACCENT, VERT, NEON, BLEU, OR, ROSE, ROUGE, INTERNE,
 };
 const DOSSIER = path.join(__dirname, 'schemas');
