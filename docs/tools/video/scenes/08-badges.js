@@ -2,5 +2,5 @@
 sceneTelephone({
   id: 'badges', de: 32, a: 36, p: 'bad', mots: ['Chaque', 'badge.'], clips: ['badges'],
   // La page est ouverte à 0,51 s ; le défilement part à 2,41 s.
-  ecran: (l) => ({ clip: 'badges', s: l < 2 - 1e-6 ? 0.9 : 2.41 + (l - 2) * 1.3 }),
+  ecran: (l) => ({ clip: 'badges', s: l < 2 - 1e-6 ? 0.9 : l < 3 - 1e-6 ? 2.41 + (l - 2) * 1.2 : 4.4 + (l - 3) * 1.2 }), // 2 : elle défile ; 3 : les secrets
 });

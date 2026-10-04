@@ -145,7 +145,7 @@ function sceneTelephone(o) {
         const im = CAPTURES[e.capture];
         if (im) c.getContext('2d').drawImage(im, 0, 136, 1080, 2201, 0, 0, c.width, c.height);
       }
-      rendreMotCle(o.p, l);
+      rendreMotCle(o.p, l, o.quandMot === undefined ? 1 : o.quandMot);
       if (o.sous) {
         const st = $(`${o.p}-sous`).style;
         st.opacity = la(l - o.sous.quand); st.transformOrigin = 'left center';
@@ -165,7 +165,7 @@ function scene(s) {
   $('scenes').insertAdjacentHTML('beforeend', `<div class="s" id="s-${s.id}">${s.html}</div>`);
 }
 // Les coupes franches, soulignées d'un éclair blanc : l'entrée, le plein, la fin.
-const ECLAIRS = [[0, 0.45], [16, 0.45], [32, 0.2], [48, 0.2], [56, 0.45]]; // plus faibles aux reprises du thème
+const ECLAIRS = [[0, 0.45], [16, 0.45], [56, 0.45]]; // l'entrée, le plein, le coup final
 function rendre(t) {
   const b = t / T;
   for (const s of SCENES) {
@@ -179,7 +179,6 @@ function rendre(t) {
 }
 </script>
 <script src="scenes/01-ouverture.js"></script>
-<script src="scenes/02-corps.js"></script>
 <script src="scenes/03-phrases.js"></script>
 <script src="scenes/04-serie.js"></script>
 <script src="scenes/05-repos.js"></script>
@@ -190,7 +189,6 @@ function rendre(t) {
 <script src="scenes/10-semaine.js"></script>
 <script src="scenes/11-mois.js"></script>
 <script src="scenes/12-progres.js"></script>
-<script src="scenes/13-devise.js"></script>
 <script src="scenes/14-fin.js"></script>
 <script>
 // Prête quand les polices, les images et les préparatifs de chaque scène sont là.

@@ -1,10 +1,11 @@
-// La fin (temps 56 à 64) : sur le dernier coup de la musique, la page entière frappe d'un bloc :
-// logo, nom, devise, ce qu'il faut savoir, l'adresse. Ensuite il n'y a plus de pied, et plus rien
-// ne s'affiche : c'est l'image sur laquelle la vidéo s'arrête.
+// La fin (temps 52 à 64). Les quatre derniers pieds de la musique construisent la page : le logo
+// et le nom, puis « Chaque série. », « Chaque record. », « Chaque progrès. », un par pied. Sur le
+// coup final, ce qu'il faut savoir et l'adresse. Ensuite plus rien ne s'affiche : c'est l'image
+// sur laquelle la vidéo s'arrête.
 const FIN_LARGEUR_NOM = 1040; // largeur du nom, du bord du A au bord du S
 const FIN_INTERLETTRE = 4;
 scene({
-  id: 'fin', de: 56, a: 64,
+  id: 'fin', de: 52, a: 64,
   css: `
 #fin-groupe{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
 #fin-plaque{display:flex;flex-direction:column;align-items:center;transform-origin:50% 50%}
@@ -34,15 +35,20 @@ scene({
     nom.style.fontSize = `${((FIN_LARGEUR_NOM - 9 * FIN_INTERLETTRE) / parEm).toFixed(2)}px`;
   },
   rendre(l) {
-    // 0 : le dernier coup. Logo et nom frappent ensemble (excès réduit : le nom reste dans les marges).
-    const plaque = $('fin-plaque').style;
-    plaque.opacity = 1;
-    plaque.transform = 'none';
-    $('fin-groupe').style.transform = `scale(${frappe(l, 0.05).toFixed(4)})`;
-    // Tout est là dès le dernier coup : la devise, les faits, l'adresse. Quand il n'y a plus de pied,
-    // plus rien ne s'affiche : la page reste telle quelle jusqu'à la fin.
-    for (const id of ['fin-d1', 'fin-d2', 'fin-d3', 'fin-faits', 'fin-adresse']) {
-      $(id).style.opacity = 1; $(id).style.transform = 'none';
-    }
+    // Les quatre derniers pieds de la musique construisent la page : la plaque (temps 0), puis la
+    // devise, un membre par pied (1, 2, 3). Sur le coup final (temps 4) le reste arrive d'un bloc.
+    // Ensuite il n'y a plus de pied, et plus rien ne s'affiche.
+    const pose = (id, quand, exces) => {
+      const e = $(id).style;
+      e.opacity = la(l - quand);
+      e.transform = `scale(${frappe(l - quand, exces).toFixed(4)})`;
+    };
+    pose('fin-plaque', 0, 0.06);
+    pose('fin-d1', 1, 0.1);
+    pose('fin-d2', 2, 0.1);
+    pose('fin-d3', 3, 0.1);
+    pose('fin-faits', 4, 0.05);
+    pose('fin-adresse', 4, 0.05);
+    $('fin-groupe').style.transform = 'none';
   },
 });
