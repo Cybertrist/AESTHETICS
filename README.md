@@ -9,13 +9,15 @@
 
 <br><br>
 
-**Mon application de musculation, sur Android : la séance, le minuteur, les records, et tout ce qu'ils racontent au fil des mois.**
+**Je me suis toujours senti mal dans mon corps.<br>C'est le moment d'atteindre mes objectifs.**
 
 </div>
 
-Je m'entraîne sept fois par semaine, autant en musculation qu'en cardio, et j'ai plus de 460 séances derrière moi. Le nom vient d'un mouvement que j'adore, l'*aesthetics* : celui de Zyzz et de David Laid, où l'on construit un physique comme on soigne une œuvre. Je voulais une application à cette image : belle, propre, pratique, avec le corps en 3D plutôt que des tableaux gris.
+Sept séances par semaine, muscu et cardio. Plus de 460 derrière moi, et ce n'est que le début.
 
-AESTHETICS fait ce dont j'ai besoin à la salle : noter une série en un geste, savoir quoi charger, voir un record tomber, et comprendre après coup ce que le mois a donné.
+Le nom vient d'un mouvement que j'adore : l'*aesthetics*. Zyzz, David Laid, et une idée simple : un physique se construit, série après série, jusqu'à ressembler à ce qu'on a en tête. AESTHETICS est mon application de musculation sur Android, faite pour ça : belle, propre, pratique, avec le corps en 3D.
+
+Elle fait ce dont j'ai besoin à la salle : noter une série en un geste, savoir quoi charger, voir un record tomber, et comprendre après coup ce que le mois a donné.
 
 Tout reste sur le téléphone, dans des fichiers que je peux lire : aucun compte à créer, aucun serveur, aucune fonction verrouillée. Fond noir, cartes grises, boutons blancs ; la couleur ne sert qu'à dire quelque chose.
 

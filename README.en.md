@@ -9,13 +9,15 @@
 
 <br><br>
 
-**My strength training app, on Android: the workout, the rest timer, the records, and everything they tell over the months.**
+**I have always felt bad in my own body.<br>Now is the time to reach my goals.**
 
 </div>
 
-I train seven times a week, as much strength as cardio, and have more than 460 workouts behind me. The name comes from a movement I love, aesthetics: the one of Zyzz and David Laid, where a physique is built the way a piece of work is crafted. I wanted an app in that image: beautiful, clean, practical, with the body in 3D rather than grey tables.
+Seven workouts a week, lifting and cardio. More than 460 behind me, and this is only the beginning.
 
-AESTHETICS does what I need at the gym: log a set in one tap, know what to load, watch a record fall, and understand afterwards what the month added up to.
+The name comes from a movement I love: aesthetics. Zyzz, David Laid, and one simple idea: a physique is built, set after set, until it looks like what you have in mind. AESTHETICS is my strength training app on Android, made for that: beautiful, clean, practical, with the body in 3D.
+
+It does what I need at the gym: log a set in one tap, know what to load, watch a record fall, and understand afterwards what the month added up to.
 
 Everything stays on the phone, in files I can read: no account to create, no server, no locked feature. Black background, grey cards, white buttons; colour is only there to say something.
 
