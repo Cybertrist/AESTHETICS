@@ -7,13 +7,15 @@
 
 <img src="docs/en/banniere.png" alt="AESTHETICS: every set, every record, every gain. To become the best version of myself. Android, strength training, offline. Flutter, 608 exercises, 116 programmes, no account, Fold." width="100%">
 
-<br>
+<br><br>
 
 **My strength training app, on Android: the workout, the rest timer, the records, and everything they tell over the months.**
 
 </div>
 
-I train four times a week and have more than 460 workouts behind me. To track them, I wanted an app of my own, with no subscription and no locked feature. AESTHETICS does what I need at the gym: log a set in one tap, know what to load, watch a record fall, and understand afterwards what the month added up to.
+I train seven times a week, as much strength as cardio, and have more than 460 workouts behind me. The name comes from a movement I love, aesthetics: the one of Zyzz and David Laid, where a physique is built the way a piece of work is crafted. I wanted an app in that image: beautiful, clean, practical, with the body in 3D rather than grey tables.
+
+AESTHETICS does what I need at the gym: log a set in one tap, know what to load, watch a record fall, and understand afterwards what the month added up to.
 
 Everything stays on the phone, in files I can read: no account to create, no server, no locked feature. Black background, grey cards, white buttons; colour is only there to say something.
 

@@ -7,13 +7,15 @@
 
 <img src="docs/banniere.png" alt="AESTHETICS : chaque série, chaque record, chaque progrès. Pour devenir la meilleure version de moi-même. Android, musculation, hors ligne. Flutter, 608 exercices, 116 programmes, aucun compte, Fold." width="100%">
 
-<br>
+<br><br>
 
 **Mon application de musculation, sur Android : la séance, le minuteur, les records, et tout ce qu'ils racontent au fil des mois.**
 
 </div>
 
-Je m'entraîne quatre fois par semaine et j'ai plus de 460 séances derrière moi. Pour les suivre, je voulais une application à moi, sans abonnement ni fonction verrouillée. AESTHETICS fait ce dont j'ai besoin à la salle : noter une série en un geste, savoir quoi charger, voir un record tomber, et comprendre après coup ce que le mois a donné.
+Je m'entraîne sept fois par semaine, autant en musculation qu'en cardio, et j'ai plus de 460 séances derrière moi. Le nom vient d'un mouvement que j'adore, l'*aesthetics* : celui de Zyzz et de David Laid, où l'on construit un physique comme on soigne une œuvre. Je voulais une application à cette image : belle, propre, pratique, avec le corps en 3D plutôt que des tableaux gris.
+
+AESTHETICS fait ce dont j'ai besoin à la salle : noter une série en un geste, savoir quoi charger, voir un record tomber, et comprendre après coup ce que le mois a donné.
 
 Tout reste sur le téléphone, dans des fichiers que je peux lire : aucun compte à créer, aucun serveur, aucune fonction verrouillée. Fond noir, cartes grises, boutons blancs ; la couleur ne sert qu'à dire quelque chose.
 
