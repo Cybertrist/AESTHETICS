@@ -7,5 +7,4 @@ sceneTelephone({
     const image = [62, 74, 100, 104][k] + Math.min(f, 0.95) * [10, 12, 3, 10][k];
     return { clip: 'repos', s: image / 30 };
   },
-  sous: { quand: 3, html: 'Minuteur automatique.' },
 });

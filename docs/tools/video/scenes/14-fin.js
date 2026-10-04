@@ -1,8 +1,6 @@
-// La fin (temps 56 à 64) : le dernier coup pose la plaque de l'ouverture, logo et nom
-// ensemble ; la devise suit, un membre par temps ; puis ce qu'il faut savoir et l'adresse.
-// Du temps 5 au temps 8 plus rien ne bouge : c'est l'image sur laquelle la vidéo s'arrête.
-// Toutes les lignes occupent leur place dès le début (seule leur opacité change) : le groupe
-// est centré pour son état final et rien ne se décale quand une ligne apparaît.
+// La fin (temps 56 à 64) : sur le dernier coup de la musique, la page entière frappe d'un bloc :
+// logo, nom, devise, ce qu'il faut savoir, l'adresse. Ensuite il n'y a plus de pied, et plus rien
+// ne s'affiche : c'est l'image sur laquelle la vidéo s'arrête.
 const FIN_LARGEUR_NOM = 1040; // largeur du nom, du bord du A au bord du S
 const FIN_INTERLETTRE = 4;
 scene({
@@ -39,17 +37,12 @@ scene({
     // 0 : le dernier coup. Logo et nom frappent ensemble (excès réduit : le nom reste dans les marges).
     const plaque = $('fin-plaque').style;
     plaque.opacity = 1;
-    plaque.transform = `scale(${frappe(l, 0.08).toFixed(4)})`;
-    // 1, 2, 3 : la devise, un membre par temps ; 4 : les faits ; 5 : l'adresse.
-    const pose = (id, quand, exces) => {
-      const e = $(id).style;
-      e.opacity = la(l - quand);
-      e.transform = `scale(${frappe(l - quand, exces).toFixed(4)})`;
-    };
-    pose('fin-d1', 1, 0.1);
-    pose('fin-d2', 2, 0.1);
-    pose('fin-d3', 3, 0.1);
-    pose('fin-faits', 4, 0.06);
-    pose('fin-adresse', 5, 0.06);
+    plaque.transform = 'none';
+    $('fin-groupe').style.transform = `scale(${frappe(l, 0.05).toFixed(4)})`;
+    // Tout est là dès le dernier coup : la devise, les faits, l'adresse. Quand il n'y a plus de pied,
+    // plus rien ne s'affiche : la page reste telle quelle jusqu'à la fin.
+    for (const id of ['fin-d1', 'fin-d2', 'fin-d3', 'fin-faits', 'fin-adresse']) {
+      $(id).style.opacity = 1; $(id).style.transform = 'none';
+    }
   },
 });
