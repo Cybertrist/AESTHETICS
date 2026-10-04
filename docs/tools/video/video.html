@@ -1,0 +1,199 @@
+<!doctype html>
+<!-- La vidéo de présentation, image par image : rendre(t) pose chaque élément
+     à l'instant t, sans horloge. capture.js appelle rendre() trente fois par
+     seconde et photographie la page. 150 battements par minute : un temps
+     dure 0,4 s, la vidéo en compte 64. -->
+<html lang="fr"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1280px;height:720px;overflow:hidden;background:#000;color:#fff;font-family:'Space Grotesk',sans-serif}
+.s{position:absolute;inset:0;opacity:0;overflow:hidden}
+.c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+h1{font-family:Syne,sans-serif;font-weight:800;letter-spacing:2px;line-height:1}
+.fond{position:absolute;inset:0;background:radial-gradient(60% 80% at 50% 45%,#1c1c20 0,#000 70%)}
+.eclair{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+/* le téléphone : une capture brute de 1080 px, barres masquées par le cadre */
+.tel{position:absolute;padding:9px;border-radius:46px;background:linear-gradient(160deg,#3a3b41,#0e0f12 45%,#26272c);
+  box-shadow:0 0 0 1px #4a4a52,0 50px 90px -20px rgba(0,0,0,.9),0 0 90px -10px rgba(255,255,255,.18)}
+.tel .v{position:relative;width:290px;height:591px;border-radius:38px;overflow:hidden;background:#000}
+.tel img{position:absolute;left:0;top:-36.5px;width:290px}
+.mot{position:absolute;font-family:Syne,sans-serif;font-weight:800;font-size:76px;letter-spacing:1px;line-height:1.02}
+.sous{position:absolute;font-size:27px;color:#a8a8b0;line-height:1.4}
+.exo{position:absolute;width:286px;height:286px;border-radius:30px;background:#131315;box-shadow:0 0 0 1px #2a2a2e,0 30px 60px -20px #000}
+.exo canvas{width:100%;height:100%}
+.exo b{position:absolute;left:0;right:0;bottom:-44px;text-align:center;font-size:21px;font-weight:500;color:#d8d8de}
+.corps{position:absolute;width:300px;height:660px}
+.corps img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.anneau{position:absolute}
+.url{font-family:'JetBrains Mono',monospace;font-size:22px;letter-spacing:1px;color:#8e8e93}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <filter id="orange" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0.45 1.50 0.15 0 0  0.30 1.00 0.10 0 0  0.07 0.24 0.02 0 0  0 0 0 1 0"/></filter>
+  <filter id="vert" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0.06 0.20 0.02 0 0  0.38 1.27 0.13 0 0  0.17 0.56 0.06 0 0  0 0 0 1 0"/></filter>
+</defs></svg>
+
+<!-- 1 · le logo et le nom -->
+<div class="s" id="s1"><div class="fond"></div><div class="c">
+  <img id="logo" src="../../logo.png" style="width:190px;height:190px;border-radius:44px;box-shadow:0 0 0 1px #ffffff30,0 0 90px #ffffff30">
+  <h1 id="nom" style="font-size:112px;margin-top:44px">AESTHETICS</h1>
+</div></div>
+
+<!-- 2 · les deux phrases -->
+<div class="s" id="s2"><div class="c" style="gap:26px">
+  <div id="p1" style="font-size:50px;font-weight:700;text-align:center">Je me suis toujours senti mal dans mon corps.</div>
+  <div id="p2" style="font-size:50px;font-weight:700;text-align:center;color:#a8a8b0">C’est le moment d’atteindre mes objectifs.</div>
+</div></div>
+
+<!-- 3 · quatre écrans, quatre mots -->
+<div class="s" id="s3"><div class="fond"></div>
+  <div id="tels"></div>
+  <div id="mots"></div>
+</div>
+
+<!-- 4 · les exercices animés -->
+<div class="s" id="s4"><div class="fond"></div>
+  <div class="mot" id="m4" style="left:0;right:0;top:54px;text-align:center;font-size:64px">608 EXERCICES</div>
+  <div id="exos"></div>
+  <div class="sous" id="x4" style="left:0;right:0;top:618px;text-align:center">496 sont animés. Vingt muscles, tous les matériels.</div>
+</div>
+
+<!-- 5 · la récupération, sur le vrai personnage -->
+<div class="s" id="s5"><div class="fond"></div>
+  <div class="corps" id="face" style="left:60px;top:36px"></div>
+  <div class="corps" id="dos" style="left:350px;top:36px"></div>
+  <div class="mot" id="m5" style="left:690px;top:166px;font-size:37px">LA<br>RÉCUPÉRATION</div>
+  <div class="sous" id="x5" style="left:694px;top:290px">Muscle par muscle.<br>De l’orange au vert.</div>
+  <svg class="anneau" id="an" style="left:694px;top:410px" width="170" height="170" viewBox="0 0 170 170">
+    <circle cx="85" cy="85" r="70" fill="none" stroke="#1d1d20" stroke-width="14"/>
+    <circle id="arc" cx="85" cy="85" r="70" fill="none" stroke="#22D85F" stroke-width="14" stroke-linecap="round" transform="rotate(-90 85 85)" stroke-dasharray="0 440"/>
+    <text id="pct" x="85" y="98" text-anchor="middle" font-family="Space Grotesk" font-size="38" font-weight="700" fill="#fff">0 %</text>
+  </svg>
+</div>
+
+<!-- 6 · la fin -->
+<div class="s" id="s6"><div class="fond"></div><div class="c">
+  <img id="logo6" src="../../logo.png" style="width:150px;height:150px;border-radius:36px;box-shadow:0 0 0 1px #ffffff30,0 0 80px #ffffff26">
+  <h1 id="nom6" style="font-size:96px;margin-top:36px">AESTHETICS</h1>
+  <div id="dev6" style="font-size:30px;margin-top:26px;color:#d8d8de;font-weight:500">Chaque série. Chaque record. Chaque progrès.</div>
+  <div class="url" id="url6" style="margin-top:34px">github.com/Cybertrist/AESTHETICS</div>
+</div></div>
+<div class="eclair" id="eclair"></div>
+
+<script>
+const T = 0.4; // un temps
+const borne = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const sortie = (x) => 1 - Math.pow(1 - borne(x), 3);             // ralentit à l'arrivée
+const rebond = (x) => { x = borne(x); return 1 + 2.2 * Math.pow(x - 1, 3) + 1.2 * Math.pow(x - 1, 2); };
+const $ = (id) => document.getElementById(id);
+const BRUT = '../src-captures/brut/', EXO = '../../exercices/', CORPS = '../../exercices/corps/';
+
+// Les quatre écrans et leurs mots.
+const ECRANS = [['05-seance', 'CHAQUE', 'SÉRIE.'], ['06-repos', 'CHAQUE', 'REPOS.'], ['11-fin-records', 'CHAQUE', 'RECORD.'], ['16e-resume-comparaison', 'CHAQUE', 'MOIS.']];
+ECRANS.forEach(([f, a, b], i) => {
+  $('tels').insertAdjacentHTML('beforeend', `<div class="tel" id="tel${i}" style="left:210px;top:55px"><div class="v"><img src="${BRUT}${f}.png"></div></div>`);
+  $('mots').insertAdjacentHTML('beforeend', `<div class="mot" id="mot${i}" style="left:640px;top:236px"><span style="color:#8e8e93">${a}</span><br>${b}</div>`);
+});
+
+// Les exercices animés : deux rangées de quatre, décodés image par image.
+const EXOS = [['bench-press', 'Développé couché'], ['barbell-row', 'Rowing barre'], ['arnold-press', 'Développé Arnold'], ['bulgarian-split-squat', 'Fente bulgare'],
+  ['barbell-curl', 'Curl barre'], ['cable-fly', 'Écarté à la poulie'], ['cable-lateral-raise', 'Élévation latérale'], ['back-extension', 'Extension lombaire']];
+EXOS.forEach(([f, nom], i) => $('exos').insertAdjacentHTML('beforeend',
+  `<div class="exo" id="exo${i}" style="left:${38 + (i % 4) * 306}px;top:214px"><canvas id="cv${i}" width="480" height="480"></canvas><b>${nom}</b></div>`));
+const IMAGES = {};
+async function decoder(nom) {
+  const r = await fetch(`${EXO}${nom}.webp`);
+  const d = new ImageDecoder({ data: await r.arrayBuffer(), type: 'image/webp' });
+  await d.tracks.ready; await d.completed;
+  const n = d.tracks.selectedTrack.frameCount, images = [];
+  for (let k = 0; k < n; k++) { const { image } = await d.decode({ frameIndex: k }); images.push(await createImageBitmap(image)); image.close(); }
+  IMAGES[nom] = images;
+}
+
+// Le personnage : le corps, puis ses muscles reteints, orange dessous, vert dessus.
+const MUSCLES = { face: ['pectoraux', 'deltoidesAnterieurs', 'biceps', 'quadriceps'], dos: ['triceps', 'grandDorsal'] };
+for (const vue of ['face', 'dos']) {
+  let h = `<img src="${CORPS}${vue}_base.webp">`;
+  MUSCLES[vue].forEach((m, k) => { h += `<img src="${CORPS}${vue}_${m}.webp" style="filter:url(#orange)"><img class="v-${vue}-${k}" src="${CORPS}${vue}_${m}.webp" style="filter:url(#vert);opacity:0">`; });
+  $(vue).innerHTML = h;
+}
+
+// La scène k est visible de [de] à [a], avec un fondu d'un quart de temps.
+const SCENES = [['s1', 0, 8], ['s2', 8, 16], ['s3', 16, 32], ['s4', 32, 44], ['s5', 44, 56], ['s6', 56, 64]];
+function rendre(t) {
+  const b = t / T; // le temps courant, en battements
+  for (const [id, de, a] of SCENES) {
+    $(id).style.opacity = borne((b - de) / 0.25) * (id === 's6' ? 1 : borne((a - b) / 0.25));
+  }
+  // Un éclair blanc à chaque changement de scène, et à l'entrée du plein.
+  const coups = [0, 16, 32, 44, 56];
+  $('eclair').style.opacity = Math.max(...coups.map((c) => (b >= c ? Math.max(0, 0.7 - (b - c) * 1.6) : 0)));
+  const pouls = 1 + 0.035 * Math.exp(-((b % 1) * 5)); // tout respire sur le pied
+
+  // 1 · le logo tombe, le nom s'écrit lettre à lettre.
+  $('logo').style.transform = `scale(${rebond(b / 1.5) * (b < 8 ? pouls : 1)})`;
+  $('nom').innerHTML = [...'AESTHETICS'].map((l, k) => `<span style="opacity:${borne((b - 2 - k * 0.3) / 0.3)}">${l}</span>`).join('');
+
+  // 2 · les deux phrases montent l'une après l'autre.
+  for (const [id, de] of [['p1', 8.3], ['p2', 11.5]]) {
+    const k = sortie((b - de) / 1.2);
+    $(id).style.opacity = k; $(id).style.transform = `translateY(${(1 - k) * 34}px)`;
+  }
+
+  // 3 · un écran et un mot tous les quatre temps.
+  ECRANS.forEach((e, i) => {
+    const de = 16 + i * 4, k = sortie((b - de) / 0.9), part = i < 3 ? borne((b - de - 4) / 0.35) : 0;
+    const vu = b >= de && b < de + 4.4 ? 1 : 0;
+    $('tel' + i).style.opacity = vu * (1 - part);
+    $('tel' + i).style.transform = `translateY(${(1 - k) * 90 - part * 50}px) rotate(${-5 + k * 2}deg) scale(${pouls})`;
+    $('mot' + i).style.opacity = vu * borne((b - de - 0.25) / 0.4) * (1 - part);
+    $('mot' + i).style.transform = `translateX(${(1 - sortie((b - de - 0.25) / 0.8)) * 70}px)`;
+  });
+
+  // 4 · quatre exercices, puis quatre autres, qui tournent pour de bon.
+  const k4 = sortie((b - 32) / 1);
+  $('m4').style.opacity = k4; $('m4').style.transform = `scale(${0.9 + 0.1 * k4})`;
+  $('x4').style.opacity = borne((b - 33.5) / 0.6);
+  EXOS.forEach(([nom], i) => {
+    const groupe = Math.floor(i / 4), de = 32.4 + groupe * 6 + (i % 4) * 0.25;
+    const vu = groupe === 0 ? borne((b - de) / 0.5) * borne((38.2 - b) / 0.3) : borne((b - de) / 0.5);
+    $('exo' + i).style.opacity = vu;
+    $('exo' + i).style.transform = `translateY(${(1 - sortie((b - de) / 0.9)) * 60}px)`;
+    const images = IMAGES[nom];
+    if (images && vu > 0) {
+      const x = $('cv' + i).getContext('2d');
+      x.clearRect(0, 0, 480, 480); x.drawImage(images[Math.floor(t * 20) % images.length], 0, 0, 480, 480);
+    }
+  });
+
+  // 5 · le corps entre, la récupération monte, les muscles passent au vert.
+  const k5 = sortie((b - 44) / 1.2);
+  $('face').style.opacity = k5; $('face').style.transform = `translateY(${(1 - k5) * 50}px)`;
+  const k5b = sortie((b - 44.5) / 1.2);
+  $('dos').style.opacity = k5b; $('dos').style.transform = `translateY(${(1 - k5b) * 50}px)`;
+  $('m5').style.opacity = borne((b - 45) / 0.5); $('x5').style.opacity = borne((b - 46) / 0.5);
+  $('an').style.opacity = borne((b - 46.5) / 0.5);
+  const p = Math.round(33 + 67 * borne((b - 47) / 7));
+  $('arc').setAttribute('stroke-dasharray', `${(440 * p / 100).toFixed(1)} 440`);
+  $('arc').setAttribute('stroke', p >= 90 ? '#22D85F' : '#FFA928');
+  $('pct').textContent = `${p} %`;
+  // Chaque muscle passe au vert à son heure, comme sur la frise des heures.
+  const SEUILS = { 'face-0': 52.5, 'face-1': 49.5, 'face-2': 48.5, 'face-3': 53.5, 'dos-0': 49.5, 'dos-1': 48.5 };
+  for (const [cle, quand] of Object.entries(SEUILS)) document.querySelector('.v-' + cle).style.opacity = borne((b - quand) / 0.6);
+
+  // 6 · la fin.
+  $('logo6').style.transform = `scale(${rebond((b - 56) / 1.5)})`;
+  $('nom6').style.opacity = borne((b - 56.6) / 0.6);
+  $('dev6').style.opacity = borne((b - 58) / 0.8); $('url6').style.opacity = borne((b - 59.5) / 0.8);
+}
+
+// Prête quand les polices, les images et les animations sont là.
+(async () => {
+  await document.fonts.ready;
+  await Promise.all([...document.images].map((i) => (i.complete ? null : new Promise((ok) => { i.onload = i.onerror = ok; }))));
+  await Promise.all(EXOS.map(([nom]) => decoder(nom).catch((e) => console.error('animation absente', nom, e))));
+  rendre(0);
+  window.pret = true;
+})();
+</script>
+</body></html>

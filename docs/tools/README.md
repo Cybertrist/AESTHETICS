@@ -13,6 +13,7 @@ de SmartBudget.
     node docs/tools/anime.js       # les schémas animés
     bash docs/tools/pastilles.sh   # les pastilles FRANÇAIS et ENGLISH, dans docs/langues
     bash docs/tools/social.sh      # l'aperçu social (JPEG), à déposer dans Settings > Social preview
+    bash docs/tools/video.sh       # la vidéo de présentation, avec sa musique
 
 Chaque commande fait la version française, puis l'anglaise dans `docs/en/`.
 
@@ -45,6 +46,12 @@ Chaque commande fait la version française, puis l'anglaise dans `docs/en/`.
   ils gardent leurs dessins de secours. À lancer avant `anime.js`.
 - `image.js` : une image fixe d'un schéma animé à un instant donné, pour
   le vérifier sans attendre qu'il tourne.
+- `video.sh` et `video/` : la vidéo de présentation. `video.html` pose
+  chaque élément à un instant donné, sans horloge ; `capture.js` pilote
+  Chrome par son protocole de débogage, photographie trente images par
+  seconde et les envoie à ffmpeg ; `musique.js` synthétise la musique, un
+  hardstyle à 150 battements par minute, sans aucun échantillon. Il faut
+  ffmpeg et Node 22 ou plus récent.
 - `jpeg.js` : convertit l'aperçu social en JPEG, sous le mégaoctet de GitHub.
 
 ## Les captures
