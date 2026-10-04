@@ -7,7 +7,8 @@
 // fetch().
 //
 //   node docs/tools/video/capture.js             la vidéo entière
-//   node docs/tools/video/capture.js --apercu    douze images fixes, pour relire
+//   node docs/tools/video/capture.js --apercu    des images fixes de toute la vidéo, pour relire
+//   node docs/tools/video/capture.js --apercu --scene seance    six images d'une seule scène
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
@@ -18,6 +19,9 @@ const DOCS = path.join(__dirname, '..', '..');
 const SORTIE = path.join(__dirname, '..', 'html', 'video');
 const CHROME = process.env.CHROME || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const APERCU = process.argv.includes('--apercu');
+const SCENE = process.argv.includes('--scene') ? process.argv[process.argv.indexOf('--scene') + 1] : null;
+// Un port par lancement : plusieurs captures peuvent tourner en même temps.
+const PORT = 9300 + Math.floor(Math.random() * 600);
 const IPS = 30, DUREE = 25.6, L = 1280, H = 720, DENSITE = 1.5; // 1920 × 1080
 fs.mkdirSync(SORTIE, { recursive: true });
 
@@ -34,12 +38,12 @@ const attendre = (ms) => new Promise((ok) => setTimeout(ok, ms));
   await new Promise((ok) => serveur.listen(0, '127.0.0.1', ok));
   const port = serveur.address().port;
   const profil = fs.mkdtempSync(path.join(os.tmpdir(), 'video-'));
-  const chrome = spawn(CHROME, ['--headless=new', '--disable-gpu', '--hide-scrollbars', '--remote-debugging-port=9377',
+  const chrome = spawn(CHROME, ['--headless=new', '--disable-gpu', '--hide-scrollbars', `--remote-debugging-port=${PORT}`,
     `--user-data-dir=${profil}`, `--window-size=${L},${H}`, 'about:blank'], { stdio: 'ignore' });
   let cible;
   for (let k = 0; k < 60 && !cible; k++) {
     await attendre(250);
-    try { cible = (await (await fetch('http://127.0.0.1:9377/json')).json()).find((c) => c.type === 'page'); } catch (e) { /* pas encore prêt */ }
+    try { cible = (await (await fetch(`http://127.0.0.1:${PORT}/json`)).json()).find((c) => c.type === 'page'); } catch (e) { /* pas encore prêt */ }
   }
   if (!cible) throw new Error('Chrome ne répond pas');
   const ws = new WebSocket(cible.webSocketDebuggerUrl);
@@ -62,10 +66,18 @@ const attendre = (ms) => new Promise((ok) => setTimeout(ok, ms));
   };
 
   if (APERCU) {
-    const instants = [0.5, 2.6, 4.6, 5.8, 7.4, 9.0, 10.6, 12.2, 13.6, 16.0, 19.6, 21.6, 24.6];
+    let instants = [0.5, 2.6, 4.6, 5.8, 7.4, 9.6, 11.2, 13.0, 15.6, 16.8, 18.6, 20.8, 21.8, 24.6], prefixe = 'apercu';
+    if (SCENE) {
+      const bornes = await js(`(() => { const s = SCENES.find((x) => x.id === ${JSON.stringify(SCENE)}); return s ? [s.de, s.a] : null; })()`);
+      if (!bornes) throw new Error(`Scène inconnue : ${SCENE}`);
+      // Six instants dans la scène, du tout début à la toute fin.
+      instants = [0.04, 0.2, 0.4, 0.6, 0.8, 0.96].map((k) => +((bornes[0] + (bornes[1] - bornes[0]) * k) * 0.4).toFixed(2));
+      prefixe = `apercu-${SCENE}`;
+    }
     for (const [k, t] of instants.entries()) {
-      fs.writeFileSync(path.join(SORTIE, `apercu-${String(k + 1).padStart(2, '0')}.jpg`), await image(t));
-      console.log(`  apercu-${String(k + 1).padStart(2, '0')}.jpg  à ${t} s`);
+      const nom = `${prefixe}-${String(k + 1).padStart(2, '0')}.jpg`;
+      fs.writeFileSync(path.join(SORTIE, nom), await image(t));
+      console.log(`  ${nom}  à ${t} s`);
     }
   } else {
     const musique = path.join(SORTIE, 'musique.wav');
