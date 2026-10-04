@@ -30,8 +30,9 @@ Chaque commande fait la version française, puis l'anglaise dans `docs/en/`.
 - `widgets.sh` : la planche des widgets, à partir de `src-captures/widgets/`.
   Ces images sont les widgets tels que l'application les dessine : le test
   `mobile/test/ecran_accueil/vues_rendu_test.dart` les écrit dans
-  `mobile/build/rendus/ecran_accueil/`, avec les douze images du widget
-  animé (`recordl-aNN.png`), d'où vient `docs/schemas/widget-record.webp`.
+  `mobile/build/rendus/ecran_accueil/`, avec toutes les images du widget
+  animé en pleine définition (`recordl-aNN.png`), d'où vient
+  `docs/schemas/widget-record.webp` (vingt images par seconde).
 - `rogner.js` : prépare les captures brutes de l'émulateur. Il retire la
   barre d'état et la barre de navigation d'après un `barres.txt` posé à
   côté, réduit et écrit en JPEG, par un canvas de Chrome.
