@@ -22,7 +22,7 @@ scene({
 <div id="fin-groupe">
   <div id="fin-plaque"><img id="fin-logo" src="${LOGO}" alt=""><div id="fin-nom">AESTHETICS</div></div>
   <div id="fin-devise"><span id="fin-d1">Chaque <b>série.</b></span>&nbsp;&nbsp;<span id="fin-d2">Chaque <b>record.</b></span>&nbsp;&nbsp;<span id="fin-d3">Chaque <b>progrès.</b></span></div>
-  <div id="fin-faits">Android · Hors ligne · Aucun compte</div>
+  <div id="fin-faits">Android · Aucun compte · Aucun serveur</div>
   <div id="fin-adresse" class="mono">github.com/Cybertrist/AESTHETICS</div>
 </div>`,
   async init() {

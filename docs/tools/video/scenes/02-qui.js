@@ -37,7 +37,7 @@ scene({
     $('qui-delts').style.opacity = la(l - 1);
     $('qui-biceps').style.opacity = la(l - 3);
     $('qui-quadris').style.opacity = la(l - 3);
-    const coup = l >= 3 ? frappe(l - 3, 0.03) : frappe(l - 1, 0.03);
+    const coup = l >= 3 - 1e-6 ? frappe(l - 3, 0.03) : frappe(l - 1, 0.03);
     $('qui-corps').style.transform = `scale(${coup.toFixed(4)})`;
   },
 });

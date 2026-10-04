@@ -105,7 +105,7 @@ const telClip = (style = '', largeur = 290, idCanvas = '', id = '') =>
 /// Une frappe : l'élément est là, entier, sur l'image même du temps, un peu trop grand, et se
 /// pose en 0,3 temps. frappe(l - 2) vaut 0 avant le temps 2, puis l'échelle de 1,15 à 1.
 /// S'emploie ainsi : e.opacity = l >= 2 ? 1 : 0 ; e.transform = `scale(${frappe(l - 2)})`.
-const frappe = (x, exces = 0.15, duree = 0.3) => (x < 0 ? 1 : 1 + exces * (1 - sortie(x / duree)));
+const frappe = (x, exces = 0.15, duree = 0.3) => (x < -1e-6 ? 1 : 1 + exces * (1 - sortie(Math.max(0, x) / duree)));
 const la = (x) => (x >= -1e-6 ? 1 : 0); // là ou pas là, sans fondu : la(l - 2)
 /// Le mot-clé des scènes du plein, toujours au même endroit : motCle('ser', 'Chaque', 'série.').
 /// Dans rendre : rendreMotCle('ser', l). La première ligne est là dès le temps 0, la seconde
@@ -115,7 +115,44 @@ const motCle = (p, ligne1, ligne2) =>
 function rendreMotCle(p, l, quand = 1) {
   const a = $(`${p}-mc1`).style, b2 = $(`${p}-mc2`).style;
   a.opacity = 1; a.transform = `translateX(${((1 - sortie(l / 0.3)) * 28).toFixed(1)}px)`;
-  b2.opacity = la(l - quand); b2.transform = `scale(${frappe(l - quand).toFixed(4)})`;
+  b2.opacity = la(l - quand); b2.transform = `scale(${frappe(l - quand, 0.06).toFixed(4)})`; // une frappe courte : les mots longs restent dans le cadre
+}
+
+/// LE TÉLÉPHONE. Dans tout le plein, l'appli se montre dans un seul et même téléphone, droit,
+/// toujours à la même place et à la même taille : seul son écran change. Le mot-clé est à droite.
+///
+/// sceneTelephone({ id, de, a, p, mots: ['Chaque', 'série.'], clips: ['seance-coches'],
+///   captures: ['08a-fiche-progres'], ecran: (l) => ({ clip: 'seance-coches', s: 1.2 }) ou
+///   ({ capture: '08a-fiche-progres' }), sous: { quand: 3, html: '…', style: '' }, css })
+/// ecran(l) dit ce que l'écran montre au temps local l : un instant d'un clip, ou une capture.
+const CAPTURES = {};
+function sceneTelephone(o) {
+  const cv = `${o.p}-ecran`;
+  scene({
+    id: o.id, de: o.de, a: o.a, css: o.css || '',
+    html: `<div class="fond"></div><div class="zone">${telClip('position:relative', 300, cv)}</div>${motCle(o.p, o.mots[0], o.mots[1])}
+      ${o.sous ? `<div class="mc-sous" id="${o.p}-sous" style="${o.sous.style || ''}">${o.sous.html}</div>` : ''}`,
+    init: () => Promise.all([
+      ...(o.clips || []).map(clip),
+      ...(o.captures || []).map((c) => CAPTURES[c] || new Promise((ok, ko) => {
+        const im = new Image(); im.onload = () => ok((CAPTURES[c] = im)); im.onerror = ko; im.src = `${BRUT}${c}.png`;
+      })),
+    ]),
+    rendre(l) {
+      const e = o.ecran(l), c = $(cv);
+      if (e.clip) dessinerClip(c, e.clip, e.s);
+      else {
+        const im = CAPTURES[e.capture];
+        if (im) c.getContext('2d').drawImage(im, 0, 136, 1080, 2201, 0, 0, c.width, c.height);
+      }
+      rendreMotCle(o.p, l);
+      if (o.sous) {
+        const st = $(`${o.p}-sous`).style;
+        st.opacity = la(l - o.sous.quand); st.transformOrigin = 'left center';
+        st.transform = `scale(${frappe(l - o.sous.quand, 0.08).toFixed(4)})`;
+      }
+    },
+  });
 }
 
 // ------------------------------------------------------------ les scènes
@@ -128,7 +165,7 @@ function scene(s) {
   $('scenes').insertAdjacentHTML('beforeend', `<div class="s" id="s-${s.id}">${s.html}</div>`);
 }
 // Les coupes franches, soulignées d'un éclair blanc : l'entrée, le plein, la fin.
-const ECLAIRS = [0, 16, 56];
+const ECLAIRS = [[0, 0.45], [16, 0.45], [32, 0.2], [48, 0.2], [56, 0.45]]; // plus faibles aux reprises du thème
 function rendre(t) {
   const b = t / T;
   for (const s of SCENES) {
@@ -138,7 +175,7 @@ function rendre(t) {
     $(`s-${s.id}`).style.opacity = o;
     if (o > 0) s.rendre(b - s.de, b, t);
   }
-  $('eclair').style.opacity = Math.max(...ECLAIRS.map((c) => (b >= c && !(c === 0 && b < 0.05) ? Math.max(0, 0.45 - (b - c) * 1.5) : 0)));
+  $('eclair').style.opacity = Math.max(...ECLAIRS.map(([c, force]) => (b >= c - 1e-6 && !(c === 0 && b < 0.05) ? Math.max(0, force - Math.max(0, b - c) * 1.5) : 0)));
 }
 </script>
 <script src="scenes/01-ouverture.js"></script>
