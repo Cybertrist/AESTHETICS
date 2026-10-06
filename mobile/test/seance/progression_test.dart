@@ -105,6 +105,19 @@ void main() {
     });
   });
 
+  test('aux haltères, la charge monte à l’haltère suivant : 1 kg jusqu’à 10, puis 2 kg', () {
+    expect([for (final kg in [3.0, 9.0, 10.0, 12.0, 16.0, 22.0]) Surcharge.haltereSuivant(kg)], [4.0, 10.0, 12.0, 14.0, 18.0, 24.0]);
+    const curl = 'curl-marteau';
+    expect(data.exercises.byId(curl)!.equipement, 'halteres');
+    // De 16 à 18 kg, le saut dépasse 10 % : il se gagne à 14 répétitions, pas à 12.
+    final debut = [seance(jour(1), [(16, 8), (16, 8)], exo: curl)];
+    expect(proposer(seance(jour(8), [(16, 12), (16, 12)], exo: curl), debut).titre, '16 kg × 13');
+    // À 14 partout, on prend les 18, pas des « 18,5 ».
+    final p = proposer(seance(jour(8), [(16, 14), (16, 14)], exo: curl), debut);
+    expect((p.poids, p.reps), (18.0, 8));
+    expect(p.titre, '18 kg × 8');
+  });
+
   group('comparaison', () {
     test('une séance écourtée se compare série pour série, pas en bloc', () {
       final complete = seance(jour(1), [(70, 7), (70, 6), (70, 5), (70, 5)]);
@@ -132,6 +145,24 @@ void main() {
     });
   });
 
+  test('une série finie en échec ne revient pas en échec la fois suivante', () async {
+    const elev = 'elevations-laterales';
+    final s = WorkoutSession(id: 'x', nom: 'Épaules', debut: jour(1), fin: jour(1).add(const Duration(hours: 1)), exercices: const [
+      SessionExercise(id: 'e', exerciseId: elev, series: [
+        WorkoutSet(id: 'a', type: SetType.echauffement, poids: 2, reps: 15, fait: true),
+        WorkoutSet(id: 'b', type: SetType.echec, poids: 3.3, reps: 15, fait: true),
+        WorkoutSet(id: 'c', type: SetType.echec, poids: 3.3, reps: 12, fait: true),
+      ]),
+    ]);
+    await data.sessions.save(s);
+    // La routine tirée de la séance, puis la séance lancée avec elle : l'échauffement reste, l'échec non.
+    final routine = routineDepuisSeance(s, 'Épaules');
+    expect([for (final p in routine.exercices.single.series) p.type], [SetType.echauffement, SetType.normale, SetType.normale]);
+    final suivante = await data.sessions.startFromRoutine(routine);
+    expect([for (final x in suivante.exercices.single.series) x.type], [SetType.echauffement, SetType.normale, SetType.normale]);
+    expect(suivante.exercices.single.series.last.poids, 3.3);
+  });
+
   group('unilatéral', () {
     test('le catalogue : un bras ou une jambe à la fois, jamais un exercice chronométré', () {
       bool uni(String id) {
@@ -139,7 +170,7 @@ void main() {
         expect(e, isNotNull, reason: '$id absent du catalogue');
         return e!.unilateral;
       }
-      for (final id in ['rowing-haltere-unilateral', 'curl-concentre', 'squat-bulgare', 'single-leg-press', 'one-arm-lat-pulldown', 'pistol-squat', 'step-up']) {
+      for (final id in ['rowing-haltere-unilateral', 'curl-concentre', 'squat-bulgare', 'single-leg-press', 'one-arm-lat-pulldown', 'pistol-squat', 'step-up', 'elevations-laterales-a-la-poulie']) {
         expect(uni(id), isTrue, reason: id);
       }
       for (final id in ['developpe-couche', 'squat', 'curl-marteau', 'fentes-marchees', 'single-leg-glute-bridge-hold', 'bench-bulgarian-split-stretch']) {

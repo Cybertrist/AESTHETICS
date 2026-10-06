@@ -200,7 +200,10 @@ class Exercise {
   /// bras, squat bulgare, curl concentré...) : ses séries se notent alors
   /// par paires, gauche puis droite. Déduit du nom, faute d'indication dans
   /// le catalogue ; les exercices chronométrés n'en font pas partie.
-  bool get unilateral => suivi.usesReps && (_unCote.hasMatch(nom) || _unCote.hasMatch(nomEn ?? ''));
+  bool get unilateral => suivi.usesReps && (_unCoteParId.contains(id) || _unCote.hasMatch(nom) || _unCote.hasMatch(nomEn ?? ''));
+
+  /// Les exercices à un côté que leur nom ne trahit pas.
+  static const _unCoteParId = {'elevations-laterales-a-la-poulie'};
 
   List<Muscle> get tousMuscles => [...musclesPrincipaux, ...musclesSecondaires];
 

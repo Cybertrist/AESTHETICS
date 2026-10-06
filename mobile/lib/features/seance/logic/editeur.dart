@@ -41,7 +41,7 @@ abstract class SeanceEditeur extends ChangeNotifier {
         ? [for (var i = 0; i < nombre; i++) WorkoutSet(id: newId())]
         : [
             for (final s in last)
-              WorkoutSet(id: newId(), type: s.type, poids: s.poids, reps: s.reps, dureeSec: s.dureeSec, distanceM: s.distanceM),
+              WorkoutSet(id: newId(), type: s.type.aReprendre, poids: s.poids, reps: s.reps, dureeSec: s.dureeSec, distanceM: s.distanceM),
           ];
     // Un exercice unilatéral : une série à gauche, une à droite.
     return repo.estUnilateral(exerciseId) ? Unilateral.series(series, newId) : series;

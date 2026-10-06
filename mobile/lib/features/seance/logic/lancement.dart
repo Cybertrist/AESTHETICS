@@ -57,7 +57,7 @@ abstract final class Lancement {
             notes: e.notes,
             series: [
               for (final x in e.series)
-                WorkoutSet(id: newId(), type: x.type, poids: x.poids, reps: x.reps, dureeSec: x.dureeSec, distanceM: x.distanceM),
+                WorkoutSet(id: newId(), type: x.type.aReprendre, poids: x.poids, reps: x.reps, dureeSec: x.dureeSec, distanceM: x.distanceM),
             ],
           ),
       ],

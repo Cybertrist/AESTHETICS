@@ -21,6 +21,12 @@ enum SetType {
   backOff('Back-off', 'B', 0xFF3CE0FF, 'Série plus légère après le top set, pour ajouter du volume.');
 
   const SetType(this.label, this.short, this.argb, this.aide);
+
+  /// Le type à reprendre quand une série sert de modèle à la suivante (la
+  /// séance d'après, la routine). « Échec » dit comment une série s'est
+  /// finie, pas ce qui est prévu : elle redevient une série normale. Les
+  /// autres types décrivent la série elle-même et se gardent.
+  SetType get aReprendre => this == SetType.echec ? SetType.normale : this;
   final String label;
 
   /// Lettre affichée à la place du numéro de série (vide pour une normale).

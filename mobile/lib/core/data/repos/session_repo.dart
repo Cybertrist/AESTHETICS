@@ -198,7 +198,7 @@ class SessionRepo extends ChangeNotifier {
         final prev = i < lastSets.length ? lastSets[i] : (lastSets.isNotEmpty ? lastSets.last : null);
         sets.add(WorkoutSet(
           id: newId(),
-          type: p.type,
+          type: p.type.aReprendre,
           poids: p.poids ?? prev?.poids,
           reps: p.reps ?? prev?.reps,
           rpe: p.rpe,

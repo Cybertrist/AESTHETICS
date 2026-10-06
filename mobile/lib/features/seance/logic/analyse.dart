@@ -257,7 +257,10 @@ abstract final class Surcharge {
       final jambes = ex != null &&
           ex.musclesPrincipaux.any((m) => m == Muscle.quadriceps || m == Muscle.ischios || m == Muscle.fessiers) &&
           (ex.equipement == 'barre' || ex.equipement == 'machine' || ex.equipement == 'smith');
-      final pas = jambes ? increment * 2 : increment;
+      // Aux haltères, la charge suivante est l'haltère d'après sur le râtelier,
+      // pas la charge plus un pas de disques.
+      final halteres = ex?.equipement == 'halteres';
+      final pas = halteres ? haltereSuivant(top) - top : (jambes ? increment * 2 : increment);
       String charge(double p) => '$signe${Fmt.poids(p, unite)}';
 
       // La fourchette de répétitions : celle de la routine si elle en donne
@@ -322,7 +325,7 @@ abstract final class Surcharge {
         final r = math.max(bas, minReps);
         out.add(proposer(top, r, dur ? 'Séries poussées à bout : garde la charge et consolide.' : 'Sous la fourchette de $bas à $haut : garde la charge et consolide.'));
       } else if (minReps >= haut && (rpeMoy == null || rpeMoy <= 8.5)) {
-        final p = Strength.arrondir(top + pas, increment);
+        final p = halteres ? haltereSuivant(top) : Strength.arrondir(top + pas, increment);
         out.add(proposer(p, bas, '$haut répétitions sur toutes tes séries : monte à ${charge(p)} et repars à $bas.', hausse: true));
       } else if (maxReps > minReps) {
         // Des séries inégales (8, 7, 6) : d'abord les amener au niveau de la meilleure.
@@ -339,6 +342,10 @@ abstract final class Surcharge {
     }
     return out;
   }
+
+  /// L'haltère juste au-dessus de [kg] sur le râtelier d'une salle : un par
+  /// kilo jusqu'à 10 kg (1, 2, 3... 10), puis de 2 en 2 (12, 14, 16...).
+  static double haltereSuivant(double kg) => kg < 10 ? kg.floorToDouble() + 1 : (kg / 2).floorToDouble() * 2 + 2;
 
   static const _fourchettes = [(3, 5), (5, 8), (8, 12), (12, 15), (15, 20)];
 
@@ -417,7 +424,7 @@ abstract final class MajRoutine {
         final ancien = i >= 0 ? anciens.removeAt(i) : null;
         // Exercice nouveau et aucune série cochée : on garde les séries prévues.
         final prevues = ancien?.series ??
-            [for (final x in e.series) PlannedSet(type: x.type, poids: x.poids, reps: x.reps, dureeSec: x.dureeSec, distanceM: x.distanceM)];
+            [for (final x in e.series) PlannedSet(type: x.type.aReprendre, poids: x.poids, reps: x.reps, dureeSec: x.dureeSec, distanceM: x.distanceM)];
         exercices.add(RoutineExercise(
           id: ancien?.id ?? newId(),
           exerciseId: e.exerciseId,
@@ -467,7 +474,7 @@ abstract final class MajRoutine {
       final poids = travail && sug?.poids != null ? sug!.poids : f.poids;
       final gardeFourchette = p?.repsMax != null && f.reps != null && f.reps! >= (p!.reps ?? 0) && f.reps! <= p.repsMax!;
       out.add(PlannedSet(
-        type: f.type,
+        type: f.type.aReprendre,
         poids: poids,
         reps: gardeFourchette ? p.reps : (travail && sug?.reps != null ? sug!.reps : f.reps),
         repsMax: gardeFourchette ? p.repsMax : null,
@@ -528,7 +535,7 @@ Routine routineDepuisSeance(WorkoutSession s, String nom) => Routine(
             notes: e.notes,
             series: [
               for (final x in e.series)
-                PlannedSet(type: x.type, poids: x.poids, reps: x.reps, dureeSec: x.dureeSec, distanceM: x.distanceM),
+                PlannedSet(type: x.type.aReprendre, poids: x.poids, reps: x.reps, dureeSec: x.dureeSec, distanceM: x.distanceM),
             ],
           ),
       ],
