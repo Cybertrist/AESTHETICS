@@ -3,7 +3,7 @@
 // À gauche, l'écran de séance : on coche la première série du développé
 // couché, elle passe au vert et le minuteur de repos part seul ; un toucher
 // sur la pilule l'ouvre en grand, « +10 » ajoute dix secondes ; le repos se
-// termine, la deuxième série passe à 82,5 kg et bat deux records ; puis le
+// termine, la deuxième série passe à 82,5 kg et bat le record de charge ; puis le
 // chevron réduit la séance en une barre posée au-dessus des onglets.
 // À droite, les six étapes, qui s'allument tour à tour.
 //
@@ -119,7 +119,7 @@ module.exports = (O) => {
   s += chiffres(3, 0.004, T.coche1, [['Durée', vDuree(0, T.coche1 + 0.01)], ['Volume', '0 kg'], ['Séries', '0']]);
   s += chiffres(3, T.coche1, T.coche2, [['Durée', vDuree(T.coche1 - 0.01, T.coche2 + 0.01)], ['Volume', '640 kg'], ['Séries', '1']]);
   s += chiffres(4, T.coche2, T.mini, [['Durée', vDuree(T.coche2 - 0.01, T.mini + 0.02, 12.5)], ['Volume', '1 300 kg'], ['Séries', '2'],
-    ['Records', (cx) => `${ecusson(cx - 9, EY + 36, 8)}${t(cx + 8, EY + 41, '2', { taille: 12.5, couleur: APP.texte, poids: 700, ancre: 'middle' })}`]]);
+    ['Records', (cx) => `${ecusson(cx - 9, EY + 36, 8)}${t(cx + 8, EY + 41, '1', { taille: 12.5, couleur: APP.texte, poids: 700, ancre: 'middle' })}`]]);
   // L'exercice ouvert.
   s += `${vignette(SX + 14, SY + 138, 44, false, 'bench-press')}
     ${t(SX + 70, SY + 165, 'Développé couché', { taille: 14, couleur: APP.texte, poids: 700 })}
@@ -169,14 +169,13 @@ module.exports = (O) => {
     ${points(SX + SL - 22, SY + 470)}
     ${bouton(SX + 14, SY + 502, SL - 28, 30, 'Ajouter des exercices', '#FFFFFF', '#000000', 11.5)}
     ${bouton(SX + 14, SY + 538, SL - 28, 30, 'Plus', APP.carte2, APP.texte, 11.5)}`;
-  // Le bandeau du record : l'écusson seul, puis la pilule et ses deux lignes.
+  // Le bandeau du record : l'écusson seul, puis la pilule et son record.
   const BY = EY + 3, BC = SX + SL / 2, BL = 252;
   s += g(T.coche2 + 0.003, T.ligne1, `<rect x="${BC - 24}" y="${BY}" width="48" height="48" rx="24" fill="#0E0E10" stroke="${OR_PALE}" stroke-opacity="0.35" stroke-width="1.2"/>${ecusson(BC, BY + 24, 15)}`, 0.006);
   s += g(T.ligne1, T.finBandeau, `<rect x="${BC - BL / 2}" y="${BY}" width="${BL}" height="48" rx="24" fill="#0E0E10" stroke="${OR_PALE}" stroke-opacity="0.35" stroke-width="1.2"/>
     ${vignette(BC - BL / 2 + 8, BY + 7, 34, false, 'bench-press')}
     ${t(BC - BL / 2 + 52, BY + 21, 'Développé couché', { taille: 11.5, couleur: APP.texte, poids: 700 })}
-    ${g(T.ligne1, T.ligne2, t(BC - BL / 2 + 52, BY + 37, 'Charge maximale · 82,5 kg', { taille: 11, couleur: OR_PALE, poids: 600 }), 0.006)}
-    ${g(T.ligne2, T.finBandeau, t(BC - BL / 2 + 52, BY + 37, '1RM estimé · 103,5 kg', { taille: 11, couleur: OR_PALE, poids: 600 }), 0.006)}
+    ${t(BC - BL / 2 + 52, BY + 37, 'Charge maximale · 82,5 kg', { taille: 11, couleur: OR_PALE, poids: 600 })}
     ${ecusson(BC + BL / 2 - 24, BY + 24, 12)}`, 0.006);
   s += toucher(COL.coche, y1 + 20, C, T.coche1) + toucher(PILX + 40, SY + 40, C, T.pilule) + toucher(COL.kg, y2 + 20, C, T.kg)
     + toucher(COL.coche, y2 + 20, C, T.coche2) + toucher(SX + 30, SY + 40, C, T.reduire);
@@ -253,9 +252,9 @@ module.exports = (O) => {
         'Appli en arrière-plan : une notification « Repos terminé » prend le relais.'],
       [['3', BLEU], ['2', BLEU], ['1', BLEU], ['son de fin', BLEU]]],
     ['Le record', OR, [T.kg - 0.01, T.reduire - 0.01],
-      ['82,5 kg × 8 bat la charge la plus lourde des séances d’avant (80 kg) et leur meilleur 1RM estimé (100,3 kg).',
-        'La ligne passe à l’or, l’écusson « PR » annonce chaque record. À 80 kg × 8, la série 1 égalait sans dépasser.'],
-      [['Charge maximale · 82,5 kg', OR], ['1RM estimé · 103,5 kg', OR]]],
+      ['82,5 kg × 8 dépasse la charge la plus lourde des séances d’avant (80 kg) : c’est une médaille d’or.',
+        'La ligne passe à l’or, l’écusson « PR » l’annonce. À 80 kg × 8, la série 1 égalait sans dépasser.'],
+      [['Charge maximale · 82,5 kg', OR]]],
     ['Réduire la séance', ACCENT, [T.reduire - 0.01, 0.996],
       ['Le chevron ferme l’écran sans arrêter la séance : une barre reste au-dessus des onglets.',
         'Elle montre le chrono, « Reprendre » et « Abandonner » ; ni l’exercice en cours, ni le repos.'],
@@ -286,5 +285,5 @@ module.exports = (O) => {
   corps += t(RX, 688, 'Chaque geste est écrit sur le téléphone : la séance en cours se retrouve telle quelle après une fermeture de l’appli.', { taille: 13, couleur: DISCRET });
 
   svg('seance.svg', 1280, 740, corps,
-    'La séance, sur un téléphone animé, en six étapes. L’écran de séance montre la barre du haut (réduire, pilule du minuteur, Terminer), l’encadré Durée, Volume, Séries, et l’exercice Développé couché avec son tableau : Série, Précédent, Kg, Reps, trois séries dont le précédent vaut 80 kg × 8, 80 kg × 8 et 80 kg × 7. Étape 1 : un toucher sur la coche valide la première série, 80 kg × 8 ; la ligne passe au vert, le volume monte à 640 kg et le compteur à 1 série. Étape 2 : le minuteur de repos part seul, 90 secondes par défaut, 60 au plus après un échauffement, jamais au milieu d’un superset ni après la dernière série ; la pilule bleue affiche le temps qui reste. Étape 3 : un toucher sur la pilule ouvre le minuteur en plein écran, un anneau bleu qui se vide, avec les boutons −10, +10 et Arrêter ; +10 ajoute dix secondes. Étape 4 : à la fin du repos, le vibreur donne un tic à 3, 2 et 1 seconde, puis un coup plus long avec le son de fin ; en arrière-plan, une notification Repos terminé prend le relais. Étape 5 : la deuxième série passe à 82,5 kg × 8 et bat deux records, la charge maximale (80 kg avant) et le 1RM estimé (100,3 kg avant, 103,5 kg maintenant) ; la ligne passe à l’or, l’écusson PR s’ouvre en haut de l’écran et annonce chaque record, et l’encadré gagne une colonne Records. Étape 6 : le chevron réduit la séance en une barre Entraînement en cours posée au-dessus des onglets, avec le chrono et les boutons Reprendre et Abandonner. Chaque geste est écrit sur le téléphone.');
+    'La séance, sur un téléphone animé, en six étapes. L’écran de séance montre la barre du haut (réduire, pilule du minuteur, Terminer), l’encadré Durée, Volume, Séries, et l’exercice Développé couché avec son tableau : Série, Précédent, Kg, Reps, trois séries dont le précédent vaut 80 kg × 8, 80 kg × 8 et 80 kg × 7. Étape 1 : un toucher sur la coche valide la première série, 80 kg × 8 ; la ligne passe au vert, le volume monte à 640 kg et le compteur à 1 série. Étape 2 : le minuteur de repos part seul, 90 secondes par défaut, 60 au plus après un échauffement, jamais au milieu d’un superset ni après la dernière série ; la pilule bleue affiche le temps qui reste. Étape 3 : un toucher sur la pilule ouvre le minuteur en plein écran, un anneau bleu qui se vide, avec les boutons −10, +10 et Arrêter ; +10 ajoute dix secondes. Étape 4 : à la fin du repos, le vibreur donne un tic à 3, 2 et 1 seconde, puis un coup plus long avec le son de fin ; en arrière-plan, une notification Repos terminé prend le relais. Étape 5 : la deuxième série passe à 82,5 kg × 8 et dépasse la charge maximale des séances d’avant, 80 kg : c’est une médaille d’or ; la ligne passe à l’or, l’écusson PR s’ouvre en haut de l’écran et l’annonce, et l’encadré gagne une colonne Records. Étape 6 : le chevron réduit la séance en une barre Entraînement en cours posée au-dessus des onglets, avec le chrono et les boutons Reprendre et Abandonner. Chaque geste est écrit sur le téléphone.');
 };

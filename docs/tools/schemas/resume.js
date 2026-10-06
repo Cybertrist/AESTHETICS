@@ -76,7 +76,7 @@ module.exports = (O) => {
   const SEANCES_AOUT = 10;
   const ecart = (actuel, avant) => Math.round((actuel - avant) / avant * 100);
   const ECART_SEANCES = ecart(SEANCES.length, SEANCES_AOUT), ECART_VOLUME = ecart(VOLUME, VOLUMES[10]);
-  // Les jours de séance des neuf mois de la page « régularité ».
+  // Les jours de séance, mois par mois : le calendrier de la page « régularité » et la série.
   const JOURS = {
     1: [5, 7, 9, 12, 16, 19, 23, 26, 30], 2: [2, 4, 9, 11, 13, 18, 20, 23, 27], 3: [2, 4, 6, 9, 13, 16, 18, 20, 25, 27, 30],
     4: [1, 3, 8, 10, 13, 15, 20, 22, 24, 29], 5: [4, 6, 8, 11, 13, 15, 18, 20, 22, 25, 27, 29], 6: [1, 3, 5, 8, 10, 15, 17, 19, 22, 24, 29],
@@ -121,7 +121,7 @@ module.exports = (O) => {
   const PAGES = [
     ['Ouverture', 'Sept barres et le titre,', 'sur fond noir.'],
     ['Les séances', 'Une ligne par séance : sa durée,', 'son volume, puis le total.'],
-    ['La régularité', 'Le nombre de séances, et', 'neuf mois de cases.'],
+    ['La régularité', 'Le nombre de séances, et', 'le calendrier du mois.'],
     ['Le volume', 'Le poids soulevé, et douze', 'mois en barres.'],
     ['En objets', 'Le volume du mois converti', 'en un objet : « × N ».'],
     ['La série', 'Les semaines d’affilée avec', 'au moins une séance.'],
@@ -185,20 +185,19 @@ module.exports = (O) => {
     s += ligne(y0 + 60 + SEANCES.length * 14.4 + 8, 'TOTAL', duree(MINUTES), `${nombre(VOLUME)} kg`);
     page.push(s);
   }
-  // 3 · la régularité
+  // 3 · la régularité : le calendrier du mois, les jours d'entraînement en vert
   {
-    const y0 = MIL - 196, bl = (W - 2 * 13) / 3, c = (bl - 6 * 2.2) / 7;
+    const y0 = MIL - 196, e = 5.4, c = (W - 6 * e) / 7;
     let s = b(CX, y0, 'Entraînements en septembre', 14.5, { poids: 700, ancre: 'middle' });
     s += haltere(CX - 34, y0 + 46, 1.25) + b(CX + 6, y0 + 64, String(SEANCES.length), 54, { extra: 'letter-spacing="-1.6"' });
     s += ecartLigne(CX, y0 + 92, ECART_SEANCES, 'par rapport à août');
-    for (let i = 0; i < 9; i++) {
-      const m = MOIS - 8 + i, x = G + (i % 3) * (bl + 13), y = y0 + 112 + Math.floor(i / 3) * 96;
-      const decalage = (new Date(AN, m - 1, 1).getDay() + 6) % 7, nb = new Date(AN, m, 0).getDate();
-      s += b(x + bl / 2, y + 10, COURTS[m - 1], 10, { poids: 700, ancre: 'middle' });
-      for (let j = 1; j <= nb; j++) {
-        const n = decalage + j - 1, fait = JOURS[m].includes(j);
-        s += `<rect x="${(x + (n % 7) * (c + 2.2)).toFixed(1)}" y="${(y + 17 + Math.floor(n / 7) * (c + 2.2)).toFixed(1)}" width="${c.toFixed(1)}" height="${c.toFixed(1)}" rx="2.6" fill="${fait ? HAUSSE : BLANC}"${fait ? '' : ' fill-opacity="0.13"'}/>`;
-      }
+    tr('L|M|M|J|V|S|D').split('|').forEach((l, i) => { s += brut(G + i * (c + e) + c / 2, y0 + 128, l, 9.4, { couleur: ENCRE2, poids: 700, ancre: 'middle' }); });
+    const decalage = (new Date(AN, MOIS - 1, 1).getDay() + 6) % 7, nb = new Date(AN, MOIS, 0).getDate();
+    for (let j = 1; j <= nb; j++) {
+      const n = decalage + j - 1, fait = JOURS[MOIS].includes(j);
+      const x = G + (n % 7) * (c + e), y = y0 + 138 + Math.floor(n / 7) * (c + e);
+      s += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${c.toFixed(1)}" height="${c.toFixed(1)}" rx="${(c * 0.26).toFixed(1)}" fill="${fait ? HAUSSE : BLANC}"${fait ? '' : ' fill-opacity="0.13"'}/>`;
+      s += brut((x + c / 2).toFixed(1), (y + c / 2 + 4.2).toFixed(1), String(j), 11.6, { couleur: fait ? '#000000' : ENCRE2, poids: 700, ancre: 'middle' });
     }
     page.push(s);
   }
@@ -392,5 +391,5 @@ module.exports = (O) => {
   corps += `<rect x="1" y="66" width="1278" height="${860 - 67}" rx="16" fill="${FOND}" opacity="1">${fondu('opacity', C, [[0, 1], [0.012, 0], [FIN, 0], [0.994, 1], [1, 1]])}</rect>`;
 
   svg('resume.svg', 1280, 860, corps,
-    `Le résumé mensuel, façon story, sur un téléphone animé. Dix pages se suivent, une touche sur l’écran pour avancer, son tiers gauche pour revenir, sans minuterie : l’ouverture ; les séances de septembre 2026, une ligne chacune avec sa durée et son volume, puis le total, ${duree(MINUTES)} et ${nombre(VOLUME)} kg ; la régularité, ${SEANCES.length} entraînements, ${ECART_SEANCES} % de plus qu’en août, et neuf mois de cases ; le volume, ${nombre(VOLUME)} kg, ${ECART_VOLUME} % de plus qu’en août, et douze mois en barres ; le volume en objets ; la série, ${SERIE} semaines d’affilée ; les muscles, une toile à neuf axes devant celle du mois d’avant ; les records, ${RECORDS.length} nouveaux ; les cinq exercices favoris ; le résumé à partager. La cinquième page convertit le volume en un objet parmi 25, du burger de 250 g à la statue de la Liberté de 225 tonnes. Un objet est gardé si le volume divisé par sa masse va de 0,93 à 99,5 : ici ${EQ.lisibles.length} objets, de ${borne(VOLUME / 99.5)} à ${borne(VOLUME / 0.93)}. Le multiple est arrondi à l’entier s’il s’écarte de 8 % au plus ou dès 10, sinon à une décimale ; les entiers passent d’abord, du plus juste au moins juste, puis le plus petit multiple ; la statue de la Liberté, en pourcentage, ferme la liste. La graine du mois, ${AN} × 12 + ${MOIS} = ${nombre(GRAINE)}, désigne le choix n° ${EQ.i + 1} sur ${EQ.nb} : ${EQ.etiquette} ${EQ.o.pluriel}, « C’est comme soulever ${EQ.fort} ! ». Une graine sur six sort un burger ou une baguette. Le résumé annuel suit la même mécanique, avec l’année pour graine : pour ${AN} jusqu’ici, ${nombre(VOLUME_AN)} kg, soit ${EQ_AN.etiquette} ${EQ_AN.o.pluriel}.`);
+    `Le résumé mensuel, façon story, sur un téléphone animé. Dix pages se suivent, une touche sur l’écran pour avancer, son tiers gauche pour revenir, sans minuterie : l’ouverture ; les séances de septembre 2026, une ligne chacune avec sa durée et son volume, puis le total, ${duree(MINUTES)} et ${nombre(VOLUME)} kg ; la régularité, ${SEANCES.length} entraînements, ${ECART_SEANCES} % de plus qu’en août, et le calendrier du mois, les jours d’entraînement en vert ; le volume, ${nombre(VOLUME)} kg, ${ECART_VOLUME} % de plus qu’en août, et douze mois en barres ; le volume en objets ; la série, ${SERIE} semaines d’affilée ; les muscles, une toile à neuf axes devant celle du mois d’avant ; les records, ${RECORDS.length} nouveaux ; les cinq exercices favoris ; le résumé à partager. La cinquième page convertit le volume en un objet parmi 25, du burger de 250 g à la statue de la Liberté de 225 tonnes. Un objet est gardé si le volume divisé par sa masse va de 0,93 à 99,5 : ici ${EQ.lisibles.length} objets, de ${borne(VOLUME / 99.5)} à ${borne(VOLUME / 0.93)}. Le multiple est arrondi à l’entier s’il s’écarte de 8 % au plus ou dès 10, sinon à une décimale ; les entiers passent d’abord, du plus juste au moins juste, puis le plus petit multiple ; la statue de la Liberté, en pourcentage, ferme la liste. La graine du mois, ${AN} × 12 + ${MOIS} = ${nombre(GRAINE)}, désigne le choix n° ${EQ.i + 1} sur ${EQ.nb} : ${EQ.etiquette} ${EQ.o.pluriel}, « C’est comme soulever ${EQ.fort} ! ». Une graine sur six sort un burger ou une baguette. Le résumé annuel suit la même mécanique, avec l’année pour graine : pour ${AN} jusqu’ici, ${nombre(VOLUME_AN)} kg, soit ${EQ_AN.etiquette} ${EQ_AN.o.pluriel}.`);
 };

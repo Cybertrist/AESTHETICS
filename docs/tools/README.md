@@ -11,6 +11,7 @@ de SmartBudget.
     bash docs/tools/figures.sh     # bannière, bandeaux, sommaire, fonctionnalités, palette
     bash docs/tools/captures.sh    # la planche de captures
     bash docs/tools/widgets.sh     # la planche des widgets de l'écran d'accueil
+    bash docs/tools/bilan.sh       # le résumé mensuel et le résumé annuel, animés
     node docs/tools/anime.js       # les schémas animés
     bash docs/tools/pastilles.sh   # les pastilles FRANÇAIS et ENGLISH, dans docs/langues
     bash docs/tools/social.sh      # l'aperçu social (JPEG), à déposer dans Settings > Social preview
@@ -33,6 +34,15 @@ Chaque commande fait la version française, puis l'anglaise dans `docs/en/`.
   `mobile/build/rendus/ecran_accueil/`, avec toutes les images du widget
   animé en pleine définition (`recordl-aNN.png`), d'où vient
   `docs/schemas/widget-record.webp` (vingt images par seconde).
+- `bilan.sh` : le résumé mensuel et le résumé annuel en mouvement. Le test
+  `mobile/test/progres/bilan_film_test.dart` ouvre le résumé de la démo,
+  le feuillette et photographie chaque page pendant qu'elle se construit,
+  vingt fois par seconde ; ffmpeg assemble `docs/schemas/resume-mensuel.webp`
+  et `resume-annuel.webp`. `SANS_TEST=1` assemble sans refaire les images.
+- `emulateur.sh` : prend les captures brutes sur l'émulateur. L'application
+  ouvre chaque page par un lien (`aesthetics://ouvrir?chemin=…`, celui de
+  ses widgets) : un écran, une ligne. Seuls les écrans de la séance en
+  cours se prennent à la main.
 - `rogner.js` : prépare les captures brutes de l'émulateur. Il retire la
   barre d'état et la barre de navigation d'après un `barres.txt` posé à
   côté, réduit et écrit en JPEG, par un canvas de Chrome.
@@ -66,10 +76,12 @@ Chaque commande fait la version française, puis l'anglaise dans `docs/en/`.
 Elles viennent de l'émulateur, dans la démo de l'application
 (`--dart-define=DEMO=true`), qui se remplit d'un jeu d'essai au premier
 lancement. Aucune vraie séance ne doit jamais entrer dans `src-captures/`.
+`emulateur.sh` dit comment régler la date de l'émulateur pour que la semaine
+de la démo soit pleine, et prend les écrans un par un.
 
 ## Ce dont ils dépendent
 
-Chrome, cherché dans `C:\Program Files\Google\Chrome\Application` ; la
+ffmpeg, pour les résumés animés et la vidéo. Chrome, cherché dans `C:\Program Files\Google\Chrome\Application` ; la
 variable `CHROME` prend le dessus. Les polices, Syne, Space Grotesk,
 JetBrains Mono et Material Symbols, viennent de Google Fonts au moment du
 rendu : il faut une connexion.

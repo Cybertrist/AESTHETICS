@@ -1,8 +1,8 @@
 // Les tests : ce que la suite contient, dossier par dossier.
 //
-// En haut, un compteur et un ruban de 98 cases, une par fichier de test :
+// En haut, un compteur et un ruban de 102 cases, une par fichier de test :
 // le compteur monte du nombre de cas que chaque fichier contient, jusqu'à
-// 905. Les 92 fichiers de la musculation et de son socle passent d'abord,
+// 925. Les 96 fichiers de la musculation et de son socle passent d'abord,
 // groupés par sous-dossier de mobile/test/ ; les 6 des modules rangés
 // (coach, nutrition, santé) viennent à part. En bas, une carte par
 // sous-dossier : ce qu'il vérifie, et un vrai nom de test tiré du code.
@@ -10,7 +10,7 @@
 // Ce sont des comptages dans le texte, pas le résultat d'un lancement :
 // rien ici ne dit qu'un test est passé. Les nombres par fichier viennent de
 //   grep -cE '^\s*(test|testWidgets)\(' <fichier>
-// sur mobile/test/**/*_test.dart : 543 test( et 362 testWidgets(, soit 905.
+// sur mobile/test/**/*_test.dart : 557 test( et 368 testWidgets(, soit 925.
 module.exports = (O) => {
   const { svg, t, tr, esc, visible, fondu, paliers, MONO, SANS, FOND, CARTE, BORD, TITRE, TEXTE, DISCRET, FIL, ACCENT, ROSE, INTERNE } = O;
 
@@ -54,10 +54,10 @@ module.exports = (O) => {
     ['seance', [23, 1, 2, 1, 5, 2, 6, 5, 5, 12, 5, 13, 6, 4, 5, 12, 9, 17],
       'La saisie des séries, le repos, les disques, la fin et l’enregistrement, le partage.',
       'deux appuis coup sur coup sur la coche valident la série une seule fois', 'test_saisie_series_test.dart'],
-    ['entrainer', [15, 2, 17, 3, 8, 25, 10, 3, 8, 29, 13, 2, 4, 12, 15],
+    ['entrainer', [15, 2, 17, 3, 9, 30, 10, 3, 8, 29, 13, 2, 4, 12, 15],
       'La bibliothèque d’exercices, les routines, les programmes et leurs éditeurs.',
       'exercice au poids du corps : seules les répétitions comptent', 'bibliotheque_test.dart'],
-    ['progres', [6, 21, 1, 8, 7, 1, 3, 33, 22, 1, 14, 41, 35],
+    ['progres', [2, 6, 21, 1, 9, 7, 1, 3, 33, 22, 1, 14, 41, 35],
       'Les calculs, les statistiques, les objectifs, le résumé de l’année, la navigation.',
       'une séance encore ouverte ne compte nulle part', 'test_bilan_calculs_test.dart'],
     ['profil', [9, 22, 3, 22, 8, 2, 19, 26, 3],
@@ -75,7 +75,7 @@ module.exports = (O) => {
     ['parcours', [14, 11, 5, 17],
       'La navigation d’un écran à l’autre et les parcours de bout en bout.',
       '« Reprendre » rouvre la séance, le retour la réduit sans la perdre', 'test_transverse_navigation_test.dart'],
-    ['core', [1, 9, 7, 5, 16, 5],
+    ['core', [1, 9, 7, 5, 9, 16, 5],
       'Les formats d’écriture, les modèles et leur relecture, les équivalents.',
       'douze types de série, anciens noms relus', 'equivalents_test.dart'],
     ['data', [1, 15],
@@ -87,17 +87,20 @@ module.exports = (O) => {
     ['fondation_rendu', [1, 8],
       'Le socle commun : contrastes, tailles des zones à toucher, rendu.',
       'le texte secondaire (#8E8E93) passe 4,5 sur le fond, la carte et la surface', 'test_transverse_socle_test.dart'],
+    ['ecran_accueil', [1, 1],
+      'Les widgets de l’écran d’accueil du téléphone, dessinés avec la démo.',
+      'les six widgets se dessinent sans erreur ni débordement', 'vues_rendu_test.dart'],
     // Les modules rangés, comptés à part.
     ['coach', [14, 1]], ['nutrition', [4, 1]], ['sante', [1, 9]],
   ];
-  const NM = 12; // les dossiers de la musculation et de son socle
+  const NM = 13; // les dossiers de la musculation et de son socle
   const somme = (l) => l.reduce((a, b) => a + b, 0);
   const fichiers = [];
   dossiers.forEach(([nom, cas], d) => cas.forEach((n) => fichiers.push({ d, n })));
   const N = fichiers.length, TOTAL = somme(fichiers.map((f) => f.n));
   const NF_MUSCU = somme(dossiers.slice(0, NM).map((d) => d[1].length)), CAS_MUSCU = somme(dossiers.slice(0, NM).map((d) => somme(d[1])));
   const NF_RANGES = N - NF_MUSCU, CAS_RANGES = TOTAL - CAS_MUSCU;
-  if (N !== 98 || TOTAL !== 905 || NF_MUSCU !== 92 || CAS_MUSCU !== 875) throw new Error(`tests : ${N} fichiers, ${TOTAL} cas, ${NF_MUSCU}/${CAS_MUSCU}`);
+  if (N !== 102 || TOTAL !== 925 || NF_MUSCU !== 96 || CAS_MUSCU !== 895) throw new Error(`tests : ${N} fichiers, ${TOTAL} cas, ${NF_MUSCU}/${CAS_MUSCU}`);
 
   // L'instant où chaque fichier est compté. Un dossier prend un temps de
   // lecture, puis un pas par fichier ; les modules rangés viennent après
@@ -117,7 +120,7 @@ module.exports = (O) => {
 
   let corps = '';
   corps += t(60, 52, 'LES TESTS', { taille: 13, couleur: ACCENT, police: MONO, poids: 700, extra: 'letter-spacing="3"' });
-  corps += t(Math.round(66 + tr('LES TESTS').length * 10.9 + 24), 52, '905 cas de test écrits dans 98 fichiers : ce que vérifie chaque dossier, avec un vrai nom de test.', { taille: 14 });
+  corps += t(Math.round(66 + tr('LES TESTS').length * 10.9 + 24), 52, '925 cas de test écrits dans 102 fichiers : ce que vérifie chaque dossier, avec un vrai nom de test.', { taille: 14 });
 
   // ------------------------------------------------------- le déroulé
   const PX = 40, PY = 74, PL = 1200, PH = 176;
@@ -134,7 +137,7 @@ module.exports = (O) => {
     });
     corps += `<g font-family="${MONO}" font-size="54" font-weight="700" fill="${TITRE}" text-anchor="end">${compteur}</g>`;
   }
-  corps += brut(184, 146, '/ 905', { taille: 21, couleur: DISCRET });
+  corps += brut(184, 146, '/ 925', { taille: 21, couleur: DISCRET });
   corps += t(66, 173, 'cas de test écrits', { taille: 12.5, couleur: TEXTE });
 
   // La console : comment on compte, le fichier, un vrai nom de test.
@@ -151,7 +154,7 @@ module.exports = (O) => {
     if (d < NM) corps += ligne(test, de, a);
   });
   corps += ligne('les modules rangés, comptés à part : coach, nutrition, santé', debut[NM], TOUT, TEXTE);
-  corps += ligne('905 cas écrits : 875 pour la musculation et son socle, 30 pour les modules rangés.', TOUT, FIN, CLAIR);
+  corps += ligne('925 cas écrits : 895 pour la musculation et son socle, 30 pour les modules rangés.', TOUT, FIN, CLAIR);
 
   // Le ruban : une case par fichier, un groupe par dossier.
   const RX = 66, RL = 1148, RY = 192, PETIT = 6, GRAND = 26;
@@ -175,7 +178,7 @@ module.exports = (O) => {
   corps += `<path d="M${RX} ${RY + 27} H${finMuscu.toFixed(1)}" stroke="${ROSE}" stroke-opacity="0.7" stroke-width="2"/>
     <path d="M${xCase(NF_MUSCU).toFixed(1)} ${RY + 27} H${RX + RL}" stroke="${INTERNE}" stroke-opacity="0.7" stroke-width="2"/>`;
   corps += brut(RX, RY + 44, String(NF_MUSCU), { taille: 12.5 });
-  corps += t(RX + 24, RY + 44, 'fichiers, 875 cas : la musculation et son socle, un groupe de cases par dossier', { taille: 12.5 });
+  corps += t(RX + 24, RY + 44, 'fichiers, 895 cas : la musculation et son socle, un groupe de cases par dossier', { taille: 12.5 });
   corps += t(RX + RL, RY + 44, '6 fichiers, 30 cas : modules rangés', { taille: 12.5, ancre: 'end' });
 
   // ------------------------------------------------------- les familles
@@ -199,7 +202,7 @@ module.exports = (O) => {
       ${para(x + 56, y + 93, test, CW - 56 - 22, { taille: 12, couleur: CLAIR, pas: 16 })}`;
   });
   // Deux bandes : les modules rangés, et ce que ces chiffres sont.
-  const BY = CY0 + 4 * (CH + CG), BH = 80, BL = (PL - CG) / 2;
+  const BY = CY0 + Math.ceil(NM / 3) * (CH + CG), BH = 80, BL = (PL - CG) / 2;
   corps += `${cadre(PX, BY, BL, BH, debut[NM])}
     ${pastille(PX + 31, BY + 29, debut[NM], NF_RANGES)}
     ${t(PX + 56, BY + 34, 'Modules rangés', { taille: 14.5, couleur: TITRE, police: MONO, poids: 700 })}
@@ -209,8 +212,8 @@ module.exports = (O) => {
   corps += `${cadre(BX2, BY, BL, BH, TOUT)}
     ${pastille(BX2 + 31, BY + 29, TOUT, '∑')}
     ${t(BX2 + 56, BY + 34, 'Comptés, pas lancés', { taille: 14.5, couleur: TITRE, police: MONO, poids: 700 })}
-    ${para(BX2 + 56, BY + 55, 'Des appels lus dans le texte : 543 test( et 362 testWidgets(. Huit sont marqués skip : trois pour des défauts connus, cinq sous condition.', BL - 56 - 22)}`;
+    ${para(BX2 + 56, BY + 55, 'Des appels lus dans le texte : 557 test( et 368 testWidgets(. Dix sont marqués skip : trois pour des défauts connus, sept sous condition.', BL - 56 - 22)}`;
 
   svg('tests.svg', 1280, BY + BH + 22, corps,
-    'Les tests d’AESTHETICS, comptés fichier par fichier. Un compteur monte de 0 à 905 et un ruban de 98 cases s’allume, une case par fichier de test, groupées par sous-dossier de mobile/test : d’abord les 92 fichiers et 875 cas de la musculation et de son socle, puis, à part, les 6 fichiers et 30 cas des modules rangés. Ce sont des cas de test écrits, comptés dans le texte par grep, pas le résultat d’un lancement. Chaque dossier s’allume à son tour, avec ce qu’il vérifie et un vrai nom de test. test/seance, 18 fichiers, 133 cas : la saisie des séries, le repos, les disques, la fin et l’enregistrement, le partage ; par exemple, deux appuis coup sur coup sur la coche valident la série une seule fois. test/entrainer, 15 fichiers, 166 cas : la bibliothèque d’exercices, les routines, les programmes et leurs éditeurs ; exercice au poids du corps, seules les répétitions comptent. test/progres, 13 fichiers, 193 cas : les calculs, les statistiques, les objectifs, le résumé de l’année, la navigation ; une séance encore ouverte ne compte nulle part. test/profil, 9 fichiers, 114 cas : les badges, les unités, les mesures, les photos, les écrans du profil ; la séance en cours ne compte pas, les étapes suivent le nombre de séances. test/import, 8 fichiers, 81 cas : la lecture des CSV, le rapprochement des noms d’exercices, les doublons ; matériel différent, jamais accepté seul. test/aujourdhui, 8 fichiers, 53 cas : l’accueil, vide, étroit ou large, et le résumé du jour ; deux séances le même jour, la pastille montre la première, comme le calendrier. test/inscription, 6 fichiers, 16 cas : le premier lancement, le brouillon, un profil abîmé à la bienvenue ; le profil créé efface le brouillon, même si une sauvegarde était en attente. test/parcours, 4 fichiers, 47 cas : la navigation d’un écran à l’autre et les parcours de bout en bout ; Reprendre rouvre la séance, le retour la réduit sans la perdre. test/core, 6 fichiers, 43 cas : les formats d’écriture, les modèles et leur relecture, les équivalents ; douze types de série, anciens noms relus. test/data, 2 fichiers, 16 cas : le catalogue d’exercices et le stockage, écritures et fichiers abîmés ; atomique, aucun fichier temporaire ne reste, le contenu est complet. test/body, 1 fichier, 4 cas : la carte du corps, avec la seule comparaison à une image de référence ; chaque muscle du contrat a un masque sur au moins une vue du corps. test/fondation_rendu, 2 fichiers, 9 cas : le socle commun, contrastes, tailles des zones à toucher, rendu ; le texte secondaire passe 4,5 sur le fond, la carte et la surface. Modules rangés, 6 fichiers, 30 cas : test/coach, test/nutrition et test/sante, les tests de trois modules cachés par défaut, écrits et comptés à part. Comptés, pas lancés : des appels lus dans le texte, 543 test( et 362 testWidgets( ; huit portent un skip, trois pour des défauts connus, cinq sous condition.');
+    'Les tests d’AESTHETICS, comptés fichier par fichier. Un compteur monte de 0 à 925 et un ruban de 102 cases s’allume, une case par fichier de test, groupées par sous-dossier de mobile/test : d’abord les 96 fichiers et 895 cas de la musculation et de son socle, puis, à part, les 6 fichiers et 30 cas des modules rangés. Ce sont des cas de test écrits, comptés dans le texte par grep, pas le résultat d’un lancement. Chaque dossier s’allume à son tour, avec ce qu’il vérifie et un vrai nom de test. test/seance, 18 fichiers, 133 cas : la saisie des séries, le repos, les disques, la fin et l’enregistrement, le partage ; par exemple, deux appuis coup sur coup sur la coche valident la série une seule fois. test/entrainer, 15 fichiers, 172 cas : la bibliothèque d’exercices, les routines, les programmes et leurs éditeurs ; exercice au poids du corps, seules les répétitions comptent. test/progres, 14 fichiers, 196 cas : les calculs, les statistiques, les objectifs, le résumé de l’année, la navigation ; une séance encore ouverte ne compte nulle part. test/profil, 9 fichiers, 114 cas : les badges, les unités, les mesures, les photos, les écrans du profil ; la séance en cours ne compte pas, les étapes suivent le nombre de séances. test/import, 8 fichiers, 81 cas : la lecture des CSV, le rapprochement des noms d’exercices, les doublons ; matériel différent, jamais accepté seul. test/aujourdhui, 8 fichiers, 53 cas : l’accueil, vide, étroit ou large, et le résumé du jour ; deux séances le même jour, la pastille montre la première, comme le calendrier. test/inscription, 6 fichiers, 16 cas : le premier lancement, le brouillon, un profil abîmé à la bienvenue ; le profil créé efface le brouillon, même si une sauvegarde était en attente. test/parcours, 4 fichiers, 47 cas : la navigation d’un écran à l’autre et les parcours de bout en bout ; Reprendre rouvre la séance, le retour la réduit sans la perdre. test/core, 7 fichiers, 52 cas : les formats d’écriture, les modèles et leur relecture, les équivalents ; douze types de série, anciens noms relus. test/data, 2 fichiers, 16 cas : le catalogue d’exercices et le stockage, écritures et fichiers abîmés ; atomique, aucun fichier temporaire ne reste, le contenu est complet. test/body, 1 fichier, 4 cas : la carte du corps, avec la seule comparaison à une image de référence ; chaque muscle du contrat a un masque sur au moins une vue du corps. test/fondation_rendu, 2 fichiers, 9 cas : le socle commun, contrastes, tailles des zones à toucher, rendu ; le texte secondaire passe 4,5 sur le fond, la carte et la surface. test/ecran_accueil, 2 fichiers, 2 cas : les widgets de l’écran d’accueil du téléphone, dessinés avec la démo ; les six widgets se dessinent sans erreur ni débordement. Modules rangés, 6 fichiers, 30 cas : test/coach, test/nutrition et test/sante, les tests de trois modules cachés par défaut, écrits et comptés à part. Comptés, pas lancés : des appels lus dans le texte, 557 test( et 368 testWidgets( ; dix portent un skip, trois pour des défauts connus, sept sous condition.');
 };
