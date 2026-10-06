@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ÆSTHETIC, proposition de design</title>
+<style>
+  @font-face { font-family: Figtree; font-weight: 400; src: url(../../assets/fonts/Figtree-Regular.ttf); }
+  @font-face { font-family: Figtree; font-weight: 500; src: url(../../assets/fonts/Figtree-Medium.ttf); }
+  @font-face { font-family: Figtree; font-weight: 600; src: url(../../assets/fonts/Figtree-SemiBold.ttf); }
+  @font-face { font-family: Figtree; font-weight: 700; src: url(../../assets/fonts/Figtree-Bold.ttf); }
+  @font-face { font-family: Figtree; font-weight: 800; src: url(../../assets/fonts/Figtree-ExtraBold.ttf); }
+  :root {
+    --fond: #000; --carte: #131315; --carte2: #1D1D20; --filet: #222226;
+    --texte: #fff; --gris: #8E8E93; --gris2: #5C5C61;
+    --accent: #FF5A5F; --vert: #22D85F; --vert-fond: #12261A;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #0B0B0C; color: var(--texte); font-family: Figtree, system-ui, sans-serif; padding: 32px 24px 64px; }
+  h1 { font-size: 22px; font-weight: 800; }
+  .intro { color: var(--gris); margin: 6px 0 28px; max-width: 760px; line-height: 1.5; font-size: 15px; }
+  .planche { display: flex; flex-wrap: wrap; gap: 28px; }
+  figure { width: 390px; }
+  figcaption { color: var(--gris); font-size: 13px; margin: 0 4px 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  .tel { width: 390px; height: 844px; background: var(--fond); border-radius: 44px; border: 1px solid #2A2A2E; overflow: hidden; position: relative; display: flex; flex-direction: column; }
+  .ecran { flex: 1; padding: 58px 20px 0; overflow: hidden; }
+  .nav { height: 78px; border-top: 1px solid var(--filet); display: flex; padding-bottom: 14px; }
+  .nav div { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; color: var(--gris2); font-size: 11px; font-weight: 600; }
+  .nav div.actif { color: var(--texte); }
+  .nav svg { width: 23px; height: 23px; }
+  svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .sur { color: var(--gris); font-size: 14px; font-weight: 500; }
+  .titre { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .tete { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--carte2); display: grid; place-items: center; font-weight: 700; }
+  .etiquette { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--gris); }
+  .section { display: flex; justify-content: space-between; align-items: baseline; margin: 28px 0 14px; }
+  .section b { font-size: 18px; font-weight: 700; }
+  .section span { color: var(--gris); font-size: 14px; font-weight: 500; }
+  .carte { background: var(--carte); border-radius: 24px; padding: 20px; }
+  .bouton { height: 54px; border-radius: 27px; background: var(--accent); color: #fff; font-weight: 700; font-size: 17px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .bouton.gris { background: var(--carte2); }
+  .bouton.petit { height: 36px; padding: 0 16px; font-size: 14px; border-radius: 18px; }
+
+  /* Corps : base grise et calques de muscles, tous sur la même toile. */
+  .corps { position: relative; aspect-ratio: 636 / 1500; }
+  .corps.carre { aspect-ratio: 1; }
+  .corps img { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  .heros { display: flex; justify-content: space-between; gap: 12px; }
+  .heros .nom { font-size: 36px; font-weight: 800; letter-spacing: -.02em; margin: 8px 0 4px; }
+  .heros .duo { display: flex; gap: 4px; }
+  .heros .corps { height: 150px; }
+
+  .semaine { display: flex; justify-content: space-between; }
+  .jour { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--gris2); }
+  .jour i { width: 38px; height: 38px; border-radius: 50%; background: var(--carte); display: grid; place-items: center; font-style: normal; color: var(--gris); font-size: 14px; }
+  .jour.fait i { background: var(--accent); color: #fff; }
+  .jour.auj i { background: none; border: 2px solid var(--accent); color: #fff; }
+  .jour.auj { color: #fff; }
+
+  .tuiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .tuiles .carte { padding: 18px; }
+  .chiffre { font-size: 28px; font-weight: 800; letter-spacing: -.02em; margin-top: 6px; }
+  .chiffre small { font-size: 15px; font-weight: 600; color: var(--gris); }
+
+  .ligne { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-top: 1px solid var(--filet); }
+  .ligne:first-child { border-top: 0; }
+  .ligne .t { flex: 1; min-width: 0; }
+  .ligne .t b { display: block; font-size: 17px; font-weight: 700; }
+  .ligne .t span { color: var(--gris); font-size: 14px; }
+  .vignette { width: 52px; height: 52px; border-radius: 14px; background: var(--carte2); flex: none; padding: 4px; }
+  .vignette img { width: 100%; height: 100%; object-fit: contain; }
+  .rond { width: 40px; height: 40px; border-radius: 50%; background: var(--carte2); display: grid; place-items: center; color: #fff; flex: none; }
+  .rond svg { width: 16px; height: 16px; fill: currentColor; stroke: none; }
+  .chevron { color: var(--gris2); width: 18px; height: 18px; flex: none; }
+
+  .onglets { display: flex; gap: 24px; border-bottom: 1px solid var(--filet); margin-bottom: 22px; }
+  .onglets span { padding-bottom: 12px; font-size: 16px; font-weight: 600; color: var(--gris); }
+  .onglets span.actif { color: #fff; box-shadow: 0 2px 0 var(--accent); }
+  .barre { height: 6px; border-radius: 3px; background: var(--carte2); overflow: hidden; margin-top: 14px; }
+  .barre i { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+
+  .silhouettes { display: flex; gap: 10px; margin-bottom: 22px; }
+  .silhouettes .corps { width: 62px; border-radius: 16px; background: var(--carte); flex: none; }
+  .silhouettes .corps.choisi { outline: 2px solid #fff; }
+  .grille { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .exo { background: var(--carte); border-radius: 20px; padding: 12px 12px 14px; }
+  .exo img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+  .exo b { display: block; font-size: 15px; font-weight: 700; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .exo span { color: var(--gris); font-size: 13px; }
+
+  .seance-tete { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; }
+  .seance-tete .t { flex: 1; }
+  .seance-tete b { font-size: 20px; font-weight: 800; display: block; }
+  .seance-tete span { color: var(--accent); font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .seance-tete span em { color: var(--gris); font-style: normal; font-weight: 500; }
+  .entete, .serie { display: grid; grid-template-columns: 34px 1fr 64px 56px 44px; align-items: center; gap: 8px; text-align: center; }
+  .entete { font-size: 11px; font-weight: 700; letter-spacing: .1em; color: var(--gris2); margin: 18px 0 6px; padding: 0 8px; }
+  .serie { height: 52px; border-radius: 14px; padding: 0 8px; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .serie .avant { color: var(--gris2); font-weight: 500; font-size: 15px; }
+  .serie .champ { background: var(--carte2); border-radius: 10px; height: 38px; display: grid; place-items: center; color: var(--gris); }
+  .serie .coche { width: 40px; height: 38px; border-radius: 12px; background: var(--carte2); display: grid; place-items: center; color: var(--gris2); justify-self: end; }
+  .serie .coche svg { width: 18px; height: 18px; stroke-width: 3; }
+  .serie.faite { background: var(--vert-fond); }
+  .serie.faite .champ { background: none; color: #fff; }
+  .serie.faite .coche { background: var(--vert); color: #000; }
+  .ajout { height: 46px; border-radius: 23px; background: var(--carte); color: #fff; font-weight: 700; font-size: 15px; display: grid; place-items: center; margin: 10px 0 18px; }
+
+  .periodes { display: flex; gap: 8px; margin-bottom: 26px; }
+  .periodes span { padding: 8px 14px; border-radius: 18px; background: var(--carte); color: var(--gris); font-size: 14px; font-weight: 600; }
+  .periodes span.actif { background: #fff; color: #000; }
+  .grand { font-size: 44px; font-weight: 800; letter-spacing: -.03em; line-height: 1.05; }
+  .grand small { font-size: 22px; color: var(--gris); font-weight: 700; }
+  .hausse { color: var(--vert); font-weight: 700; font-size: 14px; }
+  .graphe { display: flex; align-items: flex-end; gap: 8px; height: 104px; margin-top: 18px; }
+  .graphe i { flex: 1; background: var(--accent); opacity: .35; border-radius: 6px 6px 2px 2px; }
+  .graphe i:last-child { opacity: 1; }
+  .muscle { display: grid; grid-template-columns: 104px 1fr 72px; gap: 12px; align-items: center; font-size: 15px; font-weight: 600; padding: 7px 0; }
+  .muscle .barre { margin: 0; }
+  .muscle em { white-space: nowrap; font-style: normal; color: var(--gris); font-size: 14px; text-align: right; font-weight: 500; }
+  .duo-centre { display: flex; justify-content: center; gap: 18px; }
+  .duo-centre .corps { height: 150px; }
+</style>
+</head>
+<body>
+<h1>ÆSTHETIC, proposition de design</h1>
+<p class="intro">Une seule idée par écran, beaucoup d'air, une seule couleur d'accent. Fond noir, cartes très discrètes, la police Figtree en gras pour les titres et les chiffres. Le vert ne sert qu'aux séries validées. Tout ce qui n'aide pas à s'entraîner sort de l'écran.</p>
+
+<div class="planche">
+
+<figure>
+<figcaption>Accueil</figcaption>
+<div class="tel">
+  <div class="ecran">
+    <div class="tete">
+      <div><div class="sur">Jeudi 1 octobre</div><div class="titre">Bonjour Tristan</div></div>
+      <div class="avatar">T</div>
+    </div>
+    <div class="carte">
+      <div class="heros">
+        <div>
+          <div class="etiquette">Séance du jour</div>
+          <div class="nom">Legs</div>
+          <div class="sur">6 exercices · 56 min</div>
+          <div class="sur" style="margin-top:4px">Semaine 7 sur 12</div>
+        </div>
+        <div class="duo">
+          <div class="corps"><img src="../../assets/body/pack/face_base.webp"><img src="../../assets/body/pack/face_quadriceps.webp"><img src="../../assets/body/pack/face_mollets.webp"><img src="../../assets/body/pack/face_adducteurs.webp"></div>
+          <div class="corps"><img src="../../assets/body/pack/dos_base.webp"><img src="../../assets/body/pack/dos_fessiers.webp"><img src="../../assets/body/pack/dos_ischios.webp"><img src="../../assets/body/pack/dos_mollets.webp"></div>
+        </div>
+      </div>
+      <div class="bouton" style="margin-top:18px"><svg width="16" height="16" viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><path d="M7 4v16l13-8z"/></svg>Démarrer</div>
+    </div>
+
+    <div class="section"><b>Cette semaine</b><span>1 séance sur 4</span></div>
+    <div class="semaine">
+      <div class="jour fait">L<i>✓</i></div><div class="jour">M<i>29</i></div><div class="jour">M<i>30</i></div>
+      <div class="jour auj">J<i>1</i></div><div class="jour">V<i>2</i></div><div class="jour">S<i>3</i></div><div class="jour">D<i>4</i></div>
+    </div>
+
+    <div class="tuiles" style="margin-top:28px">
+      <div class="carte"><div class="etiquette">Volume</div><div class="chiffre">8,4 <small>t</small></div></div>
+      <div class="carte"><div class="etiquette">Régularité</div><div class="chiffre">27 <small>sem.</small></div></div>
+    </div>
+  </div>
+  <div class="nav">
+    <div class="actif"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg>Accueil</div>
+    <div><svg viewBox="0 0 24 24"><path d="M6 8v8M3 10v4M18 8v8M21 10v4M6 12h12"/></svg>Entraîner</div>
+    <div><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M21 19H3"/></svg>Progrès</div>
+  </div>
+</div>
+</figure>
+
+<figure>
+<figcaption>Entraîner</figcaption>
+<div class="tel">
+  <div class="ecran">
+    <div class="tete"><div class="titre">Entraîner</div><div class="avatar">T</div></div>
+    <div class="onglets"><span class="actif">Séances</span><span>Programmes</span><span>Exercices</span></div>
+
+    <div class="carte">
+      <div class="etiquette">Programme en cours</div>
+      <div style="font-size:20px;font-weight:800;margin-top:8px">Push Pull Legs</div>
+      <div class="sur">Semaine 7 sur 12 · 25 séances sur 48</div>
+      <div class="barre"><i style="width:52%"></i></div>
+    </div>
+
+    <div class="section"><b>Mes routines</b><span>Tout voir</span></div>
+    <div class="carte" style="padding:4px 18px">
+      <div class="ligne"><div class="t"><b>Push</b><span>6 exercices · 56 min</span></div><div class="rond"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="ligne"><div class="t"><b>Pull</b><span>6 exercices · 56 min</span></div><div class="rond"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="ligne"><div class="t"><b>Legs</b><span>6 exercices · 56 min</span></div><div class="rond" style="background:var(--accent)"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+    </div>
+
+    <div class="tuiles" style="margin-top:18px">
+      <div class="bouton gris" style="font-size:15px">Séance vide</div>
+      <div class="bouton gris" style="font-size:15px">Nouvelle routine</div>
+    </div>
+  </div>
+  <div class="nav">
+    <div><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg>Accueil</div>
+    <div class="actif"><svg viewBox="0 0 24 24"><path d="M6 8v8M3 10v4M18 8v8M21 10v4M6 12h12"/></svg>Entraîner</div>
+    <div><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M21 19H3"/></svg>Progrès</div>
+  </div>
+</div>
+</figure>
+
+<figure>
+<figcaption>Exercices</figcaption>
+<div class="tel">
+  <div class="ecran">
+    <div class="tete"><div class="titre">Entraîner</div>
+      <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></div>
+    <div class="onglets"><span>Séances</span><span>Programmes</span><span class="actif">Exercices</span></div>
+    <div class="silhouettes">
+      <div class="corps carre choisi"><img src="../../assets/body/pack/face_buste_base.webp"><img src="../../assets/body/pack/face_buste_pectoraux.webp"></div>
+      <div class="corps carre"><img src="../../assets/body/pack/face_buste_base.webp"><img src="../../assets/body/pack/face_buste_deltoidesAnterieurs.webp"></div>
+      <div class="corps carre"><img src="../../assets/body/pack/face_buste_base.webp"><img src="../../assets/body/pack/face_buste_biceps.webp"></div>
+      <div class="corps carre"><img src="../../assets/body/pack/dos_buste_base.webp"><img src="../../assets/body/pack/dos_buste_grandDorsal.webp"></div>
+      <div class="corps carre"><img src="../../assets/body/pack/face_jambes_base.webp"><img src="../../assets/body/pack/face_jambes_quadriceps.webp"></div>
+    </div>
+    <div class="section" style="margin-top:0"><b>Pectoraux</b><span>50 exercices</span></div>
+    <div class="grille">
+      <div class="exo"><img src="../../assets/exercises/poses/bench-press-start.webp"><b>Développé couché</b><span>Barre</span></div>
+      <div class="exo"><img src="../../assets/exercises/poses/incline-db-press-start.webp"><b>Développé incliné</b><span>Haltères</span></div>
+      <div class="exo"><img src="../../assets/exercises/poses/lateral-raise-peak.webp"><b>Élévations latérales</b><span>Haltères</span></div>
+      <div class="exo"><img src="../../assets/exercises/poses/pull-up-peak.webp"><b>Tractions</b><span>Poids du corps</span></div>
+    </div>
+  </div>
+  <div class="nav">
+    <div><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg>Accueil</div>
+    <div class="actif"><svg viewBox="0 0 24 24"><path d="M6 8v8M3 10v4M18 8v8M21 10v4M6 12h12"/></svg>Entraîner</div>
+    <div><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M21 19H3"/></svg>Progrès</div>
+  </div>
+</div>
+</figure>
+
+<figure>
+<figcaption>Séance en cours</figcaption>
+<div class="tel">
+  <div class="ecran">
+    <div class="seance-tete">
+      <svg width="24" height="24" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      <div class="t"><b>Legs</b><span>20:31 <em>· 2 séries sur 21</em></span></div>
+      <div class="bouton petit">Terminer</div>
+    </div>
+
+    <div class="ligne" style="padding-top:0;border-top:0">
+      <div class="vignette"><img src="../../assets/exercises/poses/squat-start.webp"></div>
+      <div class="t"><b style="font-size:20px;font-weight:800">Squat</b><span style="color:var(--accent);font-weight:700">Repos 2:30</span></div>
+      <svg class="chevron" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+    </div>
+    <div class="entete"><span>SÉRIE</span><span>PRÉCÉDENT</span><span>KG</span><span>RÉPS</span><span></span></div>
+    <div class="serie faite"><span>1</span><span class="avant">90 × 6</span><span class="champ">90</span><span class="champ">6</span><span class="coche"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span></div>
+    <div class="serie faite"><span>2</span><span class="avant">90 × 5</span><span class="champ">90</span><span class="champ">5</span><span class="coche"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span></div>
+    <div class="serie"><span>3</span><span class="avant">90 × 4</span><span class="champ">90</span><span class="champ">5</span><span class="coche"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span></div>
+    <div class="serie"><span>4</span><span class="avant">90 × 4</span><span class="champ">90</span><span class="champ">5</span><span class="coche"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span></div>
+    <div class="ajout">+ Ajouter une série</div>
+
+    <div class="ligne"><div class="vignette"><img src="../../assets/exercises/poses/romanian-deadlift-start.webp"></div><div class="t"><b>Soulevé de terre roumain</b><span>0 sur 4</span></div><svg class="chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+    <div class="ligne"><div class="vignette"><img src="../../assets/exercises/poses/leg-press-start.webp"></div><div class="t"><b>Presse à cuisses</b><span>0 sur 3</span></div><svg class="chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+    <div class="ligne"><div class="vignette"><img src="../../assets/exercises/poses/leg-curl-start.webp"></div><div class="t"><b>Leg curl allongé</b><span>0 sur 3</span></div><svg class="chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+    <div class="ligne"><div class="vignette"><img src="../../assets/exercises/poses/leg-extension-start.webp"></div><div class="t"><b>Leg extension</b><span>0 sur 3</span></div><svg class="chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+  </div>
+</div>
+</figure>
+
+<figure>
+<figcaption>Progrès</figcaption>
+<div class="tel">
+  <div class="ecran">
+    <div class="tete"><div class="titre">Progrès</div><div class="avatar">T</div></div>
+    <div class="periodes"><span class="actif">4 sem.</span><span>3 mois</span><span>6 mois</span><span>1 an</span></div>
+    <div class="etiquette">Volume</div>
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:6px">
+      <div class="grand">100,4 <small>t</small></div><div class="hausse">+18 %</div>
+    </div>
+    <div class="sur" style="margin-top:4px">12 séances · 240 séries</div>
+    <div class="graphe"><i style="height:38%"></i><i style="height:46%"></i><i style="height:42%"></i><i style="height:58%"></i><i style="height:66%"></i><i style="height:74%"></i><i style="height:88%"></i><i style="height:100%"></i></div>
+
+    <div class="section"><b>Muscles travaillés</b><span>Détail</span></div>
+    <div class="duo-centre">
+      <div class="corps"><img src="../../assets/body/pack/face_base.webp"><img src="../../assets/body/pack/face_pectoraux.webp"><img src="../../assets/body/pack/face_quadriceps.webp" style="opacity:.55"></div>
+      <div class="corps"><img src="../../assets/body/pack/dos_base.webp"><img src="../../assets/body/pack/dos_grandDorsal.webp"><img src="../../assets/body/pack/dos_fessiers.webp" style="opacity:.55"></div>
+    </div>
+    <div style="margin-top:14px">
+      <div class="muscle">Pectoraux<div class="barre"><i style="width:92%"></i></div><em>42 séries</em></div>
+      <div class="muscle">Grand dorsal<div class="barre"><i style="width:80%"></i></div><em>36 séries</em></div>
+      <div class="muscle">Quadriceps<div class="barre"><i style="width:58%"></i></div><em>27 séries</em></div>
+    </div>
+  </div>
+  <div class="nav">
+    <div><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg>Accueil</div>
+    <div><svg viewBox="0 0 24 24"><path d="M6 8v8M3 10v4M18 8v8M21 10v4M6 12h12"/></svg>Entraîner</div>
+    <div class="actif"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M21 19H3"/></svg>Progrès</div>
+  </div>
+</div>
+</figure>
+
+</div>
+</body>
+</html>

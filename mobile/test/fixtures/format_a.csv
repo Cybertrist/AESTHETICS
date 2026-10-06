@@ -1,0 +1,21 @@
+ Title,Date,Duration,Exercise,"Superset id",Weight,Reps,Distance,Time,"Set Type"
+"Poussée A, lourde","2026-03-18 18:05:11",01:07:22,"Barbell Bench Press",,40.000,10,null,null,WARMUP_SET
+"Poussée A, lourde","2026-03-18 18:05:11",01:07:22,"Barbell Bench Press",,80.000,6,null,null,NORMAL_SET
+"Poussée A, lourde","2026-03-18 18:05:11",01:07:22,"Barbell Bench Press",,82.500,5,null,null,NORMAL_SET
+"Poussée A, lourde","2026-03-18 18:05:11",01:07:22,"Barbell Bench Press",,82.500,4,null,null,FAILURE_SET
+"Poussée A, lourde","2026-03-18 18:05:11",01:07:22,"Dumbbell Incline Bench Press",1,30.000,10,null,null,NORMAL_SET
+"Poussée A, lourde","2026-03-18 18:05:11",01:07:22,"Cable Pushdown",1,25.000,12,null,null,NORMAL_SET
+"Poussée A, lourde","2026-03-18 18:05:11",01:07:22,"Dumbbell Incline Bench Press",1,30.000,9,null,null,NORMAL_SET
+"Poussée A, lourde","2026-03-18 18:05:11",01:07:22,"Cable Pushdown",1,25.000,10,null,null,DROP_SET
+"Poussée A, lourde","2026-03-18 18:05:11",01:07:22,"Weighted Front Plank",,null,,null,1:30,NORMAL_SET
+"Tirage B","2026-03-20 07:30:19",00:58:04,"Lever Narrow Grip Seated Row",,60.000,12,null,null,NORMAL_SET
+"Tirage B","2026-03-20 07:30:19",00:58:04,"Lever Narrow Grip Seated Row",,65.000,10,null,null,NORMAL_SET
+"Tirage B","2026-03-20 07:30:19",00:58:04,"Pull-up",,0.000,8,null,null,NORMAL_SET
+"Tirage B","2026-03-20 07:30:19",00:58:04,"Pull-up",,0.000,6,null,null,NEGATIVE_REPS_SET
+"Tirage B","2026-03-20 07:30:19",00:58:04,"Dumbbell Incline Curl",,12.000,10,null,null,NORMAL_SET
+"Tirage B","2026-03-20 07:30:19",00:58:04,"Curl Zottman Tempo Maison",,10.000,12,null,null,NORMAL_SET
+"Jambes","2026-03-22 10:00:00",01:15:00,"Barbell Full Squat",,60.000,8,null,null,WARMUP_SET
+"Jambes","2026-03-22 10:00:00",01:15:00,"Barbell Full Squat",,100.000,5,null,null,NORMAL_SET
+"Jambes","2026-03-22 10:00:00",01:15:00,"Barbell Full Squat",,90.000,8,null,null,BACK_OFF_SET
+"Jambes","2026-03-22 10:00:00",01:15:00,"Barbell Romanian Deadlift",,80.000,10,null,null,NORMAL_SET
+"Jambes","2026-03-22 10:00:00",01:15:00,"Stationary Bike",,null,,2.500,10:00,NORMAL_SET

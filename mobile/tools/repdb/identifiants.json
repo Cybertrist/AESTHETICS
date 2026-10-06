@@ -1,0 +1,3022 @@
+{
+ "bench-press": {
+  "id": "developpe-couche",
+  "nom": "Développé couché",
+  "alias": [
+   "DC",
+   "Bench",
+   "Développé couché barre",
+   "Bench press",
+   "Barbell Bench Press",
+   "Bench Press (Barbell)"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "close-grip-bench-press": {
+  "id": "developpe-couche-prise-serree",
+  "nom": "Développé couché prise serrée",
+  "alias": [
+   "DC prise serrée",
+   "Close grip bench",
+   "Close-Grip Bench Press",
+   "Close-Grip Bench Press (Barbell)",
+   "barbell close-grip bench press"
+  ],
+  "categorie": "triceps",
+  "suivi": "poidsReps"
+ },
+ "wide-grip-bench-press": {
+  "id": "developpe-couche-prise-large",
+  "nom": "Développé couché prise large",
+  "alias": [
+   "DC prise large",
+   "Wide-Grip Bench Press",
+   "Wide-Grip Bench Press (Barbell)",
+   "barbell wide bench press"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "incline-bench-press": {
+  "id": "developpe-incline",
+  "nom": "Développé incliné",
+  "alias": [
+   "Développé incliné barre",
+   "Incline bench",
+   "Incline Barbell Bench Press",
+   "Incline Barbell Bench Press (Barbell)",
+   "barbell incline bench press"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "decline-bench-press-barbell": {
+  "id": "developpe-decline",
+  "nom": "Développé décliné",
+  "alias": [
+   "Développé décliné barre",
+   "Decline bench",
+   "Decline Barbell Bench Press",
+   "Decline Barbell Bench Press (Barbell)",
+   "barbell decline bench press"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "db-bench-press": {
+  "id": "developpe-couche-halteres",
+  "nom": "Développé couché haltères",
+  "alias": [
+   "DC haltères",
+   "Dumbbell press",
+   "Dumbbell Bench Press",
+   "Bench Press (Dumbbell)"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "incline-db-press": {
+  "id": "developpe-incline-halteres",
+  "nom": "Développé incliné haltères",
+  "alias": [
+   "Incliné haltères",
+   "Incline dumbbell press",
+   "Incline Dumbbell Press (Dumbbell)",
+   "dumbbell incline bench press"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "dumbbell-floor-press": {
+  "id": "developpe-au-sol-halteres",
+  "nom": "Développé au sol haltères",
+  "alias": [
+   "Floor press haltères",
+   "Dumbbell Floor Press",
+   "Floor Press (Dumbbell)"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "smith-machine-bench-press": {
+  "id": "developpe-couche-a-la-smith",
+  "nom": "Développé couché à la Smith",
+  "alias": [
+   "DC Smith",
+   "Développé couché guidé",
+   "Smith Machine Bench Press",
+   "Bench Press (Smith Machine)",
+   "smith bench press"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "chest-press-machine": {
+  "id": "developpe-couche-machine",
+  "nom": "Développé couché machine",
+  "alias": [
+   "Chest press",
+   "Presse pectoraux",
+   "Machine Chest Press",
+   "Chest Press (Machine)",
+   "lever chest press"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "db-fly": {
+  "id": "ecarte-couche-halteres",
+  "nom": "Écarté couché haltères",
+  "alias": [
+   "Écartés haltères",
+   "Dumbbell flyes",
+   "Dumbbell Fly",
+   "Fly (Dumbbell)"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "incline-dumbbell-fly": {
+  "id": "ecarte-incline-halteres",
+  "nom": "Écarté incliné haltères",
+  "alias": [
+   "Écartés inclinés",
+   "Incline Dumbbell Fly",
+   "Incline Dumbbell Fly (Dumbbell)",
+   "dumbbell incline fly"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "decline-db-fly": {
+  "id": "ecarte-decline-halteres",
+  "nom": "Écarté décliné haltères",
+  "alias": [
+   "Écartés déclinés",
+   "Decline Dumbbell Fly",
+   "Decline Dumbbell Fly (Dumbbell)",
+   "dumbbell decline fly"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "pec-deck": {
+  "id": "pec-deck",
+  "nom": "Pec deck",
+  "alias": [
+   "Butterfly",
+   "Machine à écartés",
+   "Pec fly",
+   "Pec Deck (Machine)",
+   "lever seated fly"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "cable-fly": {
+  "id": "ecarte-a-la-poulie-vis-a-vis",
+  "nom": "Écarté à la poulie vis-à-vis",
+  "alias": [
+   "Poulie vis-à-vis",
+   "Cable fly",
+   "Crossover",
+   "Cable Crossover",
+   "Crossover (Cable)",
+   "cable standing fly"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "push-up": {
+  "id": "pompes",
+  "nom": "Pompes",
+  "alias": [
+   "Push-up",
+   "Pompe",
+   "Push-Up (Bodyweight)"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "knee-push-ups": {
+  "id": "pompes-sur-les-genoux",
+  "nom": "Pompes sur les genoux",
+  "alias": [
+   "Pompes à genoux",
+   "Kneeling Push-Up",
+   "Kneeling Push-Up (Bodyweight)",
+   "kneeling push-up (male)"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "incline-push-ups": {
+  "id": "pompes-inclinees",
+  "nom": "Pompes inclinées",
+  "alias": [
+   "Pompes mains surélevées",
+   "Incline Push-Up",
+   "Incline Push-Up (Bodyweight)"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "decline-push-up": {
+  "id": "pompes-declinees",
+  "nom": "Pompes déclinées",
+  "alias": [
+   "Pompes pieds surélevés",
+   "Decline Push-Up",
+   "Decline Push-Up (Bodyweight)"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "diamond-push-ups": {
+  "id": "pompes-diamant",
+  "nom": "Pompes diamant",
+  "alias": [
+   "Pompes serrées",
+   "Pompes triceps",
+   "Diamond Push-Up",
+   "Diamond Push-Up (Bodyweight)"
+  ],
+  "categorie": "triceps",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "wide-grip-push-ups": {
+  "id": "pompes-prise-large",
+  "nom": "Pompes prise large",
+  "alias": [
+   "Pompes mains écartées",
+   "Wide Push-Up",
+   "Wide Push-Up (Bodyweight)",
+   "wide hand push up"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "clap-push-ups": {
+  "id": "pompes-claquees",
+  "nom": "Pompes claquées",
+  "alias": [
+   "Pompes plio",
+   "Pompes explosives",
+   "Clap Push-Up",
+   "Clap Push-Up (Bodyweight)",
+   "clap push up"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "archer-push-ups": {
+  "id": "pompes-archer",
+  "nom": "Pompes archer",
+  "alias": [
+   "Archer Push-Up",
+   "Archer Push-Up (Bodyweight)",
+   "archer push up"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "dips": {
+  "id": "dips-pectoraux",
+  "nom": "Dips pectoraux",
+  "alias": [
+   "Dips buste penché",
+   "Dips",
+   "Chest Dip",
+   "Chest Dip (Bodyweight)"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "db-pullover": {
+  "id": "pull-over-haltere",
+  "nom": "Pull-over haltère",
+  "alias": [
+   "Pullover",
+   "Dumbbell Pullover",
+   "Pullover (Dumbbell)"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "barbell-pullover": {
+  "id": "pull-over-barre",
+  "nom": "Pull-over barre",
+  "alias": [
+   "Barbell Pullover",
+   "Pullover (Barbell)"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "svend-press": {
+  "id": "svend-press",
+  "nom": "Svend press",
+  "alias": [
+   "Presse au disque",
+   "Svend Press (Plate)",
+   "weighted svend press"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsReps"
+ },
+ "pull-up": {
+  "id": "tractions",
+  "nom": "Tractions",
+  "alias": [
+   "Traction pronation",
+   "Pull-up",
+   "Tractions prise pronation",
+   "Pull-Up (Bodyweight)"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "wide-grip-pull-ups": {
+  "id": "tractions-prise-large",
+  "nom": "Tractions prise large",
+  "alias": [
+   "Tractions larges",
+   "Wide-Grip Pull-Up",
+   "Wide-Grip Pull-Up (Bodyweight)",
+   "wide grip pull-up"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "chin-ups": {
+  "id": "tractions-supination",
+  "nom": "Tractions supination",
+  "alias": [
+   "Chin-up",
+   "Tractions paumes vers soi",
+   "Chin-Up (Bodyweight)"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "neutral-grip-pull-ups": {
+  "id": "tractions-prise-neutre",
+  "nom": "Tractions prise neutre",
+  "alias": [
+   "Tractions marteau",
+   "Neutral-Grip Pull-Up",
+   "Neutral-Grip Pull-Up (Bodyweight)",
+   "pull up (neutral grip)"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "weighted-pull-up": {
+  "id": "tractions-lestees",
+  "nom": "Tractions lestées",
+  "alias": [
+   "Tractions avec lest",
+   "Weighted Pull-Up",
+   "Weighted Pull-Up (Bodyweight)"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "assisted-pull-ups": {
+  "id": "tractions-assistees",
+  "nom": "Tractions assistées",
+  "alias": [
+   "Tractions machine assistée",
+   "Assisted Pull-Up",
+   "Assisted Pull-Up (Machine)"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsDuCorpsAssiste"
+ },
+ "band-assisted-pull-ups": {
+  "id": "tractions-assistees-a-l-elastique",
+  "nom": "Tractions assistées à l'élastique",
+  "alias": [
+   "Band-Assisted Pull-Up",
+   "Band-Assisted Pull-Up (Band)",
+   "band assisted pull-up"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "inverted-row": {
+  "id": "tractions-australiennes",
+  "nom": "Tractions australiennes",
+  "alias": [
+   "Rowing inversé",
+   "Inverted row",
+   "Inverted Row (Bodyweight)"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "lat-pulldown": {
+  "id": "tirage-vertical",
+  "nom": "Tirage vertical",
+  "alias": [
+   "Tirage poitrine",
+   "Lat pulldown",
+   "Tirage vertical prise large",
+   "Lat Pulldown (Cable)",
+   "cable pulldown"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "close-grip-lat-pulldown": {
+  "id": "tirage-vertical-prise-serree",
+  "nom": "Tirage vertical prise serrée",
+  "alias": [
+   "Tirage triangle",
+   "Tirage prise neutre",
+   "Close-Grip Lat Pulldown",
+   "Close-Grip Lat Pulldown (Cable)",
+   "cable lateral pulldown with v-bar"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "reverse-grip-lat-pulldown": {
+  "id": "tirage-vertical-supination",
+  "nom": "Tirage vertical supination",
+  "alias": [
+   "Tirage prise inversée",
+   "Reverse-Grip Lat Pulldown",
+   "Reverse-Grip Lat Pulldown (Cable)",
+   "cable underhand pulldown"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "behind-the-neck-lat-pulldown": {
+  "id": "tirage-nuque",
+  "nom": "Tirage nuque",
+  "alias": [
+   "Tirage derrière la nuque",
+   "Behind-the-Neck Pulldown",
+   "Behind-the-Neck Pulldown (Cable)",
+   "cable wide grip rear pulldown behind neck"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "seated-cable-row": {
+  "id": "tirage-horizontal",
+  "nom": "Tirage horizontal",
+  "alias": [
+   "Rowing poulie basse",
+   "Tirage poulie basse",
+   "Seated row",
+   "Seated Cable Row",
+   "Seated Cable Row (Cable)",
+   "cable seated row"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "wide-grip-seated-cable-row": {
+  "id": "tirage-horizontal-prise-large",
+  "nom": "Tirage horizontal prise large",
+  "alias": [
+   "Rowing poulie prise large",
+   "Wide-Grip Seated Cable Row",
+   "Wide-Grip Seated Cable Row (Cable)",
+   "cable seated wide-grip row"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "one-arm-seated-cable-row": {
+  "id": "tirage-horizontal-unilateral",
+  "nom": "Tirage horizontal unilatéral",
+  "alias": [
+   "Rowing poulie un bras",
+   "Single-Arm Cable Row",
+   "Single-Arm Cable Row (Cable)",
+   "cable seated one arm alternate row"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "barbell-row": {
+  "id": "rowing-barre",
+  "nom": "Rowing barre",
+  "alias": [
+   "Rowing buste penché",
+   "Bent-over row",
+   "Barbell Row",
+   "Row (Barbell)",
+   "barbell bent over row"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "pendlay-row": {
+  "id": "rowing-pendlay",
+  "nom": "Rowing Pendlay",
+  "alias": [
+   "Pendlay Row",
+   "Pendlay Row (Barbell)",
+   "barbell pendlay row"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "single-arm-db-row": {
+  "id": "rowing-haltere-unilateral",
+  "nom": "Rowing haltère unilatéral",
+  "alias": [
+   "Rowing un bras",
+   "Rowing haltère",
+   "One-Arm Dumbbell Row",
+   "One-Arm Dumbbell Row (Dumbbell)",
+   "dumbbell one arm bent-over row"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "bent-over-db-row": {
+  "id": "rowing-halteres-buste-penche",
+  "nom": "Rowing haltères buste penché",
+  "alias": [
+   "Rowing deux haltères",
+   "Bent-Over Dumbbell Row",
+   "Bent-Over Dumbbell Row (Dumbbell)",
+   "dumbbell bent over row"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "chest-supported-db-row": {
+  "id": "rowing-halteres-sur-banc-incline",
+  "nom": "Rowing haltères sur banc incliné",
+  "alias": [
+   "Rowing appui poitrine",
+   "Chest-Supported Dumbbell Row",
+   "Chest-Supported Dumbbell Row (Dumbbell)",
+   "dumbbell incline row"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "t-bar-row": {
+  "id": "rowing-t-bar",
+  "nom": "Rowing T-bar",
+  "alias": [
+   "T-bar",
+   "Rowing barre en T",
+   "T-Bar Row",
+   "T-Bar Row (Machine)",
+   "lever t bar row"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "one-arm-kettlebell-row": {
+  "id": "rowing-kettlebell",
+  "nom": "Rowing kettlebell",
+  "alias": [
+   "Kettlebell Row",
+   "Row (Kettlebell)",
+   "kettlebell one arm row"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "straight-arm-pulldown": {
+  "id": "pull-over-poulie-haute",
+  "nom": "Pull-over poulie haute",
+  "alias": [
+   "Tirage bras tendus",
+   "Pullover poulie",
+   "Straight-Arm Pulldown",
+   "Straight-Arm Pulldown (Cable)",
+   "cable straight arm pulldown"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "deadlift": {
+  "id": "souleve-de-terre",
+  "nom": "Soulevé de terre",
+  "alias": [
+   "SDT",
+   "Deadlift",
+   "Soulevé de terre conventionnel",
+   "Deadlift (Barbell)",
+   "barbell deadlift"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "sumo-deadlift": {
+  "id": "souleve-de-terre-sumo",
+  "nom": "Soulevé de terre sumo",
+  "alias": [
+   "SDT sumo",
+   "Sumo",
+   "Sumo Deadlift",
+   "Sumo Deadlift (Barbell)",
+   "barbell sumo deadlift"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "hex-bar-deadlift": {
+  "id": "souleve-de-terre-trap-bar",
+  "nom": "Soulevé de terre trap bar",
+  "alias": [
+   "SDT barre hexagonale",
+   "Hex bar deadlift",
+   "Trap Bar Deadlift",
+   "Deadlift (Trap Bar)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "dumbbell-deadlift": {
+  "id": "souleve-de-terre-halteres",
+  "nom": "Soulevé de terre haltères",
+  "alias": [
+   "SDT haltères",
+   "Dumbbell Deadlift",
+   "Deadlift (Dumbbell)"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "rack-pull": {
+  "id": "rack-pull",
+  "nom": "Rack pull",
+  "alias": [
+   "Soulevé de terre partiel",
+   "Rack Pull (Barbell)",
+   "barbell rack pull"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "back-extension": {
+  "id": "extensions-lombaires",
+  "nom": "Extensions lombaires",
+  "alias": [
+   "Hyperextensions",
+   "Banc à lombaires",
+   "Back Extension",
+   "Back Extension (Bodyweight)",
+   "hyperextension"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "machine-back-extension": {
+  "id": "extensions-lombaires-machine",
+  "nom": "Extensions lombaires machine",
+  "alias": [
+   "Lombaires machine",
+   "Machine Back Extension",
+   "Back Extension (Machine)",
+   "lever back extension"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "good-morning": {
+  "id": "good-morning",
+  "nom": "Good morning",
+  "alias": [
+   "Bonjour",
+   "Good Morning (Barbell)",
+   "barbell good morning"
+  ],
+  "categorie": "ischios",
+  "suivi": "poidsReps"
+ },
+ "face-pull": {
+  "id": "face-pull",
+  "nom": "Face pull",
+  "alias": [
+   "Tirage visage",
+   "Face Pull (Cable)",
+   "cable standing rear delt row (with rope)"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "shrug": {
+  "id": "shrugs-barre",
+  "nom": "Shrugs barre",
+  "alias": [
+   "Haussements d'épaules",
+   "Shrugs",
+   "Barbell Shrug",
+   "Shrug (Barbell)"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "db-shrug": {
+  "id": "shrugs-halteres",
+  "nom": "Shrugs haltères",
+  "alias": [
+   "Haussements d'épaules haltères",
+   "Dumbbell Shrug",
+   "Shrug (Dumbbell)"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "smith-machine-shrug": {
+  "id": "shrugs-a-la-smith",
+  "nom": "Shrugs à la Smith",
+  "alias": [
+   "Smith Machine Shrug",
+   "Shrug (Smith Machine)",
+   "smith shrug"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "plate-loaded-shrug": {
+  "id": "shrugs-machine",
+  "nom": "Shrugs machine",
+  "alias": [
+   "Machine Shrug",
+   "Shrug (Machine)",
+   "lever shrug"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsReps"
+ },
+ "muscle-ups": {
+  "id": "muscle-up",
+  "nom": "Muscle-up",
+  "alias": [
+   "Muscle-Up (Bodyweight)",
+   "muscle up"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "scapular-pull-ups": {
+  "id": "tractions-scapulaires",
+  "nom": "Tractions scapulaires",
+  "alias": [
+   "Rétractions scapulaires",
+   "Scapular Pull-Up",
+   "Scapular Pull-Up (Bodyweight)"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "ohp": {
+  "id": "developpe-militaire",
+  "nom": "Développé militaire",
+  "alias": [
+   "Développé militaire debout",
+   "OHP",
+   "Military press",
+   "Overhead Press",
+   "Overhead Press (Barbell)",
+   "barbell standing close grip military press"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "seated-barbell-overhead-press": {
+  "id": "developpe-militaire-assis",
+  "nom": "Développé militaire assis",
+  "alias": [
+   "Développé assis barre",
+   "Seated Barbell Overhead Press",
+   "Seated Barbell Overhead Press (Barbell)",
+   "barbell seated overhead press"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "behind-the-neck-press": {
+  "id": "developpe-nuque",
+  "nom": "Développé nuque",
+  "alias": [
+   "Développé derrière la nuque",
+   "Behind-the-Neck Press",
+   "Behind-the-Neck Press (Barbell)",
+   "barbell seated behind head military press"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "seated-db-press": {
+  "id": "developpe-halteres-assis",
+  "nom": "Développé haltères assis",
+  "alias": [
+   "Développé épaules haltères",
+   "Dumbbell shoulder press",
+   "Seated Dumbbell Shoulder Press",
+   "Seated Dumbbell Shoulder Press (Dumbbell)",
+   "dumbbell seated shoulder press"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "dumbbell-shoulder-press": {
+  "id": "developpe-halteres-debout",
+  "nom": "Développé haltères debout",
+  "alias": [
+   "Standing Dumbbell Shoulder Press",
+   "Standing Dumbbell Shoulder Press (Dumbbell)",
+   "dumbbell standing overhead press"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "arnold-press": {
+  "id": "developpe-arnold",
+  "nom": "Développé Arnold",
+  "alias": [
+   "Arnold press",
+   "Arnold Press (Dumbbell)",
+   "dumbbell arnold press"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "machine-shoulder-press": {
+  "id": "developpe-epaules-machine",
+  "nom": "Développé épaules machine",
+  "alias": [
+   "Shoulder press machine",
+   "Machine Shoulder Press",
+   "Shoulder Press (Machine)",
+   "lever shoulder press"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "smith-machine-shoulder-press": {
+  "id": "developpe-epaules-a-la-smith",
+  "nom": "Développé épaules à la Smith",
+  "alias": [
+   "Développé militaire guidé",
+   "Smith Machine Shoulder Press",
+   "Shoulder Press (Smith Machine)",
+   "smith seated shoulder press"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "push-press": {
+  "id": "push-press",
+  "nom": "Push press",
+  "alias": [
+   "Développé avec impulsion",
+   "Push Press (Barbell)"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "one-arm-kettlebell-shoulder-press": {
+  "id": "developpe-kettlebell",
+  "nom": "Développé kettlebell",
+  "alias": [
+   "Développé militaire kettlebell",
+   "Kettlebell Press",
+   "Press (Kettlebell)",
+   "kettlebell two arm military press"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "lateral-raise": {
+  "id": "elevations-laterales",
+  "nom": "Élévations latérales",
+  "alias": [
+   "Élévations latérales haltères",
+   "Lateral raises",
+   "Lateral Raise",
+   "Lateral Raise (Dumbbell)",
+   "dumbbell lateral raise"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "cable-lateral-raise": {
+  "id": "elevations-laterales-a-la-poulie",
+  "nom": "Élévations latérales à la poulie",
+  "alias": [
+   "Élévation latérale poulie",
+   "Cable Lateral Raise",
+   "Lateral Raise (Cable)",
+   "cable one arm lateral raise"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "plate-loaded-lateral-raise": {
+  "id": "elevations-laterales-machine",
+  "nom": "Élévations latérales machine",
+  "alias": [
+   "Machine Lateral Raise",
+   "Lateral Raise (Machine)",
+   "lever lateral raise"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "barbell-front-raise": {
+  "id": "elevations-frontales-barre",
+  "nom": "Élévations frontales barre",
+  "alias": [
+   "Barbell Front Raise",
+   "Front Raise (Barbell)"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "cable-front-raise": {
+  "id": "elevations-frontales-a-la-poulie",
+  "nom": "Élévations frontales à la poulie",
+  "alias": [
+   "Cable Front Raise",
+   "Front Raise (Cable)"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "rear-delt-fly": {
+  "id": "oiseau",
+  "nom": "Oiseau",
+  "alias": [
+   "Oiseau haltères",
+   "Rear delt fly",
+   "Élévations postérieures",
+   "Bent-Over Reverse Fly",
+   "Bent-Over Reverse Fly (Dumbbell)",
+   "dumbbell rear lateral raise"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "band-pull-apart": {
+  "id": "ecartes-a-l-elastique",
+  "nom": "Écartés à l'élastique",
+  "alias": [
+   "Band pull apart",
+   "Oiseau élastique",
+   "Band Pull-Apart",
+   "Pull-Apart (Band)",
+   "band reverse fly"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "dumbbell-upright-row": {
+  "id": "rowing-menton-halteres",
+  "nom": "Rowing menton haltères",
+  "alias": [
+   "Dumbbell Upright Row",
+   "Upright Row (Dumbbell)"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "cable-upright-row": {
+  "id": "rowing-menton-a-la-poulie",
+  "nom": "Rowing menton à la poulie",
+  "alias": [
+   "Cable Upright Row",
+   "Upright Row (Cable)"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "cable-external-rotation": {
+  "id": "rotation-externe-a-la-poulie",
+  "nom": "Rotation externe à la poulie",
+  "alias": [
+   "Rotateurs externes",
+   "Cable External Rotation",
+   "External Rotation (Cable)",
+   "cable standing shoulder external rotation"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "handstand-push-ups": {
+  "id": "pompes-en-equilibre",
+  "nom": "Pompes en équilibre",
+  "alias": [
+   "Pompes poirier",
+   "HSPU",
+   "Handstand Push-Up",
+   "Handstand Push-Up (Bodyweight)"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "barbell-rear-delt-row": {
+  "id": "rowing-oiseau-barre",
+  "nom": "Rowing oiseau barre",
+  "alias": [
+   "Rear delt row",
+   "Barbell Rear Delt Row",
+   "Rear Delt Row (Barbell)"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "barbell-curl": {
+  "id": "curl-barre",
+  "nom": "Curl barre",
+  "alias": [
+   "Curl biceps barre",
+   "Barbell curl",
+   "Curl (Barbell)"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "ez-bar-curl": {
+  "id": "curl-barre-ez",
+  "nom": "Curl barre EZ",
+  "alias": [
+   "Curl EZ",
+   "EZ-Bar Curl",
+   "Curl (EZ Bar)",
+   "ez barbell curl"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "bicep-curl": {
+  "id": "curl-halteres",
+  "nom": "Curl haltères",
+  "alias": [
+   "Curl biceps haltères",
+   "Dumbbell Curl",
+   "Curl (Dumbbell)",
+   "dumbbell biceps curl"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "hammer-curl": {
+  "id": "curl-marteau",
+  "nom": "Curl marteau",
+  "alias": [
+   "Hammer curl",
+   "Curl prise neutre",
+   "Hammer Curl (Dumbbell)",
+   "dumbbell hammer curl"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "cross-body-hammer-curl": {
+  "id": "curl-marteau-croise",
+  "nom": "Curl marteau croisé",
+  "alias": [
+   "Curl pupitre croisé",
+   "Cross-Body Hammer Curl",
+   "Cross-Body Hammer Curl (Dumbbell)",
+   "dumbbell cross body hammer curl"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "incline-db-curl": {
+  "id": "curl-incline",
+  "nom": "Curl incliné",
+  "alias": [
+   "Curl sur banc incliné",
+   "Incline Dumbbell Curl",
+   "Incline Dumbbell Curl (Dumbbell)",
+   "dumbbell incline curl"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "preacher-curl": {
+  "id": "curl-pupitre",
+  "nom": "Curl pupitre",
+  "alias": [
+   "Curl Larry Scott",
+   "Pupitre barre",
+   "Preacher Curl",
+   "Preacher Curl (EZ Bar)",
+   "barbell preacher curl"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "machine-preacher-curl": {
+  "id": "curl-pupitre-machine",
+  "nom": "Curl pupitre machine",
+  "alias": [
+   "Curl machine pupitre",
+   "Machine Preacher Curl",
+   "Preacher Curl (Machine)",
+   "lever preacher curl"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "concentration-curl": {
+  "id": "curl-concentre",
+  "nom": "Curl concentré",
+  "alias": [
+   "Concentration Curl",
+   "Concentration Curl (Dumbbell)",
+   "dumbbell concentration curl"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "cable-curl": {
+  "id": "curl-poulie-basse",
+  "nom": "Curl poulie basse",
+  "alias": [
+   "Curl poulie",
+   "Cable Curl",
+   "Curl (Cable)"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "cable-hammer-curl": {
+  "id": "curl-marteau-a-la-corde",
+  "nom": "Curl marteau à la corde",
+  "alias": [
+   "Curl corde",
+   "Rope Hammer Curl",
+   "Rope Hammer Curl (Cable)",
+   "cable hammer curl (with rope)"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "spider-curl": {
+  "id": "curl-araignee",
+  "nom": "Curl araignée",
+  "alias": [
+   "Spider curl",
+   "Spider Curl (EZ Bar)",
+   "ez barbell spider curl"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "zottman-curl": {
+  "id": "curl-zottman",
+  "nom": "Curl Zottman",
+  "alias": [
+   "Zottman Curl",
+   "Zottman Curl (Dumbbell)",
+   "dumbbell zottman curl"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "reverse-curl": {
+  "id": "curl-inverse",
+  "nom": "Curl inversé",
+  "alias": [
+   "Curl prise pronation",
+   "Reverse Barbell Curl",
+   "Reverse Barbell Curl (Barbell)",
+   "barbell reverse curl"
+  ],
+  "categorie": "avantBras",
+  "suivi": "poidsReps"
+ },
+ "drag-curl": {
+  "id": "drag-curl",
+  "nom": "Drag curl",
+  "alias": [
+   "Curl traîné",
+   "Drag Curl (Barbell)",
+   "barbell drag curl"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "banded-standing-curl": {
+  "id": "curl-a-l-elastique",
+  "nom": "Curl à l'élastique",
+  "alias": [
+   "Band Curl",
+   "Curl (Band)",
+   "band alternating biceps curl"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "close-grip-barbell-curl": {
+  "id": "curl-barre-prise-serree",
+  "nom": "Curl barre prise serrée",
+  "alias": [
+   "Close-Grip Barbell Curl",
+   "Close-Grip Barbell Curl (Barbell)",
+   "barbell standing close grip curl"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "skull-crusher": {
+  "id": "barre-au-front",
+  "nom": "Barre au front",
+  "alias": [
+   "Extension triceps couché",
+   "Skull crusher",
+   "Barre front",
+   "Skull Crusher (EZ Bar)",
+   "barbell lying triceps extension skull crusher"
+  ],
+  "categorie": "triceps",
+  "suivi": "poidsReps"
+ },
+ "db-skull-crusher": {
+  "id": "extension-triceps-couche-halteres",
+  "nom": "Extension triceps couché haltères",
+  "alias": [
+   "Barre au front haltères",
+   "Lying Dumbbell Triceps Extension",
+   "Lying Dumbbell Triceps Extension (Dumbbell)",
+   "dumbbell lying triceps extension"
+  ],
+  "categorie": "triceps",
+  "suivi": "poidsReps"
+ },
+ "overhead-tricep-extension": {
+  "id": "extension-nuque-haltere",
+  "nom": "Extension nuque haltère",
+  "alias": [
+   "Extension au-dessus de la tête",
+   "Triceps nuque",
+   "Overhead Dumbbell Triceps Extension",
+   "Overhead Dumbbell Triceps Extension (Dumbbell)",
+   "dumbbell seated triceps extension"
+  ],
+  "categorie": "triceps",
+  "suivi": "poidsReps"
+ },
+ "ez-bar-overhead-extension": {
+  "id": "extension-nuque-barre-ez",
+  "nom": "Extension nuque barre EZ",
+  "alias": [
+   "French press",
+   "EZ-Bar Overhead Extension",
+   "Overhead Extension (EZ Bar)",
+   "ez bar standing french press"
+  ],
+  "categorie": "triceps",
+  "suivi": "poidsReps"
+ },
+ "tricep-pushdown": {
+  "id": "extension-triceps-poulie-haute",
+  "nom": "Extension triceps poulie haute",
+  "alias": [
+   "Pushdown",
+   "Poulie haute triceps",
+   "Extension poulie barre",
+   "Triceps Pushdown",
+   "Triceps Pushdown (Cable)",
+   "cable pushdown"
+  ],
+  "categorie": "triceps",
+  "suivi": "poidsReps"
+ },
+ "tricep-kickback": {
+  "id": "kickback-haltere",
+  "nom": "Kickback haltère",
+  "alias": [
+   "Extension triceps buste penché",
+   "Dumbbell Kickback",
+   "Kickback (Dumbbell)"
+  ],
+  "categorie": "triceps",
+  "suivi": "poidsReps"
+ },
+ "bench-dips": {
+  "id": "dips-sur-banc",
+  "nom": "Dips sur banc",
+  "alias": [
+   "Dips entre deux bancs",
+   "Bench Dip",
+   "Bench Dip (Bodyweight)",
+   "triceps dip (bench leg)"
+  ],
+  "categorie": "triceps",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "weighted-dips": {
+  "id": "dips-lestes",
+  "nom": "Dips lestés",
+  "alias": [
+   "Dips avec lest",
+   "Weighted Dip",
+   "Weighted Dip (Bodyweight)",
+   "weighted triceps dip on high parallel bars"
+  ],
+  "categorie": "triceps",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "machine-triceps-extension": {
+  "id": "extension-triceps-machine",
+  "nom": "Extension triceps machine",
+  "alias": [
+   "Machine Triceps Extension",
+   "Triceps Extension (Machine)",
+   "lever triceps extension"
+  ],
+  "categorie": "triceps",
+  "suivi": "poidsReps"
+ },
+ "barbell-wrist-curl": {
+  "id": "curl-poignets",
+  "nom": "Curl poignets",
+  "alias": [
+   "Flexion des poignets",
+   "Barbell Wrist Curl",
+   "Wrist Curl (Barbell)"
+  ],
+  "categorie": "avantBras",
+  "suivi": "poidsReps"
+ },
+ "dumbbell-wrist-curl": {
+  "id": "curl-poignets-haltere",
+  "nom": "Curl poignets haltère",
+  "alias": [
+   "Dumbbell Wrist Curl",
+   "Wrist Curl (Dumbbell)",
+   "dumbbell over bench wrist curl"
+  ],
+  "categorie": "avantBras",
+  "suivi": "poidsReps"
+ },
+ "db-reverse-wrist-curl": {
+  "id": "curl-poignets-inverse-haltere",
+  "nom": "Curl poignets inversé haltère",
+  "alias": [
+   "Dumbbell Reverse Wrist Curl",
+   "Reverse Wrist Curl (Dumbbell)"
+  ],
+  "categorie": "avantBras",
+  "suivi": "poidsReps"
+ },
+ "wrist-roller": {
+  "id": "rouleau-a-poignets",
+  "nom": "Rouleau à poignets",
+  "alias": [
+   "Wrist Roller",
+   "wrist rollerer"
+  ],
+  "categorie": "avantBras",
+  "suivi": "poidsReps"
+ },
+ "cable-wrist-curl": {
+  "id": "curl-poignets-a-la-poulie",
+  "nom": "Curl poignets à la poulie",
+  "alias": [
+   "Cable Wrist Curl",
+   "Wrist Curl (Cable)"
+  ],
+  "categorie": "avantBras",
+  "suivi": "poidsReps"
+ },
+ "kettlebell-farmers-walk": {
+  "id": "marche-du-fermier",
+  "nom": "Marche du fermier",
+  "alias": [
+   "Farmer walk",
+   "Farmers carry",
+   "Farmer's Walk",
+   "Farmer's Walk (Dumbbell)",
+   "farmers walk"
+  ],
+  "categorie": "avantBras",
+  "suivi": "poidsDuree"
+ },
+ "plate-pinch": {
+  "id": "pince-au-disque",
+  "nom": "Pince au disque",
+  "alias": [
+   "Tenue de disques",
+   "Plate Pinch",
+   "Pinch (Plate)"
+  ],
+  "categorie": "avantBras",
+  "suivi": "duree"
+ },
+ "squat": {
+  "id": "squat",
+  "nom": "Squat",
+  "alias": [
+   "Squat barre",
+   "Back squat",
+   "Squat arrière",
+   "Barbell Back Squat",
+   "Back Squat (Barbell)",
+   "barbell full squat"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "front-squat": {
+  "id": "squat-avant",
+  "nom": "Squat avant",
+  "alias": [
+   "Front squat",
+   "Front Squat (Barbell)",
+   "barbell front squat"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "overhead-squat": {
+  "id": "squat-bras-tendus",
+  "nom": "Squat bras tendus",
+  "alias": [
+   "Overhead squat",
+   "Overhead Squat (Barbell)",
+   "barbell overhead squat"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "box-squat": {
+  "id": "box-squat",
+  "nom": "Box squat",
+  "alias": [
+   "Squat sur banc",
+   "Squat assis",
+   "Box Squat (Barbell)",
+   "barbell bench squat"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "goblet-squat": {
+  "id": "squat-goblet",
+  "nom": "Squat goblet",
+  "alias": [
+   "Goblet squat",
+   "Goblet Squat (Dumbbell)",
+   "dumbbell goblet squat"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "db-squat": {
+  "id": "squat-halteres",
+  "nom": "Squat haltères",
+  "alias": [
+   "Dumbbell Squat",
+   "Squat (Dumbbell)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "db-sumo-squat": {
+  "id": "squat-sumo-haltere",
+  "nom": "Squat sumo haltère",
+  "alias": [
+   "Squat plié",
+   "Plié squat",
+   "Dumbbell Sumo Squat",
+   "Sumo Squat (Dumbbell)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "smith-machine-squat": {
+  "id": "squat-a-la-smith",
+  "nom": "Squat à la Smith",
+  "alias": [
+   "Squat guidé",
+   "Smith Machine Squat",
+   "Squat (Smith Machine)",
+   "smith squat"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "bodyweight-squat": {
+  "id": "squat-au-poids-du-corps",
+  "nom": "Squat au poids du corps",
+  "alias": [
+   "Air squat",
+   "Squat sans charge",
+   "Bodyweight Squat",
+   "Squat (Bodyweight)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "jump-squat": {
+  "id": "squat-saute",
+  "nom": "Squat sauté",
+  "alias": [
+   "Squat jump",
+   "Jump Squat",
+   "Jump Squat (Bodyweight)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "hack-squat": {
+  "id": "hack-squat",
+  "nom": "Hack squat",
+  "alias": [
+   "Hack squat machine",
+   "Hack Squat (Machine)",
+   "sled hack squat"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "leg-press": {
+  "id": "presse-a-cuisses",
+  "nom": "Presse à cuisses",
+  "alias": [
+   "Presse",
+   "Presse 45",
+   "Leg press",
+   "Leg Press (Machine)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "leg-extension": {
+  "id": "leg-extension",
+  "nom": "Leg extension",
+  "alias": [
+   "Extension des jambes",
+   "Chaise à quadriceps",
+   "Leg Extension (Machine)",
+   "lever leg extension"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "single-leg-extension": {
+  "id": "leg-extension-unilateral",
+  "nom": "Leg extension unilatéral",
+  "alias": [
+   "Single-Leg Extension",
+   "Single-Leg Extension (Machine)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "db-lunge": {
+  "id": "fentes-avant",
+  "nom": "Fentes avant",
+  "alias": [
+   "Fentes haltères",
+   "Fentes",
+   "Dumbbell Lunge",
+   "Lunge (Dumbbell)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "barbell-lunge": {
+  "id": "fentes-barre",
+  "nom": "Fentes barre",
+  "alias": [
+   "Barbell Lunge",
+   "Lunge (Barbell)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "reverse-lunge": {
+  "id": "fentes-arriere",
+  "nom": "Fentes arrière",
+  "alias": [
+   "Fentes arrière haltères",
+   "Reverse lunge",
+   "Dumbbell Reverse Lunge",
+   "Reverse Lunge (Dumbbell)",
+   "dumbbell rear lunge"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "barbell-reverse-lunge": {
+  "id": "fentes-arriere-barre",
+  "nom": "Fentes arrière barre",
+  "alias": [
+   "Barbell Reverse Lunge",
+   "Reverse Lunge (Barbell)",
+   "barbell rear lunge"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "walking-lunge": {
+  "id": "fentes-marchees",
+  "nom": "Fentes marchées",
+  "alias": [
+   "Fentes en marchant",
+   "Walking Lunge",
+   "Walking Lunge (Bodyweight)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "side-lunge": {
+  "id": "fentes-laterales",
+  "nom": "Fentes latérales",
+  "alias": [
+   "Fentes sur le côté",
+   "Lateral Lunge",
+   "Lateral Lunge (Barbell)",
+   "barbell lateral lunge"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "lunge": {
+  "id": "fentes-au-poids-du-corps",
+  "nom": "Fentes au poids du corps",
+  "alias": [
+   "Bodyweight Lunge",
+   "Lunge (Bodyweight)",
+   "forward lunge (male)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "bulgarian-split-squat": {
+  "id": "squat-bulgare",
+  "nom": "Squat bulgare",
+  "alias": [
+   "Fente bulgare",
+   "Bulgarian split squat",
+   "Bulgarian Split Squat (Dumbbell)",
+   "dumbbell single leg split squat"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "smith-machine-bulgarian-split": {
+  "id": "squat-bulgare-a-la-smith",
+  "nom": "Squat bulgare à la Smith",
+  "alias": [
+   "Smith Machine Bulgarian Split Squat",
+   "Bulgarian Split Squat (Smith Machine)",
+   "smith single leg split squat"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "split-squat": {
+  "id": "fente-statique",
+  "nom": "Fente statique",
+  "alias": [
+   "Split squat",
+   "Split Squat (Bodyweight)",
+   "split squats"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "step-ups": {
+  "id": "step-up",
+  "nom": "Step-up",
+  "alias": [
+   "Montées sur banc",
+   "Step up",
+   "Dumbbell Step-Up",
+   "Step-Up (Dumbbell)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "pistol-squat": {
+  "id": "pistol-squat",
+  "nom": "Pistol squat",
+  "alias": [
+   "Squat sur une jambe",
+   "Pistol Squat (Bodyweight)",
+   "single leg squat (pistol) male"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "wall-sit": {
+  "id": "chaise-au-mur",
+  "nom": "Chaise au mur",
+  "alias": [
+   "Chaise",
+   "Wall sit",
+   "Wall Sit (Bodyweight)",
+   "march sit (wall)"
+  ],
+  "categorie": "jambes",
+  "suivi": "duree"
+ },
+ "cossack-squat": {
+  "id": "squat-cosaque",
+  "nom": "Squat cosaque",
+  "alias": [
+   "Cossack Squat",
+   "Cossack Squat (Bodyweight)",
+   "weighted cossack squats (male)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "banded-squat": {
+  "id": "squat-a-l-elastique",
+  "nom": "Squat à l'élastique",
+  "alias": [
+   "Band Squat",
+   "Squat (Band)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "box-jump": {
+  "id": "box-jump",
+  "nom": "Box jump",
+  "alias": [
+   "Saut sur caisse"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "romanian-deadlift": {
+  "id": "souleve-de-terre-roumain",
+  "nom": "Soulevé de terre roumain",
+  "alias": [
+   "SDT roumain",
+   "RDL",
+   "Romanian deadlift",
+   "Romanian Deadlift (Barbell)",
+   "barbell romanian deadlift"
+  ],
+  "categorie": "ischios",
+  "suivi": "poidsReps"
+ },
+ "dumbbell-romanian-deadlift": {
+  "id": "souleve-de-terre-roumain-halteres",
+  "nom": "Soulevé de terre roumain haltères",
+  "alias": [
+   "RDL haltères",
+   "Dumbbell Romanian Deadlift",
+   "Romanian Deadlift (Dumbbell)"
+  ],
+  "categorie": "ischios",
+  "suivi": "poidsReps"
+ },
+ "stiff-leg-deadlift": {
+  "id": "souleve-de-terre-jambes-tendues",
+  "nom": "Soulevé de terre jambes tendues",
+  "alias": [
+   "SDT jambes tendues",
+   "Stiff leg",
+   "Stiff-Leg Deadlift",
+   "Stiff-Leg Deadlift (Barbell)",
+   "barbell straight leg deadlift"
+  ],
+  "categorie": "ischios",
+  "suivi": "poidsReps"
+ },
+ "single-leg-romanian-deadlift": {
+  "id": "souleve-de-terre-unilateral",
+  "nom": "Soulevé de terre unilatéral",
+  "alias": [
+   "RDL une jambe",
+   "Single-Leg Romanian Deadlift",
+   "Single-Leg Romanian Deadlift (Dumbbell)",
+   "dumbbell single leg deadlift"
+  ],
+  "categorie": "ischios",
+  "suivi": "poidsReps"
+ },
+ "leg-curl": {
+  "id": "leg-curl-allonge",
+  "nom": "Leg curl allongé",
+  "alias": [
+   "Leg curl couché",
+   "Curl jambes allongé",
+   "Lying Leg Curl",
+   "Lying Leg Curl (Machine)",
+   "lever lying leg curl"
+  ],
+  "categorie": "ischios",
+  "suivi": "poidsReps"
+ },
+ "seated-leg-curl": {
+  "id": "leg-curl-assis",
+  "nom": "Leg curl assis",
+  "alias": [
+   "Curl jambes assis",
+   "Seated Leg Curl",
+   "Seated Leg Curl (Machine)",
+   "lever seated leg curl"
+  ],
+  "categorie": "ischios",
+  "suivi": "poidsReps"
+ },
+ "nordic-hamstring-curl": {
+  "id": "nordic-curl",
+  "nom": "Nordic curl",
+  "alias": [
+   "Nordic",
+   "Curl nordique",
+   "Nordic Hamstring Curl",
+   "Nordic Hamstring Curl (Bodyweight)",
+   "inverse leg curl (bench support)"
+  ],
+  "categorie": "ischios",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "ball-leg-curl": {
+  "id": "leg-curl-au-ballon",
+  "nom": "Leg curl au ballon",
+  "alias": [
+   "Stability Ball Leg Curl"
+  ],
+  "categorie": "ischios",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "cable-pull-through": {
+  "id": "pull-through-a-la-poulie",
+  "nom": "Pull through à la poulie",
+  "alias": [
+   "Pull through",
+   "Cable Pull-Through",
+   "Pull-Through (Cable)",
+   "cable pull through (with rope)"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsReps"
+ },
+ "kettlebell-swing": {
+  "id": "kettlebell-swing",
+  "nom": "Kettlebell swing",
+  "alias": [
+   "Swing",
+   "Swing (Kettlebell)"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsReps"
+ },
+ "hip-thrust": {
+  "id": "hip-thrust",
+  "nom": "Hip thrust",
+  "alias": [
+   "Hip thrust barre",
+   "Poussée de hanches",
+   "Barbell Hip Thrust",
+   "Hip Thrust (Barbell)"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsReps"
+ },
+ "smith-machine-hip-thrust": {
+  "id": "hip-thrust-a-la-smith",
+  "nom": "Hip thrust à la Smith",
+  "alias": [
+   "Smith Machine Hip Thrust",
+   "Hip Thrust (Smith Machine)",
+   "smith hip raise"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsReps"
+ },
+ "barbell-glute-bridge": {
+  "id": "pont-fessier-barre",
+  "nom": "Pont fessier barre",
+  "alias": [
+   "Glute bridge barre",
+   "Barbell Glute Bridge",
+   "Glute Bridge (Barbell)"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsReps"
+ },
+ "glute-bridge": {
+  "id": "pont-fessier",
+  "nom": "Pont fessier",
+  "alias": [
+   "Glute bridge",
+   "Relevé de bassin",
+   "Glute Bridge (Bodyweight)",
+   "low glute bridge on floor"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "single-leg-glute-bridge": {
+  "id": "pont-fessier-unilateral",
+  "nom": "Pont fessier unilatéral",
+  "alias": [
+   "Single-Leg Glute Bridge",
+   "Single-Leg Glute Bridge (Bodyweight)",
+   "single leg bridge with outstretched leg"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "cable-kickback": {
+  "id": "kickback-fessier-a-la-poulie",
+  "nom": "Kickback fessier à la poulie",
+  "alias": [
+   "Extension de hanche poulie",
+   "Cable Glute Kickback",
+   "Glute Kickback (Cable)",
+   "cable standing hip extension"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsReps"
+ },
+ "glute-kickback": {
+  "id": "kickback-au-sol",
+  "nom": "Kickback au sol",
+  "alias": [
+   "Donkey kick",
+   "Ruade",
+   "Glute Kickback",
+   "Glute Kickback (Bodyweight)"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "plate-loaded-glute-drive": {
+  "id": "machine-a-fessiers",
+  "nom": "Machine à fessiers",
+  "alias": [
+   "Extension de hanche machine",
+   "Glute Machine",
+   "Glute Machine (Machine)",
+   "lever hip extension v. 2"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsReps"
+ },
+ "hip-abduction": {
+  "id": "abducteurs-machine",
+  "nom": "Abducteurs machine",
+  "alias": [
+   "Machine abducteurs",
+   "Abduction",
+   "Hip Abduction Machine",
+   "Hip Abduction Machine (Machine)",
+   "lever seated hip abduction"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsReps"
+ },
+ "hip-adduction": {
+  "id": "adducteurs-machine",
+  "nom": "Adducteurs machine",
+  "alias": [
+   "Machine adducteurs",
+   "Adduction",
+   "Hip Adduction Machine",
+   "Hip Adduction Machine (Machine)",
+   "lever seated hip adduction"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "banded-seated-hip-abduction": {
+  "id": "abduction-a-l-elastique-assis",
+  "nom": "Abduction à l'élastique assis",
+  "alias": [
+   "Seated Band Hip Abduction",
+   "Seated Band Hip Abduction (Band)",
+   "resistance band seated hip abduction"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsReps"
+ },
+ "side-lying-hip-abduction": {
+  "id": "abduction-debout",
+  "nom": "Abduction debout",
+  "alias": [
+   "Élévation latérale de jambe",
+   "Standing Hip Abduction",
+   "Standing Hip Abduction (Bodyweight)",
+   "side hip abduction"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "banded-lateral-walk": {
+  "id": "marche-laterale-a-l-elastique",
+  "nom": "Marche latérale à l'élastique",
+  "alias": [
+   "Monster walk",
+   "Pas chassés élastique",
+   "Monster Walk (Band)"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "standing-calf-raise": {
+  "id": "mollets-debout-machine",
+  "nom": "Mollets debout machine",
+  "alias": [
+   "Extensions mollets debout",
+   "Calf raise",
+   "Standing Calf Raise",
+   "Standing Calf Raise (Machine)",
+   "lever standing calf raise"
+  ],
+  "categorie": "mollets",
+  "suivi": "poidsReps"
+ },
+ "seated-calf-raise": {
+  "id": "mollets-assis-machine",
+  "nom": "Mollets assis machine",
+  "alias": [
+   "Extensions mollets assis",
+   "Seated Calf Raise",
+   "Seated Calf Raise (Machine)",
+   "lever seated calf raise"
+  ],
+  "categorie": "mollets",
+  "suivi": "poidsReps"
+ },
+ "dumbbell-calf-raise": {
+  "id": "mollets-debout-halteres",
+  "nom": "Mollets debout haltères",
+  "alias": [
+   "Dumbbell Calf Raise",
+   "Calf Raise (Dumbbell)",
+   "dumbbell standing calf raise"
+  ],
+  "categorie": "mollets",
+  "suivi": "poidsReps"
+ },
+ "single-leg-calf-raise": {
+  "id": "mollets-unilateral",
+  "nom": "Mollets unilatéral",
+  "alias": [
+   "Mollets une jambe",
+   "Single-Leg Calf Raise",
+   "Single-Leg Calf Raise (Dumbbell)",
+   "dumbbell single leg calf raise"
+  ],
+  "categorie": "mollets",
+  "suivi": "poidsReps"
+ },
+ "smith-machine-calf-raise": {
+  "id": "mollets-a-la-smith",
+  "nom": "Mollets à la Smith",
+  "alias": [
+   "Smith Machine Calf Raise",
+   "Calf Raise (Smith Machine)",
+   "smith standing leg calf raise"
+  ],
+  "categorie": "mollets",
+  "suivi": "poidsReps"
+ },
+ "barbell-calf-raise": {
+  "id": "mollets-barre-debout",
+  "nom": "Mollets barre debout",
+  "alias": [
+   "Barbell Calf Raise",
+   "Calf Raise (Barbell)",
+   "barbell standing calf raise"
+  ],
+  "categorie": "mollets",
+  "suivi": "poidsReps"
+ },
+ "bodyweight-calf-raise": {
+  "id": "mollets-au-poids-du-corps",
+  "nom": "Mollets au poids du corps",
+  "alias": [
+   "Bodyweight Calf Raise",
+   "Calf Raise (Bodyweight)",
+   "bodyweight standing calf raise"
+  ],
+  "categorie": "mollets",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "donkey-calf-raise": {
+  "id": "donkey-calf-raise",
+  "nom": "Donkey calf raise",
+  "alias": [
+   "Mollets à l'âne",
+   "Donkey Calf Raise (Machine)"
+  ],
+  "categorie": "mollets",
+  "suivi": "poidsReps"
+ },
+ "hack-squat-calf-raise": {
+  "id": "mollets-au-hack-squat",
+  "nom": "Mollets au hack squat",
+  "alias": [
+   "Hack Machine Calf Raise",
+   "Hack Machine Calf Raise (Machine)",
+   "hack calf raise"
+  ],
+  "categorie": "mollets",
+  "suivi": "poidsReps"
+ },
+ "crunches": {
+  "id": "crunch",
+  "nom": "Crunch",
+  "alias": [
+   "Crunchs",
+   "Crunch au sol",
+   "Crunch (Bodyweight)",
+   "crunch floor"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "cable-crunch": {
+  "id": "crunch-a-la-poulie",
+  "nom": "Crunch à la poulie",
+  "alias": [
+   "Crunch poulie haute",
+   "Crunch à genoux poulie",
+   "Cable Crunch",
+   "Crunch (Cable)",
+   "cable kneeling crunch"
+  ],
+  "categorie": "abdos",
+  "suivi": "poidsReps"
+ },
+ "machine-seated-crunch": {
+  "id": "crunch-machine",
+  "nom": "Crunch machine",
+  "alias": [
+   "Machine abdos",
+   "Machine Crunch",
+   "Crunch (Machine)",
+   "lever seated crunch"
+  ],
+  "categorie": "abdos",
+  "suivi": "poidsReps"
+ },
+ "decline-crunch": {
+  "id": "crunch-decline",
+  "nom": "Crunch décliné",
+  "alias": [
+   "Decline Crunch",
+   "Decline Crunch (Bodyweight)"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "reverse-crunches": {
+  "id": "crunch-inverse",
+  "nom": "Crunch inversé",
+  "alias": [
+   "Relevé de bassin au sol",
+   "Reverse Crunch",
+   "Reverse Crunch (Bodyweight)"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "bicycle-crunch": {
+  "id": "crunch-velo",
+  "nom": "Crunch vélo",
+  "alias": [
+   "Bicycle",
+   "Vélo au sol",
+   "Bicycle Crunch",
+   "Bicycle Crunch (Bodyweight)",
+   "air bike"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "sit-ups": {
+  "id": "releve-de-buste",
+  "nom": "Relevé de buste",
+  "alias": [
+   "Sit-up",
+   "Redressement assis",
+   "Sit-Up (Bodyweight)",
+   "sit-up v. 2"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "hanging-leg-raise": {
+  "id": "releves-de-jambes-suspendu",
+  "nom": "Relevés de jambes suspendu",
+  "alias": [
+   "Leg raise suspendu",
+   "Hanging Leg Raise",
+   "Hanging Leg Raise (Bodyweight)"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "hanging-knee-raise": {
+  "id": "releves-de-genoux-suspendu",
+  "nom": "Relevés de genoux suspendu",
+  "alias": [
+   "Knee raise",
+   "Hanging Knee Raise",
+   "Hanging Knee Raise (Bodyweight)",
+   "hanging leg hip raise"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "captains-chair-leg-raise": {
+  "id": "releves-de-jambes-a-la-chaise-romaine",
+  "nom": "Relevés de jambes à la chaise romaine",
+  "alias": [
+   "Chaise romaine",
+   "Captain's Chair Leg Raise",
+   "Captain's Chair Leg Raise (Machine)",
+   "vertical leg raise (on parallel bars)"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "lying-leg-raise": {
+  "id": "releves-de-jambes-allonge",
+  "nom": "Relevés de jambes allongé",
+  "alias": [
+   "Leg raise au sol",
+   "Lying Leg Raise",
+   "Lying Leg Raise (Bodyweight)",
+   "lying leg raise flat bench"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "toes-to-bar": {
+  "id": "toes-to-bar",
+  "nom": "Toes to bar",
+  "alias": [
+   "Pieds à la barre",
+   "Hanging pike",
+   "Toes to Bar (Bodyweight)"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "plank": {
+  "id": "gainage",
+  "nom": "Gainage",
+  "alias": [
+   "Planche",
+   "Plank",
+   "Gainage ventral",
+   "Plank (Bodyweight)"
+  ],
+  "categorie": "abdos",
+  "suivi": "duree"
+ },
+ "side-plank": {
+  "id": "gainage-lateral",
+  "nom": "Gainage latéral",
+  "alias": [
+   "Planche latérale",
+   "Side Plank",
+   "Side Plank (Bodyweight)",
+   "side bridge v. 2"
+  ],
+  "categorie": "abdos",
+  "suivi": "duree"
+ },
+ "russian-twist": {
+  "id": "russian-twist",
+  "nom": "Russian twist",
+  "alias": [
+   "Rotations russes",
+   "Russian Twist (Bodyweight)"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "mountain-climbers": {
+  "id": "mountain-climbers",
+  "nom": "Mountain climbers",
+  "alias": [
+   "Grimpeur",
+   "Mountain Climber",
+   "Mountain Climber (Bodyweight)"
+  ],
+  "categorie": "abdos",
+  "suivi": "duree"
+ },
+ "ab-wheel-rollout": {
+  "id": "roue-abdominale",
+  "nom": "Roue abdominale",
+  "alias": [
+   "Ab wheel",
+   "Roulette",
+   "Ab Wheel Rollout",
+   "wheel rollerout"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "dead-bug": {
+  "id": "dead-bug",
+  "nom": "Dead bug",
+  "alias": [
+   "Insecte mort",
+   "Dead Bug (Bodyweight)"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "cable-pallof-press": {
+  "id": "pallof-press",
+  "nom": "Pallof press",
+  "alias": [
+   "Presse Pallof",
+   "Anti-rotation",
+   "Pallof Press (Band)",
+   "band horizontal pallof press"
+  ],
+  "categorie": "abdos",
+  "suivi": "poidsReps"
+ },
+ "dumbbell-side-bend": {
+  "id": "flexion-laterale-haltere",
+  "nom": "Flexion latérale haltère",
+  "alias": [
+   "Inclinaison latérale",
+   "Dumbbell Side Bend",
+   "Side Bend (Dumbbell)"
+  ],
+  "categorie": "abdos",
+  "suivi": "poidsReps"
+ },
+ "jackknife-sit-up": {
+  "id": "jackknife",
+  "nom": "Jackknife",
+  "alias": [
+   "Couteau suisse",
+   "V-up",
+   "Jackknife Sit-Up",
+   "Jackknife Sit-Up (Bodyweight)"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "flutter-kicks": {
+  "id": "battements-de-jambes",
+  "nom": "Battements de jambes",
+  "alias": [
+   "Ciseaux",
+   "Flutter Kicks",
+   "Flutter Kicks (Bodyweight)"
+  ],
+  "categorie": "abdos",
+  "suivi": "duree"
+ },
+ "l-sit": {
+  "id": "l-sit",
+  "nom": "L-sit",
+  "alias": [
+   "Équerre",
+   "L-Sit (Bodyweight)",
+   "l-sit on floor"
+  ],
+  "categorie": "abdos",
+  "suivi": "duree"
+ },
+ "cross-body-crunch": {
+  "id": "crunch-croise",
+  "nom": "Crunch croisé",
+  "alias": [
+   "Cross-Body Crunch",
+   "Cross-Body Crunch (Bodyweight)",
+   "cross body crunch"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "treadmill-running": {
+  "id": "course-sur-tapis",
+  "nom": "Course sur tapis",
+  "alias": [
+   "Tapis de course",
+   "Running",
+   "Treadmill Running"
+  ],
+  "categorie": "cardio",
+  "suivi": "distanceDuree"
+ },
+ "incline-treadmill-walk": {
+  "id": "marche-inclinee-sur-tapis",
+  "nom": "Marche inclinée sur tapis",
+  "alias": [
+   "Marche inclinée",
+   "Tapis incliné",
+   "Incline Treadmill Walk",
+   "walking on incline treadmill"
+  ],
+  "categorie": "cardio",
+  "suivi": "distanceDuree"
+ },
+ "stationary-bike": {
+  "id": "velo-d-appartement",
+  "nom": "Vélo d'appartement",
+  "alias": [
+   "Vélo",
+   "Bike",
+   "Stationary Bike",
+   "stationary bike run"
+  ],
+  "categorie": "cardio",
+  "suivi": "distanceDuree"
+ },
+ "rowing-machine": {
+  "id": "rameur",
+  "nom": "Rameur",
+  "alias": [
+   "Aviron",
+   "Row",
+   "Rowing Machine"
+  ],
+  "categorie": "cardio",
+  "suivi": "distanceDuree"
+ },
+ "elliptical-trainer": {
+  "id": "velo-elliptique",
+  "nom": "Vélo elliptique",
+  "alias": [
+   "Elliptique",
+   "Elliptical Trainer",
+   "walk elliptical cross trainer"
+  ],
+  "categorie": "cardio",
+  "suivi": "distanceDuree"
+ },
+ "stair-climber": {
+  "id": "stepper",
+  "nom": "Stepper",
+  "alias": [
+   "Escalier",
+   "Stairmaster",
+   "Stair Climber",
+   "walking on stepmill"
+  ],
+  "categorie": "cardio",
+  "suivi": "distanceDuree"
+ },
+ "jump-rope": {
+  "id": "corde-a-sauter",
+  "nom": "Corde à sauter",
+  "alias": [
+   "Corde",
+   "Jump Rope"
+  ],
+  "categorie": "cardio",
+  "suivi": "duree"
+ },
+ "burpees": {
+  "id": "burpees",
+  "nom": "Burpees",
+  "alias": [
+   "Burpee",
+   "Burpee (Bodyweight)"
+  ],
+  "categorie": "cardio",
+  "suivi": "repsSeules"
+ },
+ "jumping-jacks": {
+  "id": "jumping-jacks",
+  "nom": "Jumping jacks",
+  "alias": [
+   "Sauts écartés",
+   "Jumping Jack",
+   "Jumping Jack (Bodyweight)",
+   "jack jump (male)"
+  ],
+  "categorie": "cardio",
+  "suivi": "repsSeules"
+ },
+ "battle-ropes": {
+  "id": "battle-rope",
+  "nom": "Battle rope",
+  "alias": [
+   "Cordes ondulatoires",
+   "Battle Ropes",
+   "battling ropes"
+  ],
+  "categorie": "cardio",
+  "suivi": "duree"
+ },
+ "ski-erg": {
+  "id": "skierg",
+  "nom": "SkiErg",
+  "alias": [
+   "Ski ergomètre",
+   "Ski Erg",
+   "ski ergometer"
+  ],
+  "categorie": "cardio",
+  "suivi": "distanceDuree"
+ },
+ "running": {
+  "id": "course",
+  "nom": "Course",
+  "alias": [
+   "Course à pied",
+   "Footing",
+   "Running",
+   "Running (Bodyweight)",
+   "run"
+  ],
+  "categorie": "cardio",
+  "suivi": "distanceDuree"
+ },
+ "clean": {
+  "id": "epaule",
+  "nom": "Épaulé",
+  "alias": [
+   "Power clean",
+   "Épaulé en puissance",
+   "Power Clean (Barbell)"
+  ],
+  "categorie": "completCorps",
+  "suivi": "poidsReps"
+ },
+ "clean-and-jerk": {
+  "id": "epaule-jete",
+  "nom": "Épaulé-jeté",
+  "alias": [
+   "Clean and jerk",
+   "Clean and Jerk (Barbell)"
+  ],
+  "categorie": "completCorps",
+  "suivi": "poidsReps"
+ },
+ "dumbbell-snatch": {
+  "id": "arrache-haltere",
+  "nom": "Arraché haltère",
+  "alias": [
+   "Snatch haltère",
+   "Dumbbell Snatch",
+   "Snatch (Dumbbell)",
+   "dumbbell one arm snatch"
+  ],
+  "categorie": "completCorps",
+  "suivi": "poidsReps"
+ },
+ "snatch": {
+  "id": "arrache",
+  "nom": "Arraché",
+  "alias": [
+   "Snatch",
+   "Snatch (Barbell)"
+  ],
+  "categorie": "completCorps",
+  "suivi": "poidsReps"
+ },
+ "thruster": {
+  "id": "thruster",
+  "nom": "Thruster",
+  "alias": [
+   "Squat développé",
+   "Barbell Thruster",
+   "Thruster (Barbell)"
+  ],
+  "categorie": "completCorps",
+  "suivi": "poidsReps"
+ },
+ "kettlebell-turkish-get-ups": {
+  "id": "turkish-get-up",
+  "nom": "Turkish get-up",
+  "alias": [
+   "Relevé turc",
+   "Turkish Get-Up (Kettlebell)",
+   "kettlebell turkish get up (squat style)"
+  ],
+  "categorie": "completCorps",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "kettlebell-sumo-high-pull": {
+  "id": "tirage-haut-sumo-kettlebell",
+  "nom": "Tirage haut sumo kettlebell",
+  "alias": [
+   "High pull",
+   "Kettlebell Sumo High Pull",
+   "Sumo High Pull (Kettlebell)"
+  ],
+  "categorie": "completCorps",
+  "suivi": "poidsReps"
+ },
+ "kettlebell-windmills": {
+  "id": "moulin-kettlebell",
+  "nom": "Moulin kettlebell",
+  "alias": [
+   "Windmill",
+   "Kettlebell Windmill",
+   "Windmill (Kettlebell)"
+  ],
+  "categorie": "completCorps",
+  "suivi": "poidsReps"
+ },
+ "medicine-ball-slam": {
+  "id": "slam-ball",
+  "nom": "Slam ball",
+  "alias": [
+   "Lancer de médecine-ball au sol",
+   "Medicine Ball Slam",
+   "Slam (Medicine Ball)",
+   "medicine ball overhead slam"
+  ],
+  "categorie": "completCorps",
+  "suivi": "poidsReps"
+ },
+ "overhead-triceps-stretch": {
+  "id": "etirement-des-triceps",
+  "nom": "Étirement des triceps",
+  "alias": [
+   "Overhead Triceps Stretch",
+   "Overhead Triceps Stretch (Bodyweight)"
+  ],
+  "categorie": "etirements",
+  "suivi": "duree"
+ },
+ "upward-dog": {
+  "id": "chien-tete-en-haut",
+  "nom": "Chien tête en haut",
+  "alias": [
+   "Cobra",
+   "Étirement des abdos",
+   "Upward Facing Dog",
+   "Upward Facing Dog (Bodyweight)"
+  ],
+  "categorie": "etirements",
+  "suivi": "duree"
+ },
+ "neck-side-stretch": {
+  "id": "etirement-lateral-du-cou",
+  "nom": "Étirement latéral du cou",
+  "alias": [
+   "Neck Side Stretch",
+   "Neck Side Stretch (Bodyweight)"
+  ],
+  "categorie": "etirements",
+  "suivi": "duree"
+ },
+ "archer-pull-ups": {
+  "id": "tractions-archer",
+  "nom": "Tractions archer",
+  "alias": [
+   "Archer Pull Up",
+   "Archer Pull Up (Bodyweight)"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "behind-the-neck-pull-ups": {
+  "id": "tractions-nuque",
+  "nom": "Tractions nuque",
+  "alias": [
+   "Rear Pull-Up",
+   "Rear Pull-Up (Bodyweight)"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "superman": {
+  "id": "extensions-lombaires-au-sol",
+  "nom": "Extensions lombaires au sol",
+  "alias": [
+   "Lower Back Curl",
+   "Lower Back Curl (Bodyweight)"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "sphinx-pose": {
+  "id": "sphinx",
+  "nom": "Sphinx",
+  "alias": [
+   "Posture du sphinx",
+   "Sphinx (Bodyweight)"
+  ],
+  "categorie": "etirements",
+  "suivi": "duree"
+ },
+ "back-lever": {
+  "id": "back-lever",
+  "nom": "Back lever",
+  "alias": [
+   "Planche dorsale",
+   "Back Lever (Bodyweight)"
+  ],
+  "categorie": "dos",
+  "suivi": "duree"
+ },
+ "rope-climb": {
+  "id": "montee-de-corde",
+  "nom": "Montée de corde",
+  "alias": [
+   "Grimper à la corde",
+   "Rope Climb"
+  ],
+  "categorie": "dos",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "bear-crawl": {
+  "id": "marche-de-l-ours",
+  "nom": "Marche de l'ours",
+  "alias": [
+   "Bear crawl",
+   "Bear Crawl (Bodyweight)"
+  ],
+  "categorie": "cardio",
+  "suivi": "duree"
+ },
+ "straight-bar-dips": {
+  "id": "dips-a-la-barre-droite",
+  "nom": "Dips à la barre droite",
+  "alias": [
+   "Chest Dip On Straight Bar",
+   "Chest Dip On Straight Bar (Bodyweight)"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "plyo-push-up": {
+  "id": "pompes-plio",
+  "nom": "Pompes plio",
+  "alias": [
+   "Plyo Push Up",
+   "Plyo Push Up (Bodyweight)"
+  ],
+  "categorie": "pectoraux",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "upright-row": {
+  "id": "rowing-menton-barre-prise-serree",
+  "nom": "Rowing menton barre prise serrée",
+  "alias": [
+   "Barbell Upright Row",
+   "Upright Row (Barbell)",
+   "barbell upright row v. 2"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "dumbbell-front-raise": {
+  "id": "elevations-frontales-halteres-prise-neutre",
+  "nom": "Élévations frontales haltères prise neutre",
+  "alias": [
+   "Dumbbell Front Raise",
+   "Front Raise (Dumbbell)",
+   "dumbbell front raise v. 2"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "dumbbell-push-press": {
+  "id": "push-press-halteres",
+  "nom": "Push press haltères",
+  "alias": [
+   "Dumbbell Push Press",
+   "Push Press (Dumbbell)"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "dumbbell-reverse-fly": {
+  "id": "oiseau-halteres-assis",
+  "nom": "Oiseau haltères assis",
+  "alias": [
+   "Dumbbell Reverse Fly",
+   "Reverse Fly (Dumbbell)"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "side-lying-lateral-raise": {
+  "id": "elevation-laterale-allonge-sur-le-cote",
+  "nom": "Élévation latérale allongé sur le côté",
+  "alias": [
+   "Dumbbell Side Lying One Hand Raise",
+   "Side Lying One Hand Raise (Dumbbell)"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "one-arm-kettlebell-push-press": {
+  "id": "push-press-kettlebell-a-un-bras",
+  "nom": "Push press kettlebell à un bras",
+  "alias": [
+   "Kettlebell One Arm Push Press",
+   "One Arm Push Press (Kettlebell)"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "smith-machine-upright-row": {
+  "id": "rowing-menton-a-la-smith",
+  "nom": "Rowing menton à la Smith",
+  "alias": [
+   "Smith Upright Row",
+   "Smith Upright Row (Smith Machine)"
+  ],
+  "categorie": "epaules",
+  "suivi": "poidsReps"
+ },
+ "db-reverse-curl": {
+  "id": "curl-inverse-halteres",
+  "nom": "Curl inversé haltères",
+  "alias": [
+   "Dumbbell Biceps Curl Reverse",
+   "Biceps Curl Reverse (Dumbbell)"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "incline-hammer-curl": {
+  "id": "curl-marteau-incline",
+  "nom": "Curl marteau incliné",
+  "alias": [
+   "Dumbbell Incline Hammer Curl",
+   "Incline Hammer Curl (Dumbbell)"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "seated-dumbbell-curl": {
+  "id": "curl-halteres-assis",
+  "nom": "Curl haltères assis",
+  "alias": [
+   "Dumbbell Seated Curl",
+   "Seated Curl (Dumbbell)"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "close-grip-ez-bar-curl": {
+  "id": "curl-barre-ez-prise-serree",
+  "nom": "Curl barre EZ prise serrée",
+  "alias": [
+   "EZ Barbell Close-Grip Curl",
+   "EZ Barbell Close-Grip Curl (EZ Bar)"
+  ],
+  "categorie": "biceps",
+  "suivi": "poidsReps"
+ },
+ "close-grip-incline-bench": {
+  "id": "developpe-incline-prise-serree",
+  "nom": "Développé incliné prise serrée",
+  "alias": [
+   "Barbell Incline Close Grip Bench Press",
+   "Incline Close Grip Bench Press (Barbell)"
+  ],
+  "categorie": "triceps",
+  "suivi": "poidsReps"
+ },
+ "close-grip-push-ups": {
+  "id": "pompes-prise-serree",
+  "nom": "Pompes prise serrée",
+  "alias": [
+   "Close-Grip Push-Up",
+   "Close-Grip Push-Up (Bodyweight)"
+  ],
+  "categorie": "triceps",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "close-grip-ez-bar-bench-press": {
+  "id": "developpe-couche-barre-ez-prise-serree",
+  "nom": "Développé couché barre EZ prise serrée",
+  "alias": [
+   "EZ-Bar Close-Grip Bench Press",
+   "Close-Grip Bench Press (EZ Bar)"
+  ],
+  "categorie": "triceps",
+  "suivi": "poidsReps"
+ },
+ "ring-dips": {
+  "id": "dips-aux-anneaux",
+  "nom": "Dips aux anneaux",
+  "alias": [
+   "Ring Dips",
+   "Ring Dips (Bodyweight)"
+  ],
+  "categorie": "triceps",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "butterfly-stretch": {
+  "id": "posture-du-papillon",
+  "nom": "Posture du papillon",
+  "alias": [
+   "Butterfly stretch",
+   "Butterfly Yoga Pose",
+   "Butterfly Yoga Pose (Bodyweight)"
+  ],
+  "categorie": "etirements",
+  "suivi": "duree"
+ },
+ "side-lying-hip-adduction": {
+  "id": "adduction-de-hanche-allonge-sur-le-cote",
+  "nom": "Adduction de hanche allongé sur le côté",
+  "alias": [
+   "Side Lying Hip Adduction",
+   "Side Lying Hip Adduction (Bodyweight)",
+   "side lying hip adduction (male)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsDuCorpsLeste"
+ },
+ "banded-glute-bridge": {
+  "id": "pont-fessier-a-l-elastique",
+  "nom": "Pont fessier à l'élastique",
+  "alias": [
+   "Band Hip Lift",
+   "Hip Lift (Band)"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsReps"
+ },
+ "kettlebell-pistol-squat": {
+  "id": "pistol-squat-kettlebell",
+  "nom": "Pistol squat kettlebell",
+  "alias": [
+   "Kettlebell Pistol Squat",
+   "Pistol Squat (Kettlebell)"
+  ],
+  "categorie": "jambes",
+  "suivi": "poidsReps"
+ },
+ "banded-kneeling-hip-thrust": {
+  "id": "hip-thrust-a-genoux-a-l-elastique",
+  "nom": "Hip thrust à genoux à l'élastique",
+  "alias": [
+   "Resistance Band Hip Thrusts On Knees",
+   "Resistance Band Hip Thrusts On Knees (Band)",
+   "resistance band hip thrusts on knees (female)"
+  ],
+  "categorie": "fessiers",
+  "suivi": "poidsReps"
+ },
+ "cocoons": {
+  "id": "cocons",
+  "nom": "Cocons",
+  "alias": [
+   "Cocoons",
+   "Cocoons (Bodyweight)"
+  ],
+  "categorie": "abdos",
+  "suivi": "repsSeules"
+ },
+ "human-flag": {
+  "id": "drapeau",
+  "nom": "Drapeau",
+  "alias": [
+   "Human flag",
+   "Drapeau humain",
+   "Flag",
+   "Flag (Bodyweight)"
+  ],
+  "categorie": "abdos",
+  "suivi": "duree"
+ },
+ "crow-pose": {
+  "id": "planche-grenouille",
+  "nom": "Planche grenouille",
+  "alias": [
+   "Frog stand",
+   "Crow pose",
+   "Frog Planche",
+   "Frog Planche (Bodyweight)"
+  ],
+  "categorie": "abdos",
+  "suivi": "duree"
+ },
+ "front-lever": {
+  "id": "front-lever",
+  "nom": "Front lever",
+  "alias": [
+   "Front Lever (Bodyweight)"
+  ],
+  "categorie": "abdos",
+  "suivi": "duree"
+ },
+ "pilates-spine-twist": {
+  "id": "torsion-de-la-colonne",
+  "nom": "Torsion de la colonne",
+  "alias": [
+   "Spine Twist",
+   "Spine Twist (Bodyweight)"
+  ],
+  "categorie": "etirements",
+  "suivi": "duree"
+ }
+}

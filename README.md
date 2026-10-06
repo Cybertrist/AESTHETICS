@@ -206,7 +206,7 @@ La suite compte 925 cas de test écrits dans 102 fichiers, rangés comme le code
 
 AESTHETICS n'est pas sur le Play Store, et aucun APK n'est publié ici pour l'instant.
 
-**Le code.** Ce dépôt porte pour l'instant la présentation du projet : le code de l'application n'y est pas encore publié. C'est une application Flutter, pour Android 8 ou plus, qui se construit en une commande :
+**Le code.** Tout le code de l'application est dans [`mobile/`](mobile/) : l'application, ses tests et ses outils. C'est une application Flutter, pour Android 8 ou plus, qui se construit en une commande :
 
 ```
 flutter build apk --release --target-platform android-arm64
@@ -215,6 +215,8 @@ flutter build apk --release --target-platform android-arm64 --dart-define=DEMO=t
 ```
 
 La démo se remplit d'un jeu d'essai au premier lancement, sans jamais toucher aux vraies données : c'est elle qui a servi aux captures de cette page.
+
+Le pack d'exercices (catalogue, animations, poses, personnage) n'est pas dans le dépôt : sa licence ne permet pas de le redistribuer en bloc. Sans lui, l'application ne se construit pas telle quelle : ses dossiers sont déclarés dans `pubspec.yaml`. [`mobile/README.md`](mobile/README.md) dit lesquels.
 
 **Les licences.** Le code est sous licence [MIT](LICENSE). Le reste appartient à ses auteurs :
 

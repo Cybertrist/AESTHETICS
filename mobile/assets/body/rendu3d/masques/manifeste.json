@@ -1,0 +1,81 @@
+{
+ "face": {
+  "largeur": 760,
+  "hauteur": 1200,
+  "masques": [
+   "pectoraux",
+   "deltoidesAnterieurs",
+   "deltoidesLateraux",
+   "biceps",
+   "triceps",
+   "avantBras",
+   "trapezes",
+   "grandDorsal",
+   "abdominaux",
+   "obliques",
+   "quadriceps",
+   "ischios",
+   "adducteurs",
+   "abducteurs",
+   "mollets",
+   "cou"
+  ]
+ },
+ "dos": {
+  "largeur": 760,
+  "hauteur": 1200,
+  "masques": [
+   "deltoidesLateraux",
+   "deltoidesPosterieurs",
+   "triceps",
+   "avantBras",
+   "trapezes",
+   "grandDorsal",
+   "rhomboides",
+   "lombaires",
+   "obliques",
+   "fessiers",
+   "quadriceps",
+   "ischios",
+   "adducteurs",
+   "abducteurs",
+   "mollets",
+   "cou"
+  ]
+ },
+ "face_buste": {
+  "largeur": 1100,
+  "hauteur": 900,
+  "masques": [
+   "pectoraux",
+   "deltoidesAnterieurs",
+   "deltoidesLateraux",
+   "biceps",
+   "triceps",
+   "avantBras",
+   "trapezes",
+   "grandDorsal",
+   "abdominaux",
+   "obliques",
+   "abducteurs",
+   "cou"
+  ]
+ },
+ "dos_buste": {
+  "largeur": 1100,
+  "hauteur": 900,
+  "masques": [
+   "deltoidesLateraux",
+   "deltoidesPosterieurs",
+   "triceps",
+   "avantBras",
+   "trapezes",
+   "grandDorsal",
+   "rhomboides",
+   "lombaires",
+   "obliques",
+   "fessiers",
+   "abducteurs"
+  ]
+ }
+}

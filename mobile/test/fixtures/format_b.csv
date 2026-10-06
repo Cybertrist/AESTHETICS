@@ -1,0 +1,11 @@
+Workout #;Date;Workout Name;Duration (sec);Exercise Name;Set Order;Weight (kg);Reps;RPE;Distance (meters);Seconds;Notes;Workout Notes
+1;2025-11-03 18:02:44;Haut du corps;3900;Bench Press (Barbell);W;40;10;;0;0;;Bonne séance
+1;2025-11-03 18:02:44;Haut du corps;3900;Bench Press (Barbell);1;80;8;8;0;0;Pause en bas;Bonne séance
+1;2025-11-03 18:02:44;Haut du corps;3900;Bench Press (Barbell);2;82,5;6;9;0;0;;Bonne séance
+1;2025-11-03 18:02:44;Haut du corps;3900;Bench Press (Barbell);Rest Timer;0;0;;0;120;;Bonne séance
+1;2025-11-03 18:02:44;Haut du corps;3900;Lat Pulldown (Cable);1;55;12;;0;0;;Bonne séance
+1;2025-11-03 18:02:44;Haut du corps;3900;Lat Pulldown (Cable);D;40;10;;0;0;;Bonne séance
+1;2025-11-03 18:02:44;Haut du corps;3900;Plank;1;0;0;;0;60;;Bonne séance
+2;2025-11-05 19:10:00;Bas du corps;4500;Squat (Barbell);1;100;5;;0;0;;
+2;2025-11-05 19:10:00;Bas du corps;4500;Squat (Barbell);F;100;7;10;0;0;;
+2;2025-11-05 19:10:00;Bas du corps;4500;Running;1;0;0;;1200;360;;

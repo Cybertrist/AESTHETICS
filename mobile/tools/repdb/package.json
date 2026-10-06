@@ -1,0 +1,9 @@
+{
+  "name": "aesthetic-repdb",
+  "private": true,
+  "type": "module",
+  "description": "Import du pack d'exercices sous licence dans les assets de l'appli",
+  "dependencies": {
+    "sharp": "^0.34.0"
+  }
+}

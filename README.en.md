@@ -206,7 +206,7 @@ The suite holds 925 test cases written in 102 files, laid out like the code: one
 
 AESTHETICS is not on the Play Store, and no APK is published here for now.
 
-**The code.** For now this repository holds the presentation of the project: the app's code is not published here yet. It is a Flutter app, for Android 8 or later, built with one command:
+**The code.** All of the app's code is in [`mobile/`](mobile/): the app, its tests and its tools. It is a Flutter app, for Android 8 or later, built with one command:
 
 ```
 flutter build apk --release --target-platform android-arm64
@@ -215,6 +215,8 @@ flutter build apk --release --target-platform android-arm64 --dart-define=DEMO=t
 ```
 
 The demo fills itself with sample data on first launch, without ever touching real data: it is the one used for the screenshots on this page.
+
+The exercise pack (catalogue, animations, poses, character) is not in the repository: its licence does not allow redistributing it in bulk. Without it, the app does not build as is: its folders are declared in `pubspec.yaml`. [`mobile/README.md`](mobile/README.md) lists them.
 
 **Licences.** The code is under the [MIT](LICENSE) licence. The rest belongs to its authors:
 

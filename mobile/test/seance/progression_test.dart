@@ -1,0 +1,176 @@
+import 'package:aesthetic/core/data/data.dart';
+import 'package:aesthetic/core/logic/logic.dart';
+import 'package:aesthetic/core/models/models.dart';
+import 'package:aesthetic/features/seance/logic/analyse.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+/// La proposition « la prochaine fois », la comparaison d'une séance
+/// écourtée, et les séries gauche, droite d'un exercice unilatéral.
+void main() {
+  // Le catalogue se lit dans les fichiers de l'appli.
+  TestWidgetsFlutterBinding.ensureInitialized();
+  const dc = 'developpe-couche';
+  var n = 0;
+  WorkoutSession seance(DateTime debut, List<(double, int)> series, {String exo = dc}) => WorkoutSession(
+        id: 's${n++}',
+        nom: 'Push',
+        debut: debut,
+        fin: debut.add(const Duration(hours: 1)),
+        routineId: 'r',
+        exercices: [
+          SessionExercise(id: 'e${n++}', exerciseId: exo, series: [
+            for (final (p, r) in series) WorkoutSet(id: 'w${n++}', poids: p, reps: r, fait: true),
+          ]),
+        ],
+      );
+  DateTime jour(int j) => DateTime(2026, 9, j, 18);
+
+  late AppData data;
+  setUp(() async {
+    data = AppData(Store.memory());
+    await data.exercises.load();
+  });
+  Suggestion proposer(WorkoutSession s, List<WorkoutSession> avant, {Routine? routine}) =>
+      Surcharge.calculer(s, exos: data.exercises, avant: avant, routine: routine).single;
+
+  group('la prochaine fois', () {
+    test('30 kg × 5 puis 30 kg × 6 : on propose 30 kg × 7, pas une charge plus lourde', () {
+      final avant = seance(jour(1), [(30, 5), (30, 5), (30, 5)]);
+      final p = proposer(seance(jour(8), [(30, 6), (30, 6), (30, 6)]), [avant]);
+      expect((p.poids, p.reps), (30.0, 7));
+      expect(p.titre, '30 kg × 7');
+      expect(p.raison, contains("30 kg × 5 la dernière fois, × 6 aujourd'hui"));
+      expect(p.raison, contains('la charge montera à 8'));
+    });
+
+    test('un nombre fixe dans la routine n’est pas un plafond', () {
+      // La routine a repris « 30 kg × 5 » de la séance d'avant : 6 répétitions ne font pas monter la charge.
+      final routine = Routine(id: 'r', nom: 'Push', creeLe: DateTime(2026), exercices: const [
+        RoutineExercise(id: 're', exerciseId: dc, series: [PlannedSet(poids: 30, reps: 5), PlannedSet(poids: 30, reps: 5)]),
+      ]);
+      final p = proposer(seance(jour(8), [(30, 6), (30, 6)]), [seance(jour(1), [(30, 5), (30, 5)])], routine: routine);
+      expect((p.poids, p.reps), (30.0, 7));
+    });
+
+    test('le haut de la fourchette partout : la charge monte et l’on repart du bas', () {
+      final p = proposer(seance(jour(8), [(30, 8), (30, 8), (30, 8)]), [seance(jour(1), [(30, 7), (30, 7), (30, 7)])]);
+      expect((p.poids, p.reps), (32.5, 5));
+      // Sans passé à cette charge, 8 est le bas de « 8 à 12 » : on gagne d'abord des répétitions.
+      final neuf = proposer(seance(jour(8), [(30, 8), (30, 8), (30, 8)]), const []);
+      expect((neuf.poids, neuf.reps), (30.0, 9));
+      expect(p.raison, contains('8 répétitions sur toutes tes séries'));
+    });
+
+    test('la fourchette de la routine passe devant', () {
+      final routine = Routine(id: 'r', nom: 'Push', creeLe: DateTime(2026), exercices: const [
+        RoutineExercise(id: 're', exerciseId: dc, series: [PlannedSet(reps: 6, repsMax: 10)]),
+      ]);
+      expect(proposer(seance(jour(8), [(60, 8), (60, 8)]), const [], routine: routine).reps, 9);
+      final haut = proposer(seance(jour(8), [(60, 10), (60, 10)]), const [], routine: routine);
+      expect((haut.poids, haut.reps), (62.5, 6));
+    });
+
+    test('séries inégales : d’abord toutes au niveau de la meilleure', () {
+      final p = proposer(seance(jour(8), [(30, 7), (30, 6), (30, 5)]), const []);
+      expect((p.poids, p.reps), (30.0, 7));
+      expect(p.raison, contains('Amène toutes tes séries à 7'));
+    });
+
+    test('une seule série à la charge la plus lourde : elle n’est pas acquise', () {
+      final p = proposer(seance(jour(8), [(72.5, 8), (70, 6), (70, 6)]), const []);
+      expect((p.poids, p.reps), (72.5, 8));
+      expect(p.raison, contains("n'a tenu que sur 1 série"));
+    });
+
+    test('trois séances au même point : une répétition de plus sur la première série', () {
+      final avant = [seance(jour(1), [(30, 6), (30, 6)]), seance(jour(4), [(30, 6), (30, 6)])];
+      final p = proposer(seance(jour(8), [(30, 6), (30, 6)]), avant);
+      expect((p.poids, p.reps), (30.0, 7));
+      expect(p.raison, contains('3 séances au même point'));
+    });
+
+    test('un recul se dit, et la charge reste', () {
+      final p = proposer(seance(jour(8), [(30, 6), (30, 6)]), [seance(jour(1), [(30, 7), (30, 7)])]);
+      expect(p.poids, 30);
+      expect(p.raison, contains('1 répétition de moins que la dernière fois'));
+    });
+
+    test('un pas trop gros pour la charge : deux répétitions de plus avant de monter', () {
+      // 2,5 kg sur 10 kg, c'est un quart de plus : parti de 10 répétitions, on va jusqu'à 14 au lieu de 12.
+      final debut = [seance(jour(1), [(10, 10), (10, 10)])];
+      final p = proposer(seance(jour(8), [(10, 12), (10, 12)]), debut);
+      expect((p.poids, p.reps), (10.0, 13));
+      expect(p.raison, contains('le pas de 2,5 kg étant gros pour cette charge'));
+      expect(proposer(seance(jour(8), [(10, 14), (10, 14)]), debut).poids, 12.5);
+    });
+  });
+
+  group('comparaison', () {
+    test('une séance écourtée se compare série pour série, pas en bloc', () {
+      final complete = seance(jour(1), [(70, 7), (70, 6), (70, 5), (70, 5)]);
+      final courte = seance(jour(8), [(72.5, 8), (70, 6)]);
+      // En bloc : 1 000 kg contre 1 610 kg, soit -38 %. Série pour série : 1 000 contre 910.
+      final c = comparerAuPrecedent(courte, [complete, courte])!;
+      expect(c.aSeriesEgales, isTrue);
+      expect(c.texte, '+10 %');
+      expect(c.legende, 'vs dernier Push, à séries égales');
+    });
+
+    test('autant de séries ou plus : le volume entier, comme avant', () {
+      final avant = seance(jour(1), [(70, 8), (70, 8)]);
+      final s = seance(jour(8), [(70, 8), (70, 8), (70, 8)]);
+      final c = comparerAuPrecedent(s, [avant, s])!;
+      expect(c.aSeriesEgales, isFalse);
+      expect(c.texte, '+50 %');
+      expect(c.legende, 'vs dernier Push');
+    });
+
+    test('aucun exercice en commun : rien à comparer', () {
+      final avant = seance(jour(1), [(70, 8), (70, 8)]);
+      final s = seance(jour(8), [(20, 8)], exo: 'curl-marteau');
+      expect(comparerAuPrecedent(s, [avant, s]), isNull);
+    });
+  });
+
+  group('unilatéral', () {
+    test('le catalogue : un bras ou une jambe à la fois, jamais un exercice chronométré', () {
+      bool uni(String id) {
+        final e = data.exercises.byId(id);
+        expect(e, isNotNull, reason: '$id absent du catalogue');
+        return e!.unilateral;
+      }
+      for (final id in ['rowing-haltere-unilateral', 'curl-concentre', 'squat-bulgare', 'single-leg-press', 'one-arm-lat-pulldown', 'pistol-squat', 'step-up']) {
+        expect(uni(id), isTrue, reason: id);
+      }
+      for (final id in ['developpe-couche', 'squat', 'curl-marteau', 'fentes-marchees', 'single-leg-glute-bridge-hold', 'bench-bulgarian-split-stretch']) {
+        expect(uni(id), isFalse, reason: id);
+      }
+    });
+
+    test('trois séries prévues en donnent six : gauche, droite, gauche, droite', () async {
+      const g = SetType.gauche, d = SetType.droite;
+      final routine = Routine(id: 'r', nom: 'Dos', creeLe: DateTime(2026), exercices: const [
+        RoutineExercise(id: 'a', exerciseId: 'rowing-haltere-unilateral', series: [
+          PlannedSet(type: SetType.echauffement, poids: 10, reps: 12),
+          PlannedSet(poids: 24, reps: 10),
+          PlannedSet(poids: 24, reps: 10),
+          PlannedSet(poids: 24, reps: 10),
+        ]),
+        RoutineExercise(id: 'b', exerciseId: dc, series: [PlannedSet(poids: 60, reps: 8), PlannedSet(poids: 60, reps: 8)]),
+      ]);
+      final s = await data.sessions.startFromRoutine(routine);
+      expect([for (final x in s.exercices.first.series) x.type], [SetType.echauffement, g, d, g, d, g, d]);
+      expect(s.exercices.first.series.skip(1).every((x) => x.poids == 24 && x.reps == 10), isTrue);
+      expect([for (final x in s.exercices.last.series) x.type], [SetType.normale, SetType.normale], reason: 'un exercice des deux côtés à la fois ne change pas');
+
+      // Des côtés déjà notés dans la routine : rien n'est doublé.
+      expect(Unilateral.prevues(const [PlannedSet(type: g, reps: 10), PlannedSet(type: d, reps: 10)]).length, 2);
+    });
+
+    test('ajouté en séance : trois paires gauche, droite', () {
+      final series = Unilateral.series([for (var i = 0; i < 3; i++) WorkoutSet(id: 'w$i')], newId);
+      expect([for (final x in series) x.type], [for (var i = 0; i < 3; i++) ...const [SetType.gauche, SetType.droite]]);
+      expect({for (final x in series) x.id}.length, 6);
+    });
+  });
+}

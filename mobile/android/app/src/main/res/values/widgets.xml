@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_widget_image">Widget Aesthetics</string>
+    <string name="app_widget_attente">Ouvre Aesthetics une fois pour activer ce widget.</string>
+    <string name="widget_lancer">Lancer ma séance</string>
+    <string name="widget_lancer_desc">La routine du jour, à démarrer d\'un appui.</string>
+    <string name="widget_semaine">Ma semaine</string>
+    <string name="widget_semaine_desc">Tes séances de la semaine et tes sept jours.</string>
+    <string name="widget_serie">Ma série</string>
+    <string name="widget_serie_desc">Tes semaines d\'affilée et la semaine en cours.</string>
+    <string name="widget_recup">Récupération</string>
+    <string name="widget_recup_desc">Tes muscles prêts et le groupe conseillé.</string>
+    <string name="widget_mois">Mon mois</string>
+    <string name="widget_mois_desc">Le calendrier du mois et tes jours d\'entraînement.</string>
+    <string name="widget_record">Mon dernier record</string>
+    <string name="widget_record_desc">Ton record le plus récent, le personnage en action.</string>
+    <string name="widget_recordl">Mon dernier record (large)</string>
+    <string name="widget_recordl_desc">Ton record le plus récent, en format large.</string>
+</resources>

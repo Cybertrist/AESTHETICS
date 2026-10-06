@@ -1,0 +1,15 @@
+{
+  "name": "corps3d",
+  "private": true,
+  "description": "Rendu du personnage anatomique ÆSTHETIC à partir de BodyParts3D et Z-Anatomy",
+  "type": "commonjs",
+  "scripts": {
+    "rendu": "node rendu.js"
+  },
+  "dependencies": {
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^25.12.0",
+    "three": "^0.170.0",
+    "three-mesh-bvh": "^0.8.3"
+  }
+}

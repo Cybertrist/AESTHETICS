@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ÆSTHETIC, proposition 2</title>
+<style>
+  @font-face { font-family: Figtree; font-weight: 400; src: url(../../assets/fonts/Figtree-Regular.ttf); }
+  @font-face { font-family: Figtree; font-weight: 500; src: url(../../assets/fonts/Figtree-Medium.ttf); }
+  @font-face { font-family: Figtree; font-weight: 600; src: url(../../assets/fonts/Figtree-SemiBold.ttf); }
+  @font-face { font-family: Figtree; font-weight: 700; src: url(../../assets/fonts/Figtree-Bold.ttf); }
+  @font-face { font-family: Figtree; font-weight: 800; src: url(../../assets/fonts/Figtree-ExtraBold.ttf); }
+  :root {
+    --fond: #000; --carte: #131315; --carte2: #1D1D20; --filet: #222226;
+    --texte: #fff; --gris: #8E8E93; --gris2: #5C5C61;
+    --accent: #FF5A5F; --vert: #22D85F; --vert-fond: #12261A;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #0B0B0C; color: var(--texte); font-family: Figtree, system-ui, sans-serif; padding: 32px 24px 64px; }
+  h1 { font-size: 22px; font-weight: 800; }
+  .intro { color: var(--gris); margin: 6px 0 28px; max-width: 760px; line-height: 1.5; font-size: 15px; }
+  .planche { display: flex; flex-wrap: wrap; gap: 28px; }
+  figure { width: 390px; }
+  figcaption { color: var(--gris); font-size: 13px; margin: 0 4px 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  .tel { width: 390px; height: 844px; background: var(--fond); border-radius: 44px; border: 1px solid #2A2A2E; overflow: hidden; position: relative; display: flex; flex-direction: column; }
+  .ecran { flex: 1; padding: 58px 20px 0; overflow: hidden; }
+  .nav { height: 78px; border-top: 1px solid var(--filet); display: flex; padding-bottom: 14px; }
+  .nav div { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; color: var(--gris2); font-size: 11px; font-weight: 600; }
+  .nav div.actif { color: var(--texte); }
+  .nav svg { width: 23px; height: 23px; }
+  svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .sur { color: var(--gris); font-size: 14px; font-weight: 500; }
+  .titre { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .tete { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--carte2); display: grid; place-items: center; font-weight: 700; }
+  .etiquette { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--gris); }
+  .section { display: flex; justify-content: space-between; align-items: baseline; margin: 28px 0 14px; }
+  .section b { font-size: 18px; font-weight: 700; }
+  .section span { color: var(--gris); font-size: 14px; font-weight: 500; }
+  .carte { background: var(--carte); border-radius: 24px; padding: 20px; }
+  .bouton { height: 54px; border-radius: 27px; background: var(--accent); color: #fff; font-weight: 700; font-size: 17px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .bouton.gris { background: var(--carte2); }
+  .bouton.petit { height: 36px; padding: 0 16px; font-size: 14px; border-radius: 18px; }
+
+  /* Corps : base grise et calques de muscles, tous sur la même toile. */
+  .corps { position: relative; aspect-ratio: 636 / 1500; }
+  .corps.carre { aspect-ratio: 1; }
+  .corps img { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  .heros { display: flex; justify-content: space-between; gap: 12px; }
+  .heros .nom { font-size: 36px; font-weight: 800; letter-spacing: -.02em; margin: 8px 0 4px; }
+  .heros .duo { display: flex; gap: 4px; }
+  .heros .corps { height: 150px; }
+
+  .semaine { display: flex; justify-content: space-between; }
+  .jour { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--gris2); }
+  .jour i { width: 38px; height: 38px; border-radius: 50%; background: var(--carte); display: grid; place-items: center; font-style: normal; color: var(--gris); font-size: 14px; }
+  .jour.fait i { background: var(--accent); color: #fff; }
+  .jour.auj i { background: none; border: 2px solid var(--accent); color: #fff; }
+  .jour.auj { color: #fff; }
+
+  .tuiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .tuiles .carte { padding: 18px; }
+  .chiffre { font-size: 28px; font-weight: 800; letter-spacing: -.02em; margin-top: 6px; }
+  .chiffre small { font-size: 15px; font-weight: 600; color: var(--gris); }
+
+  .ligne { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-top: 1px solid var(--filet); }
+  .ligne:first-child { border-top: 0; }
+  .ligne .t { flex: 1; min-width: 0; }
+  .ligne .t b { display: block; font-size: 17px; font-weight: 700; }
+  .ligne .t span { color: var(--gris); font-size: 14px; }
+  .vignette { width: 52px; height: 52px; border-radius: 14px; background: var(--carte2); flex: none; padding: 4px; }
+  .vignette img { width: 100%; height: 100%; object-fit: contain; }
+  .rond { width: 40px; height: 40px; border-radius: 50%; background: var(--carte2); display: grid; place-items: center; color: #fff; flex: none; }
+  .rond svg { width: 16px; height: 16px; fill: currentColor; stroke: none; }
+  .chevron { color: var(--gris2); width: 18px; height: 18px; flex: none; }
+
+  .onglets { display: flex; gap: 24px; border-bottom: 1px solid var(--filet); margin-bottom: 22px; }
+  .onglets span { padding-bottom: 12px; font-size: 16px; font-weight: 600; color: var(--gris); }
+  .onglets span.actif { color: #fff; box-shadow: 0 2px 0 var(--accent); }
+  .barre { height: 6px; border-radius: 3px; background: var(--carte2); overflow: hidden; margin-top: 14px; }
+  .barre i { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+
+  .silhouettes { display: flex; gap: 10px; margin-bottom: 22px; }
+  .silhouettes .corps { width: 62px; border-radius: 16px; background: var(--carte); flex: none; }
+  .silhouettes .corps.choisi { outline: 2px solid #fff; }
+  .grille { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .exo { background: var(--carte); border-radius: 20px; padding: 12px 12px 14px; }
+  .exo img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+  .exo b { display: block; font-size: 15px; font-weight: 700; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .exo span { color: var(--gris); font-size: 13px; }
+
+  .seance-tete { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; }
+  .seance-tete .t { flex: 1; }
+  .seance-tete b { font-size: 20px; font-weight: 800; display: block; }
+  .seance-tete span { color: var(--accent); font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .seance-tete span em { color: var(--gris); font-style: normal; font-weight: 500; }
+  .entete, .serie { display: grid; grid-template-columns: 34px 1fr 64px 56px 44px; align-items: center; gap: 8px; text-align: center; }
+  .entete { font-size: 11px; font-weight: 700; letter-spacing: .1em; color: var(--gris2); margin: 18px 0 6px; padding: 0 8px; }
+  .serie { height: 52px; border-radius: 14px; padding: 0 8px; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .serie .avant { color: var(--gris2); font-weight: 500; font-size: 15px; }
+  .serie .champ { background: var(--carte2); border-radius: 10px; height: 38px; display: grid; place-items: center; color: var(--gris); }
+  .serie .coche { width: 40px; height: 38px; border-radius: 12px; background: var(--carte2); display: grid; place-items: center; color: var(--gris2); justify-self: end; }
+  .serie .coche svg { width: 18px; height: 18px; stroke-width: 3; }
+  .serie.faite { background: var(--vert-fond); }
+  .serie.faite .champ { background: none; color: #fff; }
+  .serie.faite .coche { background: var(--vert); color: #000; }
+  .ajout { height: 46px; border-radius: 23px; background: var(--carte); color: #fff; font-weight: 700; font-size: 15px; display: grid; place-items: center; margin: 10px 0 18px; }
+
+  .periodes { display: flex; gap: 8px; margin-bottom: 26px; }
+  .periodes span { padding: 8px 14px; border-radius: 18px; background: var(--carte); color: var(--gris); font-size: 14px; font-weight: 600; }
+  .periodes span.actif { background: #fff; color: #000; }
+  .grand { font-size: 44px; font-weight: 800; letter-spacing: -.03em; line-height: 1.05; }
+  .grand small { font-size: 22px; color: var(--gris); font-weight: 700; }
+  .hausse { color: var(--vert); font-weight: 700; font-size: 14px; }
+  .graphe { display: flex; align-items: flex-end; gap: 8px; height: 104px; margin-top: 18px; }
+  .graphe i { flex: 1; background: var(--accent); opacity: .35; border-radius: 6px 6px 2px 2px; }
+  .graphe i:last-child { opacity: 1; }
+  .muscle { display: grid; grid-template-columns: 104px 1fr 72px; gap: 12px; align-items: center; font-size: 15px; font-weight: 600; padding: 7px 0; }
+  .muscle .barre { margin: 0; }
+  .muscle em { white-space: nowrap; font-style: normal; color: var(--gris); font-size: 14px; text-align: right; font-weight: 500; }
+  .duo-centre { display: flex; justify-content: center; gap: 18px; }
+  .duo-centre .corps { height: 150px; }
+
+  /* Proposition 2 : l'image d'abord, comme la page des exercices. */
+  .lumiere { background: radial-gradient(circle at 50% 42%, #2A2A2F 0%, #151517 62%); }
+  .sils { display: flex; gap: 12px; margin-bottom: 22px; }
+  .sil { display: flex; flex-direction: column; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; color: var(--gris); flex: none; }
+  .sil .corps { width: 64px; border-radius: 20px; background: var(--carte); }
+  .sil.choisi { color: #fff; }
+  .sil.choisi .corps { background: var(--carte2); outline: 2px solid var(--accent); }
+  .exo2 b { display: block; font-size: 15px; font-weight: 700; margin-top: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .exo2 span { color: var(--gris); font-size: 13px; }
+  .exo2 .img { position: relative; border-radius: 22px; aspect-ratio: 1 / 1.08; padding: 10px; background: radial-gradient(circle at 50% 45%, #2A2A2F 0%, #151517 68%); }
+  .exo2 .img img { width: 100%; height: 100%; object-fit: contain; }
+  .exo2 .img i { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; background: rgba(0,0,0,.45); display: grid; place-items: center; color: var(--gris); }
+  .exo2 .img i svg { width: 15px; height: 15px; }
+  .exo2 .img i.fav { color: var(--accent); }
+  .exo2 .img i.fav svg { fill: currentColor; }
+  .pastilles { display: flex; gap: 8px; margin-bottom: 18px; }
+  .pastilles span { padding: 7px 13px; border-radius: 17px; background: var(--carte); color: var(--gris); font-size: 13px; font-weight: 600; }
+  .pastilles span.actif { background: #fff; color: #000; }
+  .heros2 { border-radius: 28px; padding: 20px; }
+  .heros2 .haut { display: flex; justify-content: space-between; align-items: flex-start; }
+  .heros2 .nom { font-size: 38px; font-weight: 800; letter-spacing: -.02em; line-height: 1; margin-top: 8px; }
+  .heros2 .duo { display: flex; justify-content: center; gap: 22px; margin: 6px 0 14px; }
+  .heros2 .duo .corps { height: 230px; }
+  .minis { display: flex; gap: 8px; }
+  .mini { width: 46px; height: 46px; border-radius: 13px; background: var(--carte2); padding: 3px; flex: none; }
+  .mini img { width: 100%; height: 100%; object-fit: contain; }
+  .mini.plus { display: grid; place-items: center; color: var(--gris); font-size: 13px; font-weight: 700; }
+  .routine { background: var(--carte); border-radius: 24px; padding: 16px 16px 16px 18px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .routine .t { flex: 1; min-width: 0; }
+  .routine .t b { font-size: 18px; font-weight: 800; display: block; }
+  .routine .t span { color: var(--gris); font-size: 13px; }
+  .routine .minis { margin-top: 10px; }
+  .routine .mini { width: 40px; height: 40px; border-radius: 12px; }
+  .banniere { border-radius: 26px; height: 250px; padding: 8px; position: relative; margin-bottom: 4px; }
+  .banniere img { width: 100%; height: 100%; object-fit: contain; }
+  .banniere .titre2 { position: absolute; left: 18px; bottom: 14px; }
+  .banniere .titre2 b { font-size: 22px; font-weight: 800; display: block; }
+  .banniere .titre2 span { color: var(--accent); font-weight: 700; font-size: 14px; }
+  .banniere .pts { position: absolute; right: 16px; top: 14px; color: var(--gris); letter-spacing: 2px; font-weight: 800; }
+  .suite { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+  .suite .etiquette { flex: none; }
+  .corps-heros { display: flex; justify-content: center; gap: 26px; border-radius: 28px; padding: 16px 0 12px; margin-bottom: 20px; }
+  .corps-heros .corps { height: 230px; }
+</style>
+</head>
+<body>
+<h1>ÆSTHETIC, proposition 2 : l'image d'abord</h1>
+<p class="intro">Ce qui marche sur la page des exercices, c'est le bonhomme en grand. Je l'applique partout : chaque écran s'ouvre sur une grande image (le corps, l'animation, les vignettes des exercices) posée sur une lumière douce, et le texte se fait discret.</p>
+
+<div class="planche">
+
+<figure>
+<figcaption>Exercices (amélioré)</figcaption>
+<div class="tel">
+  <div class="ecran">
+    <div class="tete"><div><div class="titre">Exercices</div><div class="sur">608 mouvements animés</div></div>
+      <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></div>
+    <div class="sils">
+      <div class="sil choisi"><div class="corps carre"><img src="../../assets/body/pack/face_buste_base.webp"><img src="../../assets/body/pack/face_buste_pectoraux.webp"></div><span>Pectoraux</span></div>
+      <div class="sil"><div class="corps carre"><img src="../../assets/body/pack/face_buste_base.webp"><img src="../../assets/body/pack/face_buste_deltoidesAnterieurs.webp"></div><span>Épaules</span></div>
+      <div class="sil"><div class="corps carre"><img src="../../assets/body/pack/face_buste_base.webp"><img src="../../assets/body/pack/face_buste_biceps.webp"></div><span>Bras</span></div>
+      <div class="sil"><div class="corps carre"><img src="../../assets/body/pack/dos_buste_base.webp"><img src="../../assets/body/pack/dos_buste_grandDorsal.webp"></div><span>Dos</span></div>
+      <div class="sil"><div class="corps carre"><img src="../../assets/body/pack/face_jambes_base.webp"><img src="../../assets/body/pack/face_jambes_quadriceps.webp"></div><span>Jambes</span></div>
+    </div>
+    <div class="pastilles"><span class="actif">Tout</span><span>Barre</span><span>Haltères</span><span>Machine</span><span>Poulie</span></div>
+    <div class="grille">
+      <div class="exo2"><div class="img"><img src="../../assets/exercises/poses/bench-press-start.webp"><i class="fav"><svg viewBox="0 0 24 24"><path d="M7 4h10v16l-5-4-5 4z"/></svg></i></div><b>Développé couché</b><span>Barre</span></div>
+      <div class="exo2"><div class="img"><img src="../../assets/exercises/poses/incline-db-press-start.webp"><i class=""><svg viewBox="0 0 24 24"><path d="M7 4h10v16l-5-4-5 4z"/></svg></i></div><b>Développé incliné</b><span>Haltères</span></div>
+      <div class="exo2"><div class="img"><img src="../../assets/exercises/poses/lateral-raise-peak.webp"><i class=""><svg viewBox="0 0 24 24"><path d="M7 4h10v16l-5-4-5 4z"/></svg></i></div><b>Élévations latérales</b><span>Haltères</span></div>
+      <div class="exo2"><div class="img"><img src="../../assets/exercises/poses/pull-up-peak.webp"><i class="fav"><svg viewBox="0 0 24 24"><path d="M7 4h10v16l-5-4-5 4z"/></svg></i></div><b>Tractions</b><span>Poids du corps</span></div>
+    </div>
+  </div>
+  <div class="nav">
+    <div><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg>Accueil</div>
+    <div class="actif"><svg viewBox="0 0 24 24"><path d="M6 8v8M3 10v4M18 8v8M21 10v4M6 12h12"/></svg>Entraîner</div>
+    <div><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M21 19H3"/></svg>Progrès</div>
+  </div>
+</div>
+</figure>
+
+<figure>
+<figcaption>Accueil</figcaption>
+<div class="tel">
+  <div class="ecran">
+    <div class="tete"><div><div class="sur">Jeudi 1 octobre</div><div class="titre">Bonjour Tristan</div></div><div class="avatar">T</div></div>
+    <div class="heros2 lumiere">
+      <div class="haut">
+        <div><div class="etiquette">Séance du jour</div><div class="nom">Legs</div></div>
+        <div class="sur" style="text-align:right">6 exercices<br>56 min</div>
+      </div>
+      <div class="duo">
+        <div class="corps"><img src="../../assets/body/pack/face_base.webp"><img src="../../assets/body/pack/face_quadriceps.webp"><img src="../../assets/body/pack/face_mollets.webp"><img src="../../assets/body/pack/face_adducteurs.webp"></div>
+        <div class="corps"><img src="../../assets/body/pack/dos_base.webp"><img src="../../assets/body/pack/dos_fessiers.webp"><img src="../../assets/body/pack/dos_ischios.webp"><img src="../../assets/body/pack/dos_mollets.webp"></div>
+      </div>
+      <div class="minis" style="justify-content:center;margin-bottom:16px">
+        <div class="mini"><img src="../../assets/exercises/poses/squat-start.webp"></div><div class="mini"><img src="../../assets/exercises/poses/romanian-deadlift-start.webp"></div><div class="mini"><img src="../../assets/exercises/poses/leg-press-start.webp"></div><div class="mini"><img src="../../assets/exercises/poses/leg-curl-start.webp"></div><div class="mini"><img src="../../assets/exercises/poses/leg-extension-start.webp"></div><div class="mini"><img src="../../assets/exercises/poses/standing-calf-raise-start.webp"></div>
+      </div>
+      <div class="bouton"><svg width="16" height="16" viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><path d="M7 4v16l13-8z"/></svg>Démarrer</div>
+    </div>
+    <div class="section" style="margin-top:22px"><b>Cette semaine</b><span>1 séance sur 4</span></div>
+    <div class="semaine">
+      <div class="jour fait">L<i>✓</i></div><div class="jour">M<i>29</i></div><div class="jour">M<i>30</i></div>
+      <div class="jour auj">J<i>1</i></div><div class="jour">V<i>2</i></div><div class="jour">S<i>3</i></div><div class="jour">D<i>4</i></div>
+    </div>
+  </div>
+  <div class="nav">
+    <div class="actif"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg>Accueil</div>
+    <div><svg viewBox="0 0 24 24"><path d="M6 8v8M3 10v4M18 8v8M21 10v4M6 12h12"/></svg>Entraîner</div>
+    <div><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M21 19H3"/></svg>Progrès</div>
+  </div>
+</div>
+</figure>
+
+<figure>
+<figcaption>Entraîner</figcaption>
+<div class="tel">
+  <div class="ecran">
+    <div class="tete"><div class="titre">Entraîner</div><div class="avatar">T</div></div>
+    <div class="onglets"><span class="actif">Séances</span><span>Programmes</span><span>Exercices</span></div>
+    <div class="section" style="margin-top:0"><b>Push Pull Legs</b><span>Semaine 7 sur 12</span></div>
+    <div class="barre" style="margin:-4px 0 22px"><i style="width:52%"></i></div>
+
+    <div class="routine"><div class="t"><b>Push</b><span>6 exercices · 56 min</span>
+      <div class="minis"><div class="mini"><img src="../../assets/exercises/poses/bench-press-start.webp"></div><div class="mini"><img src="../../assets/exercises/poses/incline-db-press-start.webp"></div><div class="mini"><img src="../../assets/exercises/poses/lateral-raise-peak.webp"></div><div class="mini plus">+3</div></div></div>
+      <div class="rond"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+    <div class="routine"><div class="t"><b>Pull</b><span>6 exercices · 56 min</span>
+      <div class="minis"><div class="mini"><img src="../../assets/exercises/poses/pull-up-peak.webp"></div><div class="mini"><img src="../../assets/exercises/poses/lat-pulldown-peak.webp"></div><div class="mini"><img src="../../assets/exercises/poses/hammer-curl-peak.webp"></div><div class="mini plus">+3</div></div></div>
+      <div class="rond"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+    <div class="routine"><div class="t"><b>Legs</b><span>6 exercices · 56 min · aujourd'hui</span>
+      <div class="minis"><div class="mini"><img src="../../assets/exercises/poses/squat-start.webp"></div><div class="mini"><img src="../../assets/exercises/poses/romanian-deadlift-start.webp"></div><div class="mini"><img src="../../assets/exercises/poses/leg-press-start.webp"></div><div class="mini plus">+3</div></div></div>
+      <div class="rond" style="background:var(--accent)"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+
+    <div class="tuiles" style="margin-top:14px">
+      <div class="bouton gris" style="font-size:15px">Séance vide</div>
+      <div class="bouton gris" style="font-size:15px">Nouvelle routine</div>
+    </div>
+  </div>
+  <div class="nav">
+    <div><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg>Accueil</div>
+    <div class="actif"><svg viewBox="0 0 24 24"><path d="M6 8v8M3 10v4M18 8v8M21 10v4M6 12h12"/></svg>Entraîner</div>
+    <div><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M21 19H3"/></svg>Progrès</div>
+  </div>
+</div>
+</figure>
+
+<figure>
+<figcaption>Séance en cours</figcaption>
+<div class="tel">
+  <div class="ecran">
+    <div class="seance-tete" style="margin-bottom:16px">
+      <svg width="24" height="24" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      <div class="t"><b>Legs</b><span>20:31 <em>· 2 séries sur 21</em></span></div>
+      <div class="bouton petit">Terminer</div>
+    </div>
+    <div class="banniere lumiere">
+      <img src="../../assets/exercises/anim/squat.webp">
+      <div class="pts">•••</div>
+      <div class="titre2"><b>Squat</b><span>Repos 2:30</span></div>
+    </div>
+    <div class="entete" style="margin-top:12px"><span>SÉRIE</span><span>PRÉCÉDENT</span><span>KG</span><span>RÉPS</span><span></span></div>
+    <div class="serie faite"><span>1</span><span class="avant">90 × 6</span><span class="champ">90</span><span class="champ">6</span><span class="coche"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span></div>
+    <div class="serie faite"><span>2</span><span class="avant">90 × 5</span><span class="champ">90</span><span class="champ">5</span><span class="coche"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span></div>
+    <div class="serie"><span>3</span><span class="avant">90 × 4</span><span class="champ">90</span><span class="champ">5</span><span class="coche"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span></div>
+    <div class="serie"><span>4</span><span class="avant">90 × 4</span><span class="champ">90</span><span class="champ">5</span><span class="coche"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span></div>
+    <div class="ajout" style="margin-bottom:14px">+ Ajouter une série</div>
+    <div class="suite"><div class="etiquette">Ensuite</div>
+      <div class="minis"><div class="mini"><img src="../../assets/exercises/poses/romanian-deadlift-start.webp"></div><div class="mini"><img src="../../assets/exercises/poses/leg-press-start.webp"></div><div class="mini"><img src="../../assets/exercises/poses/leg-curl-start.webp"></div><div class="mini"><img src="../../assets/exercises/poses/leg-extension-start.webp"></div><div class="mini"><img src="../../assets/exercises/poses/standing-calf-raise-start.webp"></div></div>
+    </div>
+  </div>
+</div>
+</figure>
+
+<figure>
+<figcaption>Progrès</figcaption>
+<div class="tel">
+  <div class="ecran">
+    <div class="tete" style="margin-bottom:18px"><div class="titre">Progrès</div><div class="avatar">T</div></div>
+    <div class="periodes" style="margin-bottom:18px"><span class="actif">4 sem.</span><span>3 mois</span><span>6 mois</span><span>1 an</span></div>
+    <div class="corps-heros lumiere">
+      <div class="corps"><img src="../../assets/body/pack/face_base.webp"><img src="../../assets/body/pack/face_pectoraux.webp"><img src="../../assets/body/pack/face_quadriceps.webp" style="opacity:.55"></div>
+      <div class="corps"><img src="../../assets/body/pack/dos_base.webp"><img src="../../assets/body/pack/dos_grandDorsal.webp"><img src="../../assets/body/pack/dos_fessiers.webp" style="opacity:.55"></div>
+    </div>
+    <div class="tuiles">
+      <div class="carte"><div class="etiquette">Volume</div><div class="chiffre">100,4 <small>t</small></div><div class="hausse" style="margin-top:4px">+18 %</div></div>
+      <div class="carte"><div class="etiquette">Séances</div><div class="chiffre">12</div><div class="sur" style="margin-top:4px">3,4 par semaine</div></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="muscle">Pectoraux<div class="barre"><i style="width:92%"></i></div><em>42 séries</em></div>
+      <div class="muscle">Grand dorsal<div class="barre"><i style="width:80%"></i></div><em>36 séries</em></div>
+      <div class="muscle">Quadriceps<div class="barre"><i style="width:58%"></i></div><em>27 séries</em></div>
+    </div>
+  </div>
+  <div class="nav">
+    <div><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg>Accueil</div>
+    <div><svg viewBox="0 0 24 24"><path d="M6 8v8M3 10v4M18 8v8M21 10v4M6 12h12"/></svg>Entraîner</div>
+    <div class="actif"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M21 19H3"/></svg>Progrès</div>
+  </div>
+</div>
+</figure>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Un widget animé : douze images dessinées par l'appli, qui défilent en boucle. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_racine"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ViewFlipper
+        android:id="@+id/widget_film"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:autoStart="true"
+        android:flipInterval="170"
+        android:inAnimation="@null"
+        android:outAnimation="@null">
+
+        <ImageView
+            android:id="@+id/widget_t0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_widget_image"
+            android:scaleType="fitCenter" />
+        <ImageView
+            android:id="@+id/widget_t1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_widget_image"
+            android:scaleType="fitCenter" />
+        <ImageView
+            android:id="@+id/widget_t2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_widget_image"
+            android:scaleType="fitCenter" />
+        <ImageView
+            android:id="@+id/widget_t3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_widget_image"
+            android:scaleType="fitCenter" />
+        <ImageView
+            android:id="@+id/widget_t4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_widget_image"
+            android:scaleType="fitCenter" />
+        <ImageView
+            android:id="@+id/widget_t5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_widget_image"
+            android:scaleType="fitCenter" />
+        <ImageView
+            android:id="@+id/widget_t6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_widget_image"
+            android:scaleType="fitCenter" />
+        <ImageView
+            android:id="@+id/widget_t7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_widget_image"
+            android:scaleType="fitCenter" />
+        <ImageView
+            android:id="@+id/widget_t8"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_widget_image"
+            android:scaleType="fitCenter" />
+        <ImageView
+            android:id="@+id/widget_t9"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_widget_image"
+            android:scaleType="fitCenter" />
+        <ImageView
+            android:id="@+id/widget_t10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_widget_image"
+            android:scaleType="fitCenter" />
+        <ImageView
+            android:id="@+id/widget_t11"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_widget_image"
+            android:scaleType="fitCenter" />
+    </ViewFlipper>
+
+    <TextView
+        android:id="@+id/widget_attente"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/widget_fond"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/app_widget_attente"
+        android:textColor="#FFFFFFFF"
+        android:textSize="14sp"
+        android:visibility="gone" />
+</FrameLayout>
