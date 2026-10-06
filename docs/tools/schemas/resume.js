@@ -105,11 +105,29 @@ module.exports = (O) => {
     const pas = k === 0 ? [[0, 1], [p(1), 0]] : k === 9 ? [[0, 0], [p(9), 1]] : [[0, 0], [p(k), 1], [p(k + 1), 0]];
     return `<g opacity="${k === 0 ? 1 : 0}">${paliers('opacity', C, pas)}${contenu}</g>`;
   };
+  // Les entrées de l'appli (`TempoBilan`) : une page se construit en une
+  // seconde et demie quand on y arrive ; ses éléments entrent l'un après
+  // l'autre, chacun sur une part [duree] de ce temps.
+  const TEMPO = 1.5 / C;
+  const part = (k, rang, sur, duree = 0.42) => {
+    const de = p(k) + 0.003 + (sur <= 1 ? 0 : rang / (sur - 1)) * (1 - duree) * TEMPO;
+    return [de, de + duree * TEMPO].map((x) => Number(x.toFixed(4)));
+  };
+  // Un attribut qui passe de [v0] à [v1] quand vient le tour de l'élément.
+  const anime = (attribut, k, rang, sur, v0, v1, duree) => { const [de, a] = part(k, rang, sur, duree); return fondu(attribut, C, [[0, v0], [de, v0], [a, v1], [1, v1]]); };
+  // Un élément qui entre à son tour : il monte en apparaissant, ou grossit autour de (cx, cy).
+  const entree = (k, rang, sur, contenu, { grossit = false, cx = 0, cy = 0 } = {}) => {
+    const [de, a] = part(k, rang, sur);
+    const mouvement = (type, v0, v1) => `<animateTransform attributeName="transform" type="${type}" dur="${C}s" repeatCount="indefinite" keyTimes="0;${de};${a};1" values="${v0};${v0};${v1};${v1}"/>`;
+    return `<g opacity="0">${anime('opacity', k, rang, sur, 0, 1)}${grossit
+      ? `<g transform="translate(${cx},${cy})"><g>${mouvement('scale', '0.7', '1')}<g transform="translate(${-cx},${-cy})">${contenu}</g></g></g>`
+      : `<g>${mouvement('translate', '0 12', '0 0')}${contenu}</g>`}</g>`;
+  };
   const titreBloc = (x, y, s, couleur = DISCRET) => t(x, y, s, { taille: 11, couleur, police: MONO, poids: 700, extra: 'letter-spacing="2"' });
 
   let corps = '';
   corps += t(60, 52, 'LE RÉSUMÉ MENSUEL', { taille: 13, couleur: ACCENT, police: MONO, poids: 700, extra: 'letter-spacing="3"' });
-  corps += t(Math.round(66 + tr('LE RÉSUMÉ MENSUEL').length * 10.9 + 24), 52, 'Dix pages façon story, une touche pour avancer. La cinquième pèse le mois en objets.', { taille: 14 });
+  corps += t(Math.round(66 + tr('LE RÉSUMÉ MENSUEL').length * 10.9 + 24), 52, 'Dix pages façon story, qui se construisent quand on y arrive. La cinquième pèse le mois en objets.', { taille: 14 });
 
   // --------------------------------------------------- les dix pages, à gauche
   const LX = 60, LL = 268, LY = 104, LPAS = 60;
@@ -169,16 +187,17 @@ module.exports = (O) => {
   // 1 · l'ouverture
   {
     const H = 182, l = (W - 6 * 7) / 7, y0 = MIL - 140;
-    page.push([0.35, 0.55, 0.45, 0.72, 0.60, 0.85, 1.0].map((h, i) => `<rect x="${(G + i * (l + 7)).toFixed(1)}" y="${(y0 + H * (1 - h)).toFixed(1)}" width="${l.toFixed(1)}" height="${(H * h).toFixed(1)}" rx="5.5" fill="${ACCENT}"/>`).join('')
-      + b(CX, y0 + H + 52, 'Résumé', 28, { ancre: 'middle' }) + b(CX, y0 + H + 90, 'mensuel', 28, { ancre: 'middle' }));
+    page.push([0.35, 0.55, 0.45, 0.72, 0.60, 0.85, 1.0].map((h, i) => `<rect x="${(G + i * (l + 7)).toFixed(1)}" y="${(y0 + H * (1 - h)).toFixed(1)}" width="${l.toFixed(1)}" height="${(H * h).toFixed(1)}" rx="5.5" fill="${ACCENT}">${anime('height', 0, i, 10, 0, (H * h).toFixed(1))}${anime('y', 0, i, 10, y0 + H, (y0 + H * (1 - h)).toFixed(1))}</rect>`).join('')
+      + entree(0, 1, 2, b(CX, y0 + H + 52, 'Résumé', 28, { ancre: 'middle' }) + b(CX, y0 + H + 90, 'mensuel', 28, { ancre: 'middle' })));
   }
   // 2 · les séances
   {
     const y0 = MIL - 196, ligne = (y, nom, d, v) => b(G, y, nom, 9.6) + b(D - 62, y, d, 9.6, { ancre: 'end' }) + (v ? b(D, y, v, 9.6, { ancre: 'end' }) : '');
     let s = titreMois(G, y0, 27);
     const PAS_L = Math.min(14.4, 318 / (SEANCES.length + 1));
-    SEANCES.forEach(([nom, min, v], i) => { s += ligne(y0 + 60 + i * PAS_L, nom.toUpperCase(), duree(min), v > 0 ? `${nombre(v)} kg` : ''); });
-    s += ligne(y0 + 60 + SEANCES.length * PAS_L + 8, 'TOTAL', duree(MINUTES), `${nombre(VOLUME)} kg`);
+    const NL = SEANCES.length + 1;
+    SEANCES.forEach(([nom, min, v], i) => { s += entree(1, i, NL, ligne(y0 + 60 + i * PAS_L, nom.toUpperCase(), duree(min), v > 0 ? `${nombre(v)} kg` : '')); });
+    s += entree(1, NL - 1, NL, ligne(y0 + 60 + SEANCES.length * PAS_L + 8, 'TOTAL', duree(MINUTES), `${nombre(VOLUME)} kg`));
     page.push(s);
   }
   // 3 · la régularité : le calendrier du mois, les jours d'entraînement en vert
@@ -192,8 +211,10 @@ module.exports = (O) => {
     for (let j = 1; j <= nb; j++) {
       const n = decalage + j - 1, fait = JOURS[MOIS].includes(j);
       const x = G + (n % 7) * (c + e), y = y0 + 138 + Math.floor(n / 7) * (c + e);
-      s += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${c.toFixed(1)}" height="${c.toFixed(1)}" rx="${(c * 0.26).toFixed(1)}" fill="${fait ? HAUSSE : BLANC}"${fait ? '' : ' fill-opacity="0.13"'}/>`;
-      s += brut((x + c / 2).toFixed(1), (y + c / 2 + 4.2).toFixed(1), String(j), 11.6, { couleur: fait ? '#000000' : ENCRE2, poids: 700, ancre: 'middle' });
+      const carre = (couleur, extra = '') => `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${c.toFixed(1)}" height="${c.toFixed(1)}" rx="${(c * 0.26).toFixed(1)}" fill="${couleur}"${extra}/>`;
+      const numero = (couleur) => brut((x + c / 2).toFixed(1), (y + c / 2 + 4.2).toFixed(1), String(j), 11.6, { couleur, poids: 700, ancre: 'middle' });
+      s += carre(BLANC, ' fill-opacity="0.13"') + numero(ENCRE2);
+      if (fait) s += `<g opacity="0">${anime('opacity', 2, j - 1, nb, 0, 1, 0.25)}${carre(HAUSSE)}${numero('#000000')}</g>`;
     }
     page.push(s);
   }
@@ -206,8 +227,8 @@ module.exports = (O) => {
       const m = (MOIS + i) % 12, annee = i < 12 - MOIS ? AN - 1 : AN, y = y0 + 108 + i * 25.4, courant = i === 11;
       const l = LB * Math.max(v / max, 0.015);
       s += b(G, y + 14, annee === AN ? COURTS[m] : `${COURTS[m]} ${annee % 100}`, 10.8, { poids: courant ? 700 : 600 });
-      s += `<rect x="${G + 60}" y="${y}" width="${l.toFixed(1)}" height="20" rx="2.8" fill="${BLANC}"${courant ? '' : ' fill-opacity="0.32"'}/>`;
-      if (v === max) s += t(G + 60 + l - 6, y + 14, `${nombre(v)} kg`, { taille: 9.2, couleur: '#000000', poids: 700, ancre: 'end' });
+      s += `<rect x="${G + 60}" y="${y}" width="${l.toFixed(1)}" height="20" rx="2.8" fill="${BLANC}"${courant ? '' : ' fill-opacity="0.32"'}>${anime('width', 3, i, VOLUMES.length, (LB * 0.015).toFixed(1), l.toFixed(1))}</rect>`;
+      if (v === max) s += `<g opacity="0">${fondu('opacity', C, [[0, 0], [part(3, i, VOLUMES.length)[1], 0], [part(3, i, VOLUMES.length)[1] + 0.004, 1], [1, 1]])}` + t(G + 60 + l - 6, y + 14, `${nombre(v)} kg`, { taille: 9.2, couleur: '#000000', poids: 700, ancre: 'end' }) + '</g>';
     });
     page.push(s);
   }
@@ -227,7 +248,7 @@ module.exports = (O) => {
     const y0 = MIL - 172, oy = y0 + 178;
     let s = b(CX, y0, 'Poids soulevé en septembre', 12, { poids: 700, ancre: 'middle' });
     s += grandVolume(y0 + 50, 41);
-    s += `<ellipse cx="${CX}" cy="${oy}" rx="${W * 0.5}" ry="92" fill="url(#resumeHalo)"/>
+    const objet = `<ellipse cx="${CX}" cy="${oy}" rx="${W * 0.5}" ry="92" fill="url(#resumeHalo)"/>
       ${!require('fs').existsSync(require('path').join(__dirname, '..', '..', 'exercices', OBJET_3D)) ? `<g transform="translate(${CX - 96},${oy - 62}) rotate(-16) scale(0.36)" opacity="0.45">${elephant(EQ.o.accent, '#A892EA')}</g>
       <g transform="translate(${CX + 92},${oy + 66}) rotate(14) scale(-0.28,0.28)" opacity="0.4">${elephant(EQ.o.accent, '#A892EA')}</g>
       <g transform="translate(${CX + 6},${oy - 4}) rotate(-6) scale(0.94)">${elephant(EQ.o.accent, '#A892EA')}</g>`
@@ -235,16 +256,17 @@ module.exports = (O) => {
       <g transform="translate(${CX + 92},${oy + 66}) rotate(14)" opacity="0.45">${O.image(OBJET_3D, -22, -22, 44, 44)}</g>
       <g transform="translate(${CX + 4},${oy - 2}) rotate(-6)">${O.image(OBJET_3D, -84, -84, 168, 168)}</g>`}
       <g transform="translate(${D - 34},${oy - 78}) rotate(8)"><rect x="-38" y="-17" width="76" height="34" rx="17" fill="#FFFFFF"/>${t(0, 6.5, EQ.etiquette, { taille: 18, couleur: '#000000', poids: 900, ancre: 'middle' })}</g>`;
-    s += b(CX, y0 + 300, 'C’est comme soulever', 17, { ancre: 'middle' });
-    s += `<text x="${CX}" y="${y0 + 322}" text-anchor="middle" font-family="${SANS}" font-size="17" font-weight="800" fill="${EQ.o.accent}">${O.esc(tr(EQ.fort))}<tspan fill="${BLANC}">${O.EN ? '!' : ' !'}</tspan></text>`;
-    page.push(s);
+    s += entree(4, 0, 3, objet, { grossit: true, cx: CX, cy: oy });
+    let phrase = b(CX, y0 + 300, 'C’est comme soulever', 17, { ancre: 'middle' });
+    phrase += `<text x="${CX}" y="${y0 + 322}" text-anchor="middle" font-family="${SANS}" font-size="17" font-weight="800" fill="${EQ.o.accent}">${O.esc(tr(EQ.fort))}<tspan fill="${BLANC}">${O.EN ? '!' : ' !'}</tspan></text>`;
+    page.push(s + entree(4, 2, 3, phrase));
   }
   // 6 · la série
   {
     const y0 = MIL - 92;
-    page.push(`<g transform="translate(${CX - 62},${y0 + 40})" fill="none" stroke="${BLANC}" stroke-width="5" stroke-linejoin="round"><path d="M0 -44 C10 -22 30 -12 30 12 A30 30 0 0 1 -30 12 C-30 0 -24 -10 -15 -18 C-14 -8 -9 -2 -3 0 C-9 -16 -6 -30 0 -44 Z"/></g>
-      ${b(CX - 20, y0 + 74, String(SERIE), 94, { extra: 'letter-spacing="-2.8"' })}
-      ${tr('Série|hebdomadaire !').split('|').map((l, i) => brut(CX, y0 + 124 + i * 26, l, 22, { ancre: 'middle' })).join('')}`);
+    page.push(entree(5, 0, 3, `<g transform="translate(${CX - 62},${y0 + 40})" fill="none" stroke="${BLANC}" stroke-width="5" stroke-linejoin="round"><path d="M0 -44 C10 -22 30 -12 30 12 A30 30 0 0 1 -30 12 C-30 0 -24 -10 -15 -18 C-14 -8 -9 -2 -3 0 C-9 -16 -6 -30 0 -44 Z"/></g>
+      ${b(CX - 20, y0 + 74, String(SERIE), 94, { extra: 'letter-spacing="-2.8"' })}`, { grossit: true, cx: CX, cy: y0 + 40 })
+      + entree(5, 2, 3, `${tr('Série|hebdomadaire !').split('|').map((l, i) => brut(CX, y0 + 124 + i * 26, l, 22, { ancre: 'middle' })).join('')}`));
   }
   // 7 · les muscles
   // Un axe, une figurine : le fond (buste ou jambes, de face ou de dos) et le calque du muscle.
@@ -269,8 +291,9 @@ module.exports = (O) => {
       s += muscleFig ? corpsFig + muscleFig : b(x, y + 3.5, a[0], 9.6, { poids: 700, ancre: 'middle' });
     });
     const ly = cy + r + 62;
-    s += `<circle cx="${CX - 92}" cy="${ly - 4.5}" r="4" fill="#4D8DFF"/>${b(CX - 82, ly, 'Septembre', 13, { poids: 700 })}
-      <circle cx="${CX + 26}" cy="${ly - 4.5}" r="4" fill="#A0A0AA"/>${b(CX + 36, ly, 'Août', 13, { poids: 700, couleur: ENCRE2 })}`;
+    s = entree(6, 0, 3, s, { grossit: true, cx: CX, cy });
+    s += entree(6, 2, 3, `<circle cx="${CX - 92}" cy="${ly - 4.5}" r="4" fill="#4D8DFF"/>${b(CX - 82, ly, 'Septembre', 13, { poids: 700 })}
+      <circle cx="${CX + 26}" cy="${ly - 4.5}" r="4" fill="#A0A0AA"/>${b(CX + 36, ly, 'Août', 13, { poids: 700, couleur: ENCRE2 })}`);
     page.push(s);
   }
   // 8 · les records
@@ -281,7 +304,7 @@ module.exports = (O) => {
     s += b(G + 50, y0 + 71, `${NB_RECORDS} nouveaux records`, 19);
     s += `<rect x="${G}" y="${y0 + 100}" width="100" height="2" fill="${BLANC}"/>`;
     s += b(G, y0 + 130, 'Exercice', 12.6) + b(D, y0 + 130, 'Meilleure série', 12.6, { ancre: 'end' });
-    RECORDS.forEach(([nom, serie], i) => { s += b(G, y0 + 158 + i * 28, court(nom, 28), 11) + b(D, y0 + 158 + i * 28, serie, 11, { poids: 600, ancre: 'end' }); });
+    RECORDS.forEach(([nom, serie], i) => { s += entree(7, i, RECORDS.length, b(G, y0 + 158 + i * 28, court(nom, 28), 11) + b(D, y0 + 158 + i * 28, serie, 11, { poids: 600, ancre: 'end' })); });
     page.push(s);
   }
   // 9 · les favoris
@@ -289,12 +312,14 @@ module.exports = (O) => {
     const y0 = MIL - 196;
     let s = `<g transform="translate(${CX},${y0 + 34}) skewY(-8)"><rect x="${-SL / 2 - 10}" y="-26" width="${SL + 20}" height="52" fill="#E9FBF8"/>${t(0, 4.5, 'TOP EXERCICES DE SEPTEMBRE', { taille: 12.6, couleur: '#0D2A2A', poids: 800, ancre: 'middle', extra: 'letter-spacing="0.3"' })}</g>`;
     FAVORIS.forEach(([nom, n, id], i) => {
-      const y = y0 + 100 + i * 57;
+      const y = y0 + 100 + i * 57, dejaLa = s;
+      s = '';
       s += b(G + 7, y + 31, String(i + 1), 18, { ancre: 'middle' });
       const POSES = { 'developpe-couche': 'bench-press', 'developpe-incline-halteres': 'incline-db-press', 'developpe-militaire': 'overhead-press', 'extension-triceps-poulie-haute': 'triceps-pushdown', 'ecarte-a-la-poulie-vis-a-vis': 'cable-fly' };
       const posee = POSES[id] && O.photo(POSES[id], G + 26, y, 48, { rayon: 9, fond: '#E9FBF8' });
       s += posee || `<rect x="${G + 26}" y="${y}" width="48" height="48" rx="9" fill="#E9FBF8"/><g transform="translate(${G + 50},${y + 24}) scale(0.72)" fill="none" stroke="#0D2A2A" stroke-width="2.8" stroke-linecap="round"><path d="M-12 0 H12 M-15 -10 V10 M-21 -6 V6 M15 -10 V10 M21 -6 V6"/></g>`;
       s += b(G + 86, y + 22, court(nom, 30), 10.8, { poids: 700 }) + b(G + 86, y + 38, `${n} séries`, 10, { poids: 600, couleur: ENCRE2 });
+      s = dejaLa + entree(8, i, FAVORIS.length, s);
     });
     page.push(s);
   }
@@ -303,10 +328,10 @@ module.exports = (O) => {
     const y0 = MIL - 186;
     const bloc = (x, y, titre, valeur, unite, deja) => `${deja ? brut(x, y, titre, 11.8) : b(x, y, titre, 11.8)}<text x="${x}" y="${y + 33}" font-family="${SANS}" font-size="30.6" font-weight="800" fill="${BLANC}" letter-spacing="-0.6">${valeur}${unite ? `<tspan font-size="14.4" letter-spacing="0"> ${O.esc(deja ? unite : tr(unite))}</tspan>` : ''}</text>`;
     let s = haltere(G + 20, y0 + 6, 1.1) + titreMois(G + 54, y0, 22.5);
-    s += bloc(G, y0 + 62, 'Entraînements', M.nbSeances) + ecartLigne(G, y0 + 112, ECART_SEANCES, 'du mois dernier', 'start');
-    s += bloc(G, y0 + 142, 'Volume', nombre(VOLUME), 'kg') + ecartLigne(G, y0 + 192, ECART_VOLUME, 'du mois dernier', 'start');
-    s += bloc(G, y0 + 222, 'Temps', Math.floor(MINUTES / 60), 'heures');
-    s += bloc(G, y0 + 290, 'Records', NB_RECORDS) + bloc(G + W / 2, y0 + 290, tr('Série|sem.').split('|')[0], SERIE, tr('Série|sem.').split('|')[1], true);
+    s += entree(9, 0, 4, bloc(G, y0 + 62, 'Entraînements', M.nbSeances) + ecartLigne(G, y0 + 112, ECART_SEANCES, 'du mois dernier', 'start'));
+    s += entree(9, 1, 4, bloc(G, y0 + 142, 'Volume', nombre(VOLUME), 'kg') + ecartLigne(G, y0 + 192, ECART_VOLUME, 'du mois dernier', 'start'));
+    s += entree(9, 2, 4, bloc(G, y0 + 222, 'Temps', Math.floor(MINUTES / 60), 'heures'));
+    s += entree(9, 3, 4, bloc(G, y0 + 290, 'Records', NB_RECORDS) + bloc(G + W / 2, y0 + 290, tr('Série|sem.').split('|')[0], SERIE, tr('Série|sem.').split('|')[1], true));
     page.push(s);
   }
   let ecran = '';
@@ -387,5 +412,5 @@ module.exports = (O) => {
   corps += `<rect x="1" y="66" width="1278" height="${860 - 67}" rx="16" fill="${FOND}" opacity="1">${fondu('opacity', C, [[0, 1], [0.012, 0], [FIN, 0], [0.994, 1], [1, 1]])}</rect>`;
 
   svg('resume.svg', 1280, 860, corps,
-    `Le résumé mensuel, façon story, sur un téléphone animé. Dix pages se suivent, une touche sur l’écran pour avancer, son tiers gauche pour revenir, sans minuterie : l’ouverture ; les séances de septembre 2026, une ligne chacune avec sa durée et son volume, puis le total, ${duree(MINUTES)} et ${nombre(VOLUME)} kg ; la régularité, ${M.nbSeances} entraînements, ${ECART_SEANCES} % de plus qu’en août, et le calendrier du mois, les jours d’entraînement en vert ; le volume, ${nombre(VOLUME)} kg, ${ECART_VOLUME} % de plus qu’en août, et douze mois en barres ; le volume en objets ; la série, ${SERIE} semaines d’affilée ; les muscles, une toile à neuf axes devant celle du mois d’avant ; les records, ${NB_RECORDS} nouveaux ; les cinq exercices favoris ; le résumé à partager. Ce sont les chiffres de la démo de l’application, les mêmes que dans les deux films posés dessous. La cinquième page convertit le volume en un objet parmi 25, du burger de 250 g à la statue de la Liberté de 225 tonnes. Un objet est gardé si le volume divisé par sa masse va de 0,93 à 99,5 : ici ${EQ.lisibles.length} objets, de ${borne(VOLUME / 99.5)} à ${borne(VOLUME / 0.93)}. Le multiple est arrondi à l’entier s’il s’écarte de 8 % au plus ou dès 10, sinon à une décimale ; les entiers passent d’abord, du plus juste au moins juste, puis le plus petit multiple ; la statue de la Liberté, en pourcentage, ferme la liste. La graine du mois, ${AN} × 12 + ${MOIS} = ${nombre(GRAINE)}, désigne le choix n° ${EQ.i + 1} sur ${EQ.nb} : ${EQ.etiquette} ${EQ.o.pluriel}, « C’est comme soulever ${EQ.fort} ! ». Une graine sur six sort un burger ou une baguette. Le résumé annuel suit la même mécanique, avec l’année pour graine : pour ${AN} jusqu’ici, ${nombre(VOLUME_AN)} kg, soit ${EQ_AN.etiquette} ${EQ_AN.o.pluriel}.`);
+    `Le résumé mensuel, façon story, sur un téléphone animé. Dix pages se suivent, une touche sur l’écran pour avancer, son tiers gauche pour revenir, sans minuterie, et chaque page se construit en une seconde et demie quand on y arrive : l’ouverture, dont les sept barres montent ; les séances de septembre 2026, une ligne chacune avec sa durée et son volume, puis le total, ${duree(MINUTES)} et ${nombre(VOLUME)} kg ; la régularité, ${M.nbSeances} entraînements, ${ECART_SEANCES} % de plus qu’en août, et le calendrier du mois, dont les jours d’entraînement s’allument en vert l’un après l’autre ; le volume, ${nombre(VOLUME)} kg, ${ECART_VOLUME} % de plus qu’en août, et douze mois en barres qui s’allongent ; le volume en objets ; la série, ${SERIE} semaines d’affilée ; les muscles, une toile à neuf axes devant celle du mois d’avant ; les records, ${NB_RECORDS} nouveaux ; les cinq exercices favoris ; le résumé à partager. Ce sont les chiffres de la démo de l’application, les mêmes que dans les deux films posés dessous. La cinquième page convertit le volume en un objet parmi 25, du burger de 250 g à la statue de la Liberté de 225 tonnes. Un objet est gardé si le volume divisé par sa masse va de 0,93 à 99,5 : ici ${EQ.lisibles.length} objets, de ${borne(VOLUME / 99.5)} à ${borne(VOLUME / 0.93)}. Le multiple est arrondi à l’entier s’il s’écarte de 8 % au plus ou dès 10, sinon à une décimale ; les entiers passent d’abord, du plus juste au moins juste, puis le plus petit multiple ; la statue de la Liberté, en pourcentage, ferme la liste. La graine du mois, ${AN} × 12 + ${MOIS} = ${nombre(GRAINE)}, désigne le choix n° ${EQ.i + 1} sur ${EQ.nb} : ${EQ.etiquette} ${EQ.o.pluriel}, « C’est comme soulever ${EQ.fort} ! ». Une graine sur six sort un burger ou une baguette. Le résumé annuel suit la même mécanique, avec l’année pour graine : pour ${AN} jusqu’ici, ${nombre(VOLUME_AN)} kg, soit ${EQ_AN.etiquette} ${EQ_AN.o.pluriel}.`);
 };
