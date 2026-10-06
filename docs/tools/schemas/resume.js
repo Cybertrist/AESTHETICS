@@ -174,7 +174,14 @@ module.exports = (O) => {
   const b = (x, y, s, taille, o = {}) => t(x, y, s, { taille, couleur: BLANC, poids: 800, ...o });
   // « Série » veut dire ailleurs une série d'exercice : ici la série de semaines se traduit avec son voisin, d'un bloc.
   const brut = (x, y, s, taille, { couleur = BLANC, poids = 800, ancre = 'start' } = {}) => `<text x="${x}" y="${y}" font-family="${SANS}" font-size="${taille}" font-weight="${poids}" fill="${couleur}" text-anchor="${ancre}">${O.esc(s)}</text>`;
-  const haltere = (x, y, k = 1) => `<g transform="translate(${x},${y}) scale(${k}) rotate(-45)" fill="none" stroke="${BLANC}" stroke-width="2.6" stroke-linecap="round"><path d="M-12 0 H12 M-15 -10 V10 M-21 -6 V6 M15 -10 V10 M21 -6 V6"/></g>`;
+  // L'haltère de l'appli (`AppIcone.haltere`, lib/core/ui/icones.dart) : quatre
+  // disques arrondis et la barre, sur une grille de 22, penchés de 45 degrés.
+  // Centré sur (x, y), de côté [taille].
+  const haltere = (x, y, taille) => `<g transform="translate(${x - taille / 2},${y - taille / 2}) scale(${(taille / 22).toFixed(3)}) rotate(-45 11 11)" fill="none" stroke="${BLANC}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="1.8" y="8.6" width="3" height="4.8" rx="1.3"/><rect x="4.8" y="6" width="3.4" height="10" rx="1.5"/><rect x="13.8" y="6" width="3.4" height="10" rx="1.5"/><rect x="17.2" y="8.6" width="3" height="4.8" rx="1.3"/><path d="M8.2 11 H13.8"/></g>`;
+  // La flamme de la page « série » (le tracé de `PageSerie`), même grille.
+  const flamme = (x, y, taille) => `<g transform="translate(${x - taille / 2},${y - taille / 2}) scale(${(taille / 22).toFixed(3)})" fill="none" stroke="${BLANC}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 2.5c.6 3.4 5 5 5 10a5 5 0 0 1-10 0c0-2 .9-3.3 2.2-4.4.2 1.3.9 2.2 1.7 2.4C9.3 7.5 9.9 4.7 11 2.5z"/></g>`;
   const ecartLigne = (x, y, e, suite, ancre = 'middle') => {
     const l = (`${e} % ${tr(suite)}`.length * 5.9 + 14) * (ancre === 'middle' ? 0.5 : 0);
     return `<path d="M${x - l} ${y} h9 l-4.5 -7 z" fill="${HAUSSE}"/>
@@ -204,7 +211,7 @@ module.exports = (O) => {
   {
     const y0 = MIL - 196, e = 5.4, c = (W - 6 * e) / 7;
     let s = b(CX, y0, 'Entraînements en septembre', 14.5, { poids: 700, ancre: 'middle' });
-    s += haltere(CX - 34, y0 + 46, 1.25) + b(CX + 6, y0 + 64, String(M.nbSeances), 54, { extra: 'letter-spacing="-1.6"' });
+    s += haltere(CX - 36, y0 + 44, 42) + b(CX + 6, y0 + 64, String(M.nbSeances), 54, { extra: 'letter-spacing="-1.6"' });
     s += ecartLigne(CX, y0 + 92, ECART_SEANCES, 'par rapport à août');
     tr('L|M|M|J|V|S|D').split('|').forEach((l, i) => { s += brut(G + i * (c + e) + c / 2, y0 + 128, l, 9.4, { couleur: ENCRE2, poids: 700, ancre: 'middle' }); });
     const decalage = (new Date(AN, MOIS - 1, 1).getDay() + 6) % 7, nb = new Date(AN, MOIS, 0).getDate();
@@ -264,7 +271,7 @@ module.exports = (O) => {
   // 6 · la série
   {
     const y0 = MIL - 92;
-    page.push(entree(5, 0, 3, `<g transform="translate(${CX - 62},${y0 + 40})" fill="none" stroke="${BLANC}" stroke-width="5" stroke-linejoin="round"><path d="M0 -44 C10 -22 30 -12 30 12 A30 30 0 0 1 -30 12 C-30 0 -24 -10 -15 -18 C-14 -8 -9 -2 -3 0 C-9 -16 -6 -30 0 -44 Z"/></g>
+    page.push(entree(5, 0, 3, `${flamme(CX - 58, y0 + 40, 72)}
       ${b(CX - 20, y0 + 74, String(SERIE), 94, { extra: 'letter-spacing="-2.8"' })}`, { grossit: true, cx: CX, cy: y0 + 40 })
       + entree(5, 2, 3, `${tr('Série|hebdomadaire !').split('|').map((l, i) => brut(CX, y0 + 124 + i * 26, l, 22, { ancre: 'middle' })).join('')}`));
   }
@@ -327,7 +334,7 @@ module.exports = (O) => {
   {
     const y0 = MIL - 186;
     const bloc = (x, y, titre, valeur, unite, deja) => `${deja ? brut(x, y, titre, 11.8) : b(x, y, titre, 11.8)}<text x="${x}" y="${y + 33}" font-family="${SANS}" font-size="30.6" font-weight="800" fill="${BLANC}" letter-spacing="-0.6">${valeur}${unite ? `<tspan font-size="14.4" letter-spacing="0"> ${O.esc(deja ? unite : tr(unite))}</tspan>` : ''}</text>`;
-    let s = haltere(G + 20, y0 + 6, 1.1) + titreMois(G + 54, y0, 22.5);
+    let s = haltere(G + 20, y0 + 4, 37) + titreMois(G + 54, y0, 22.5);
     s += entree(9, 0, 4, bloc(G, y0 + 62, 'Entraînements', M.nbSeances) + ecartLigne(G, y0 + 112, ECART_SEANCES, 'du mois dernier', 'start'));
     s += entree(9, 1, 4, bloc(G, y0 + 142, 'Volume', nombre(VOLUME), 'kg') + ecartLigne(G, y0 + 192, ECART_VOLUME, 'du mois dernier', 'start'));
     s += entree(9, 2, 4, bloc(G, y0 + 222, 'Temps', Math.floor(MINUTES / 60), 'heures'));
