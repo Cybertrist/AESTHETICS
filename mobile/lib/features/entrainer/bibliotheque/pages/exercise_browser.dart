@@ -819,8 +819,11 @@ class _Filtres extends StatelessWidget {
   /// On en coche plusieurs, puis on valide.
   Future<void> _materiel(BuildContext context) async {
     final counts = <String, int>{};
+    // Un exercice compte sous chaque matériel qu'il demande.
     for (final e in repo.all) {
-      counts[e.famille] = (counts[e.famille] ?? 0) + 1;
+      for (final m in e.materiels) {
+        counts[m] = (counts[m] ?? 0) + 1;
+      }
     }
     final r = await ouvrirFiltreMateriel(
       context,

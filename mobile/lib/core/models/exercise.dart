@@ -62,6 +62,38 @@ abstract final class Equipements {
   }
 }
 
+/// Ce que le catalogue ne dit pas de chaque exercice, relevé à part
+/// (`assets/data/exercices_plus.json`) : s'il se fait un côté après l'autre,
+/// et tout le matériel qu'il demande. Chargé avec le catalogue ; un exercice
+/// absent de la table (un exercice personnel) garde les règles par défaut.
+abstract final class ExercicesPlus {
+  static Map<String, ({bool unilateral, Set<String> materiels})> _table = const {};
+
+  /// Lit la table : `{ "id": { "u": true, "m": ["halteres", "banc"] } }`.
+  static void charger(Object? json) {
+    final table = <String, ({bool unilateral, Set<String> materiels})>{};
+    if (json is Map) {
+      for (final e in json.entries) {
+        final v = e.value;
+        if (v is! Map) continue;
+        final m = v['m'];
+        table['${e.key}'] = (
+          unilateral: v['u'] == true,
+          materiels: m is List ? {for (final x in m) '$x'} : const <String>{},
+        );
+      }
+    }
+    _table = table;
+  }
+
+  static bool? unilateral(String id) => _table[id]?.unilateral;
+
+  static Set<String>? materiels(String id) {
+    final m = _table[id]?.materiels;
+    return m == null || m.isEmpty ? null : m;
+  }
+}
+
 /// Médias d'un exercice : animation, vidéo ou images (URL ou asset).
 class ExerciseMedia {
   const ExerciseMedia({this.gif, this.gifSecours, this.mp4, this.images = const [], this.imagesLocales = const [], this.credit});
@@ -200,10 +232,17 @@ class Exercise {
   /// bras, squat bulgare, curl concentré...) : ses séries se notent alors
   /// par paires, gauche puis droite. Déduit du nom, faute d'indication dans
   /// le catalogue ; les exercices chronométrés n'en font pas partie.
-  bool get unilateral => suivi.usesReps && (_unCoteParId.contains(id) || _unCote.hasMatch(nom) || _unCote.hasMatch(nomEn ?? ''));
+  bool get unilateral => suivi.usesReps && (ExercicesPlus.unilateral(id) ?? (_unCote.hasMatch(nom) || _unCote.hasMatch(nomEn ?? '')));
 
-  /// Les exercices à un côté que leur nom ne trahit pas.
-  static const _unCoteParId = {'elevations-laterales-a-la-poulie'};
+  /// Tout le matériel que demande l'exercice : un développé couché aux
+  /// haltères demande des haltères et un banc. C'est ce que lit le filtre
+  /// « Matériel », où l'exercice apparaît sous chacun. Sans indication du
+  /// catalogue, sa seule [famille].
+  Set<String> get materiels => ExercicesPlus.materiels(id) ?? {famille};
+
+  /// Vrai si l'exercice se charge avec des haltères, quel que soit le reste
+  /// du matériel (banc, ballon...).
+  bool get auxHalteres => materiels.contains('halteres');
 
   List<Muscle> get tousMuscles => [...musclesPrincipaux, ...musclesSecondaires];
 

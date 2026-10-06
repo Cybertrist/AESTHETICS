@@ -91,7 +91,7 @@ class ExerciseRepo extends ChangeNotifier {
       it = it.where((e) => (principauxSeulement ? e.musclesPrincipaux : e.tousMuscles).any(muscles.contains));
     }
     if (equipements.isNotEmpty) {
-      it = it.where((e) => equipements.contains(e.famille));
+      it = it.where((e) => e.materiels.any(equipements.contains));
     }
     if (query.trim().isEmpty) return it.toList();
     final scored = <(Exercise, int)>[];

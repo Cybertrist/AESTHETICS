@@ -22,10 +22,11 @@ enum SetType {
 
   const SetType(this.label, this.short, this.argb, this.aide);
 
-  /// Le type à reprendre quand une série sert de modèle à la suivante (la
-  /// séance d'après, la routine). « Échec » dit comment une série s'est
-  /// finie, pas ce qui est prévu : elle redevient une série normale. Les
-  /// autres types décrivent la série elle-même et se gardent.
+  /// Le type à reprendre quand une série faite sert de modèle à la suivante
+  /// (un exercice ajouté d'après la dernière fois, une séance refaite, une
+  /// routine tirée d'une séance). « Échec » dit comment une série s'est
+  /// finie, pas ce qui est prévu : elle redevient une série normale. Une
+  /// routine qui prévoit elle-même une série en échec la garde, elle.
   SetType get aReprendre => this == SetType.echec ? SetType.normale : this;
   final String label;
 

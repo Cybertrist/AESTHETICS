@@ -259,7 +259,7 @@ abstract final class Surcharge {
           (ex.equipement == 'barre' || ex.equipement == 'machine' || ex.equipement == 'smith');
       // Aux haltères, la charge suivante est l'haltère d'après sur le râtelier,
       // pas la charge plus un pas de disques.
-      final halteres = ex?.equipement == 'halteres';
+      final halteres = ex?.auxHalteres ?? false;
       final pas = halteres ? haltereSuivant(top) - top : (jambes ? increment * 2 : increment);
       String charge(double p) => '$signe${Fmt.poids(p, unite)}';
 
@@ -474,7 +474,9 @@ abstract final class MajRoutine {
       final poids = travail && sug?.poids != null ? sug!.poids : f.poids;
       final gardeFourchette = p?.repsMax != null && f.reps != null && f.reps! >= (p!.reps ?? 0) && f.reps! <= p.repsMax!;
       out.add(PlannedSet(
-        type: f.type.aReprendre,
+        // Une série finie en échec ne change pas le plan : la routine garde
+        // son type, « Échec » compris si c'est elle qui le prévoit.
+        type: f.type == SetType.echec ? (p?.type ?? SetType.normale) : f.type,
         poids: poids,
         reps: gardeFourchette ? p.reps : (travail && sug?.reps != null ? sug!.reps : f.reps),
         repsMax: gardeFourchette ? p.repsMax : null,

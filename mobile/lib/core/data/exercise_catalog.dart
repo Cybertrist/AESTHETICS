@@ -10,7 +10,15 @@ import '../models/exercise.dart';
 abstract final class ExerciseCatalog {
   static const assetPath = 'assets/data/exercises.json';
 
+  /// Les compléments du catalogue : unilatéral, tout le matériel.
+  static const plusPath = 'assets/data/exercices_plus.json';
+
   static Future<List<Exercise>> load({AssetBundle? bundle}) async {
+    try {
+      ExercicesPlus.charger(jsonDecode(await (bundle ?? rootBundle).loadString(plusPath, cache: false)));
+    } catch (_) {
+      // Sans la table, chaque exercice garde ses règles par défaut.
+    }
     try {
       final raw = await (bundle ?? rootBundle).loadString(assetPath, cache: false);
       // Plus de 1 300 exercices, environ 2 Mo : décodés hors du fil de l'interface.

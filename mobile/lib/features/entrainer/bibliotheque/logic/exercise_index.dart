@@ -201,7 +201,7 @@ class ExerciseIndex {
           .any(filtres.muscles.contains));
     }
     if (filtres.equipements.isNotEmpty) {
-      it = it.where((e) => filtres.equipements.contains(e.exercise.famille));
+      it = it.where((e) => e.exercise.materiels.any(filtres.equipements.contains));
     }
     if (filtres.categories.isNotEmpty) {
       it = it.where((e) => filtres.categories.contains(e.exercise.categorie));

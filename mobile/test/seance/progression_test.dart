@@ -1,6 +1,7 @@
 import 'package:aesthetic/core/data/data.dart';
 import 'package:aesthetic/core/logic/logic.dart';
 import 'package:aesthetic/core/models/models.dart';
+import 'package:aesthetic/features/entrainer/bibliotheque/logic/exercise_index.dart';
 import 'package:aesthetic/features/seance/logic/analyse.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -161,6 +162,41 @@ void main() {
     final suivante = await data.sessions.startFromRoutine(routine);
     expect([for (final x in suivante.exercices.single.series) x.type], [SetType.echauffement, SetType.normale, SetType.normale]);
     expect(suivante.exercices.single.series.last.poids, 3.3);
+  });
+
+  test('une routine qui prévoit une série en échec la garde ; un échec de séance ne change pas la routine', () async {
+    const elev = 'elevations-laterales';
+    final routine = Routine(id: 'r', nom: 'Épaules', creeLe: DateTime(2026), exercices: const [
+      RoutineExercise(id: 'a', exerciseId: elev, series: [PlannedSet(poids: 8, reps: 12), PlannedSet(type: SetType.echec, poids: 8, reps: 12)]),
+    ]);
+    // Prévue dans la routine, la série en échec revient à chaque séance.
+    final lancee = await data.sessions.startFromRoutine(routine);
+    expect([for (final x in lancee.exercices.single.series) x.type], [SetType.normale, SetType.echec]);
+    // En séance, la première série finit elle aussi en échec : la routine, mise à jour, garde son plan.
+    final faite = lancee.copyWith(exercices: [
+      lancee.exercices.single.copyWith(series: [
+        for (final x in lancee.exercices.single.series) x.copyWith(type: SetType.echec, fait: true),
+      ]),
+    ]);
+    final apres = MajRoutine.appliquer(routine, faite);
+    expect([for (final p in apres.exercices.single.series) p.type], [SetType.normale, SetType.echec]);
+  });
+
+  test('matériel : un exercice apparaît sous chaque matériel qu’il demande', () {
+    final dcHalteres = data.exercises.byId('developpe-couche-halteres')!;
+    expect(dcHalteres.materiels, {'halteres', 'banc'});
+    expect(dcHalteres.auxHalteres, isTrue);
+    expect(data.exercises.byId('squat')!.materiels, {'barre'});
+    final index = ExerciseIndex();
+    List<String> filtre(Set<String> materiels) => index
+        .filtrer(catalogue: data.exercises.catalogue, perso: const [], filtres: LibraryFilters(equipements: materiels), favoris: const {}, recents: const [], frequences: const {})
+        .map((e) => e.id)
+        .toList();
+    expect(filtre({'banc'}), containsAll(['developpe-couche-halteres', 'developpe-couche', 'curl-incline']));
+    expect(filtre({'halteres'}), contains('developpe-couche-halteres'));
+    expect(filtre({'banc'}), isNot(contains('squat')));
+    // Un exercice personnel, hors de la table, garde sa seule famille.
+    expect(const Exercise(id: 'perso', nom: 'Mon truc', equipement: 'poulie', perso: true).materiels, {'poulie'});
   });
 
   group('unilatéral', () {
