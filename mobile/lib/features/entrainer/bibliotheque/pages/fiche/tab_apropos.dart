@@ -58,7 +58,8 @@ class TabAPropos extends StatelessWidget {
     final repo = context.watch<ExerciseRepo>();
     final favori = repo.isFavori(e.id);
     final alternatives = exercicesAlternatifs(e, repo.all);
-    final erreurs = ErreursFrequentes.pour(e);
+    // Les erreurs écrites pour cet exercice ; à défaut (un exercice personnel), les règles générales.
+    final erreurs = ExercicesPlus.erreurs(e.id) ?? ErreursFrequentes.pour(e);
     final notes = ExerciseNotes.of(context.read<Store>());
     final couleurs = <Muscle, Teinte>{
       // Les principaux se peignent en dernier : dans le pack, certains calques se recouvrent

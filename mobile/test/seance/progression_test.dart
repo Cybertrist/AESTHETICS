@@ -199,6 +199,27 @@ void main() {
     expect(const Exercise(id: 'perso', nom: 'Mon truc', equipement: 'poulie', perso: true).materiels, {'poulie'});
   });
 
+  test('fiches relues : les erreurs à éviter parlent du bon matériel, les corrections s’appliquent', () {
+    final dc = data.exercises.byId('developpe-couche-halteres')!;
+    final erreurs = ExercicesPlus.erreurs(dc.id)!;
+    expect(erreurs.length, inInclusiveRange(2, 4));
+    expect(erreurs.any((x) => x.toLowerCase().contains('barre')), isFalse, reason: 'aux haltères, pas de barre');
+    expect(erreurs.any((x) => x.contains('Haltères')), isTrue);
+    // Chaque exercice du catalogue a sa liste, et aucune fiche sans barre n'en parle.
+    for (final e in data.exercises.catalogue) {
+      final l = ExercicesPlus.erreurs(e.id);
+      expect(l, isNotNull, reason: e.id);
+      if (e.materiels.every((m) => const {'halteres', 'banc', 'kettlebell', 'poids du corps', 'elastique', 'mini-bande', 'ballon'}.contains(m))) {
+        expect(l!.any((x) => RegExp(r'\bbarre\b', caseSensitive: false).hasMatch(x)), isFalse, reason: '${e.id} : $l');
+      }
+    }
+    // Des corrections de fiche : des étapes réécrites, des muscles, un suivi, un nom.
+    expect(data.exercises.byId('decline-bench-press')!.instructions.join(' ').toLowerCase(), isNot(contains('barre')));
+    expect(data.exercises.byId('hip-thrust')!.musclesPrincipaux, [Muscle.fessiers]);
+    expect(data.exercises.byId('assisted-dips')!.suivi, ExerciseTracking.poidsDuCorpsAssiste);
+    expect(data.exercises.byId('curl-a-l-elastique')!.nom, "Leg curl debout à l'élastique");
+  });
+
   group('unilatéral', () {
     test('le catalogue : un bras ou une jambe à la fois, jamais un exercice chronométré', () {
       bool uni(String id) {

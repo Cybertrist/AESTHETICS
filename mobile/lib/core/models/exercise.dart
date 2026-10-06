@@ -62,35 +62,59 @@ abstract final class Equipements {
   }
 }
 
-/// Ce que le catalogue ne dit pas de chaque exercice, relevé à part
-/// (`assets/data/exercices_plus.json`) : s'il se fait un côté après l'autre,
-/// et tout le matériel qu'il demande. Chargé avec le catalogue ; un exercice
-/// absent de la table (un exercice personnel) garde les règles par défaut.
+/// Ce que le catalogue ne dit pas de chaque exercice, ou dit mal, relevé à
+/// part (`assets/data/exercices_plus.json`) après une relecture exercice par
+/// exercice : s'il se fait un côté après l'autre, tout le matériel qu'il
+/// demande, ses erreurs à éviter, et les corrections de sa fiche (étapes,
+/// conseils, muscles). Chargé avec le catalogue ; un exercice absent de la
+/// table (un exercice personnel) garde les règles par défaut.
 abstract final class ExercicesPlus {
-  static Map<String, ({bool unilateral, Set<String> materiels})> _table = const {};
+  static Map<String, Map<String, dynamic>> _table = const {};
 
-  /// Lit la table : `{ "id": { "u": true, "m": ["halteres", "banc"] } }`.
+  /// Lit la table : `{ "id": { "u": true, "m": ["halteres", "banc"],
+  /// "e": ["Fesses qui décollent du banc."], "i": [...], "c": [...],
+  /// "mp": [...], "ms": [...], "s": "repsSeules", "n": "Nom", "cat": "ischios" } }`.
   static void charger(Object? json) {
-    final table = <String, ({bool unilateral, Set<String> materiels})>{};
+    final table = <String, Map<String, dynamic>>{};
     if (json is Map) {
       for (final e in json.entries) {
         final v = e.value;
-        if (v is! Map) continue;
-        final m = v['m'];
-        table['${e.key}'] = (
-          unilateral: v['u'] == true,
-          materiels: m is List ? {for (final x in m) '$x'} : const <String>{},
-        );
+        if (v is Map) table['${e.key}'] = Map<String, dynamic>.from(v);
       }
     }
     _table = table;
   }
 
-  static bool? unilateral(String id) => _table[id]?.unilateral;
+  static List<String>? _liste(String id, String cle) {
+    final v = _table[id]?[cle];
+    if (v is! List || v.isEmpty) return null;
+    return [for (final x in v) '$x'];
+  }
 
-  static Set<String>? materiels(String id) {
-    final m = _table[id]?.materiels;
-    return m == null || m.isEmpty ? null : m;
+  static bool? unilateral(String id) => _table.containsKey(id) ? _table[id]!['u'] == true : null;
+
+  static Set<String>? materiels(String id) => _liste(id, 'm')?.toSet();
+
+  /// Les erreurs à éviter, écrites pour cet exercice et son matériel.
+  static List<String>? erreurs(String id) => _liste(id, 'e');
+
+  /// L'exercice du catalogue avec les corrections de sa fiche.
+  static Exercise corriger(Exercise e) {
+    if (!_table.containsKey(e.id)) return e;
+    List<Muscle>? muscles(String cle) {
+      final noms = _liste(e.id, cle);
+      if (noms == null) return null;
+      final connus = Muscle.values.asNameMap();
+      final out = [for (final n in noms) if (connus[n] != null) connus[n]!];
+      return out.isEmpty ? null : out;
+    }
+
+    final v = _table[e.id]!;
+    final i = _liste(e.id, 'i'), c = _liste(e.id, 'c'), mp = muscles('mp'), ms = muscles('ms');
+    final nom = v['n'] is String ? v['n'] as String : null, categorie = v['cat'] is String ? v['cat'] as String : null;
+    final suivi = ExerciseTracking.values.asNameMap()[v['s']];
+    if (i == null && c == null && mp == null && ms == null && nom == null && categorie == null && suivi == null) return e;
+    return e.copyWith(nom: nom, categorie: categorie, suivi: suivi, instructions: i, conseils: c, musclesPrincipaux: mp, musclesSecondaires: ms);
   }
 }
 

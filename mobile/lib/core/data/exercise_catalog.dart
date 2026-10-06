@@ -22,7 +22,8 @@ abstract final class ExerciseCatalog {
     try {
       final raw = await (bundle ?? rootBundle).loadString(assetPath, cache: false);
       // Plus de 1 300 exercices, environ 2 Mo : décodés hors du fil de l'interface.
-      return await compute(_parse, raw, debugLabel: 'catalogue d\'exercices');
+      final catalogue = await compute(_parse, raw, debugLabel: 'catalogue d\'exercices');
+      return [for (final e in catalogue) ExercicesPlus.corriger(e)];
     } catch (_) {
       return [];
     }
