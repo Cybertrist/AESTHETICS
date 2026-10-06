@@ -50,6 +50,12 @@ RoutineDuJour appliquerProgression({
     final faites = dernier?.seriesFaites.where((s) => s.type.counts).toList() ?? const <WorkoutSet>[];
     var series = [...re.series];
     String? note;
+    // Aux haltères, on ne charge pas un pas de disques : on prend l'haltère
+    // suivant du râtelier, et tout arrondi tombe sur un haltère qui existe.
+    final halteres = ex?.auxHalteres ?? false;
+    double plus(double? base) => halteres && base != null ? Strength.haltereSuivant(base) - base : pas;
+    double arrondi(double kg) => halteres ? Strength.arrondirHaltere(kg) : Strength.arrondir(kg, pas);
+    final hausse = halteres ? 'haltère suivant' : '+${Fmt.n(pas)} kg';
 
     if (suivi.usesWeight && plan.progression != ProgressionType.aucune && faites.isNotEmpty) {
       switch (plan.progression) {
@@ -57,9 +63,9 @@ RoutineDuJour appliquerProgression({
           final reussi = _toutReussi(re.series, faites, (p) => p.reps);
           series = [
             for (var i = 0; i < series.length; i++)
-              series[i].type.counts ? _avecPoids(series[i], _poidsBase(series[i], i, faites), reussi ? pas : 0) : series[i],
+              series[i].type.counts ? _avecPoids(series[i], _poidsBase(series[i], i, faites), reussi ? plus(_poidsBase(series[i], i, faites)) : 0) : series[i],
           ];
-          note = reussi ? 'Réussi la dernière fois : +${Fmt.n(pas)} kg' : 'Même charge, objectif : toutes les répétitions';
+          note = reussi ? 'Réussi la dernière fois : $hausse' : 'Même charge, objectif : toutes les répétitions';
         case ProgressionType.doubleProgression:
           final haut = _toutReussi(re.series, faites, (p) => p.repsMax ?? p.reps);
           series = [
@@ -67,17 +73,17 @@ RoutineDuJour appliquerProgression({
               if (!series[i].type.counts)
                 series[i]
               else if (haut)
-                _avecPoids(series[i], _poidsBase(series[i], i, faites), pas).copyWith(reps: series[i].reps)
+                _avecPoids(series[i], _poidsBase(series[i], i, faites), plus(_poidsBase(series[i], i, faites))).copyWith(reps: series[i].reps)
               else
                 _avecPoids(series[i], _poidsBase(series[i], i, faites), 0).copyWith(
                   reps: _repsCible(series[i], i < faites.length ? faites[i].reps : faites.last.reps),
                 ),
           ];
-          note = haut ? 'Haut de fourchette atteint : +${Fmt.n(pas)} kg' : 'Une répétition de plus que la dernière fois';
+          note = haut ? 'Haut de fourchette atteint : $hausse' : 'Une répétition de plus que la dernière fois';
         case ProgressionType.ondulee:
           final unRm = faites.map((s) => s.poids == null || s.reps == null ? 0.0 : Strength.oneRepMax(s.poids!, s.reps!)).fold(0.0, (a, b) => a > b ? a : b);
           if (unRm > 0) {
-            final kg = Strength.arrondir(Strength.poidsPourReps(unRm, ondule!.reps) * 0.92, pas);
+            final kg = arrondi(Strength.poidsPourReps(unRm, ondule!.reps) * 0.92);
             series = [
               for (final s in series)
                 s.type.counts ? PlannedSet(type: s.type, poids: kg, reps: ondule.reps, rpe: ondule.rpe, dureeSec: s.dureeSec, distanceM: s.distanceM) : s,
@@ -102,7 +108,7 @@ RoutineDuJour appliquerProgression({
           else if (vus++ < garder)
             PlannedSet(
               type: s.type == SetType.echec ? SetType.normale : s.type,
-              poids: s.poids == null ? null : Strength.arrondir(s.poids! * 0.9, pas),
+              poids: s.poids == null ? null : arrondi(s.poids! * 0.9),
               reps: s.reps,
               repsMax: s.repsMax,
               dureeSec: s.dureeSec,

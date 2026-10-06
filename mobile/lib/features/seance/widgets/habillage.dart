@@ -388,7 +388,7 @@ String reposCourt(int sec) {
 
 /// Nombre de séries qui comptent (validées, hors échauffement) : la seule
 /// règle du module pour « séries », la même que le volume.
-int seriesComptees(WorkoutSession s) => s.exercices.fold(0, (a, e) => a + e.series.where((x) => x.fait && x.type.counts).length);
+int seriesComptees(WorkoutSession s) => s.exercices.fold(0, (a, e) => a + compterSeries(e.series.where((x) => x.fait).map((x) => x.type)));
 
 /// Minuteur « 01:56 ».
 String minSec(Duration d) {

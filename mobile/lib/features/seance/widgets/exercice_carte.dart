@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../../core/logic/unilateral.dart';
 import '../../../core/models/models.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/ui/ui.dart';
@@ -89,6 +90,16 @@ class ExerciceCarte extends StatelessWidget {
 
   /// Séries prévues par la routine, pour montrer la fourchette de répétitions.
   final List<PlannedSet>? plan;
+
+  /// Le plan en face des séries affichées : quand la séance a doublé les
+  /// séries d'un exercice unilatéral (gauche, droite), chaque série prévue
+  /// vaut pour sa paire.
+  List<PlannedSet>? get _planAligne {
+    final p = plan;
+    if (p == null) return null;
+    final cotes = se.series.any((x) => x.type == SetType.gauche || x.type == SetType.droite);
+    return cotes ? Unilateral.prevues(p) : p;
+  }
   final bool afficherRpe;
   final bool effortRir;
   final int position;
@@ -325,8 +336,8 @@ class ExerciceCarte extends StatelessWidget {
               suivi: suivi,
               unite: unite,
               precedent: precedentPour(se.series, i, precedent),
-              cibleReps: cibleRepsPour(plan, i),
-              repsPrevues: plan != null && i < plan!.length ? plan![i].reps : null,
+              cibleReps: cibleRepsPour(_planAligne, i),
+              repsPrevues: _planAligne != null && i < _planAligne!.length ? _planAligne![i].reps : null,
               afficherRpe: afficherRpe,
               effortRir: effortRir,
               alterne: i.isOdd,

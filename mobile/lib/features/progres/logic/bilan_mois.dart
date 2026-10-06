@@ -226,7 +226,7 @@ class BilanMois {
     final series = <String, int>{};
     for (final s in dans) {
       for (final e in s.exercices) {
-        final k = e.seriesFaites.where((x) => x.type.counts).length;
+        final k = compterSeries(e.seriesFaites.map((x) => x.type));
         if (k > 0) series[e.exerciseId] = (series[e.exerciseId] ?? 0) + k;
       }
     }

@@ -53,7 +53,24 @@ enum SetType {
 
   /// Les échauffements ne comptent ni dans le volume ni dans les records.
   bool get counts => this != echauffement;
+
+  /// Ce que pèse une série de ce type dans un compte de séries : rien pour
+  /// un échauffement, une demie pour un côté (une gauche et une droite font
+  /// une série), une sinon.
+  double get poidsSerie => switch (this) {
+        echauffement => 0,
+        gauche || droite => 0.5,
+        _ => 1,
+      };
 }
+
+/// Le nombre de séries de travail parmi ces types, en fraction : une paire
+/// gauche, droite compte pour une série, un côté seul pour une demie.
+double poidsDesSeries(Iterable<SetType> types) => types.fold(0.0, (a, t) => a + t.poidsSerie);
+
+/// Le même compte, pour l'affichage : arrondi à la série entière du dessus
+/// (un côté fait sans l'autre compte déjà pour une série).
+int compterSeries(Iterable<SetType> types) => poidsDesSeries(types).ceil();
 
 /// Photo ou vidéo jointe à une séance (chemin d'un fichier local).
 class SessionMedia {
@@ -594,7 +611,7 @@ class WorkoutSession {
 
   double get volume => exercices.fold(0.0, (a, e) => a + e.volume);
 
-  int get nbSeriesFaites => exercices.fold(0, (a, e) => a + e.seriesFaites.where((s) => s.type.counts).length);
+  int get nbSeriesFaites => exercices.fold(0, (a, e) => a + compterSeries(e.seriesFaites.map((s) => s.type)));
 
   int get nbReps => exercices.fold(
       0, (a, e) => a + e.seriesFaites.where((s) => s.type.counts).fold(0, (b, s) => b + (s.reps ?? 0)));

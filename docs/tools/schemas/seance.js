@@ -203,7 +203,7 @@ module.exports = (O) => {
   const MX = SX + 10, MY = SY + 424, ML = SL - 20, MB = (ML - 20 - 8) / 2;
   const onglets = [
     ['Accueil', (x, y, c) => `<path d="M${x - 7} ${y} l7 -6 l7 6 M${x - 5} ${y - 1} v7 h10 v-7" fill="none" stroke="${c}" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/>`],
-    ['Entraîner', (x, y, c) => `<path d="M${x - 5} ${y} h10 M${x - 7} ${y - 5} v10 M${x + 7} ${y - 5} v10 M${x - 10} ${y - 3} v6 M${x + 10} ${y - 3} v6" fill="none" stroke="${c}" stroke-width="1.9" stroke-linecap="round"/>`],
+    ['Entraînement', (x, y, c) => `<path d="M${x - 5} ${y} h10 M${x - 7} ${y - 5} v10 M${x + 7} ${y - 5} v10 M${x - 10} ${y - 3} v6 M${x + 10} ${y - 3} v6" fill="none" stroke="${c}" stroke-width="1.9" stroke-linecap="round"/>`],
     ['Progrès', (x, y, c) => `<path d="M${x - 6} ${y + 6} v-5 M${x} ${y + 6} v-12 M${x + 6} ${y + 6} v-8" fill="none" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/>`],
     ['Profil', (x, y, c) => `<circle cx="${x}" cy="${y - 3}" r="3.4" fill="none" stroke="${c}" stroke-width="1.7"/><path d="M${x - 7} ${y + 7} a7 6 0 0 1 14 0" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round"/>`],
   ];

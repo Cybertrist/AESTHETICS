@@ -161,7 +161,7 @@ class ExerciseStats {
 
   RecordLine? get chargeMax => _max('Charge max', (p) => p.chargeMax);
   RecordLine? get volumeSeance => _max('Volume en une séance', (p) => p.volume,
-      detail: (p) => Fmt.pluriel(p.exercise.series.where((s) => s.fait && s.type.counts).length, 'série'));
+      detail: (p) => Fmt.pluriel(compterSeries(p.exercise.series.where((s) => s.fait).map((s) => s.type)), 'série'));
   RecordLine? get meilleureSerie => _max('Meilleure série', (p) => p.meilleureSerieVolume,
       detail: (p) => p.meilleureSerie == null ? null : '${Fmt.n(p.meilleureSerie!.poids ?? 0)} × ${p.meilleureSerie!.reps}');
   RecordLine? get repsMax => _max('Reps max en une série', (p) => p.repsMax.toDouble());
@@ -170,7 +170,7 @@ class ExerciseStats {
   RecordLine? get distanceMax => _max('Distance en une séance', (p) => p.distance);
 
   int get nbSeances => points.length;
-  int get nbSeries => points.fold(0, (a, p) => a + p.seriesFaites.where((s) => s.type.counts).length);
+  int get nbSeries => points.fold(0, (a, p) => a + compterSeries(p.seriesFaites.map((s) => s.type)));
   double get volumeTotal => points.fold(0.0, (a, p) => a + p.volume);
   DateTime? get derniere => points.isEmpty ? null : points.last.date;
   DateTime? get premiere => points.isEmpty ? null : points.first.date;

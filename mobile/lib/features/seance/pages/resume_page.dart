@@ -97,7 +97,7 @@ class ResumePage extends StatelessWidget {
           (
             e.exerciseId,
             exos.nameOf(e.exerciseId),
-            e.seriesFaites.where((x) => x.type.counts).length,
+            compterSeries(e.seriesFaites.map((x) => x.type)),
             () {
               final comptees = e.seriesFaites.where((x) => x.type.counts).toList()
                 ..sort((a, b) {

@@ -91,7 +91,7 @@ class CareerStats {
       b.series += s.nbSeriesFaites;
       jours[s.debut.weekday]++;
       for (final e in s.exercices) {
-        final nb = e.seriesFaites.where((x) => x.type.counts).length;
+        final nb = compterSeries(e.seriesFaites.map((x) => x.type));
         if (nb > 0) exos[e.exerciseId] = (exos[e.exerciseId] ?? 0) + nb;
       }
       if (d > Duration.zero && (longue == null || d > longue.duree)) longue = s;

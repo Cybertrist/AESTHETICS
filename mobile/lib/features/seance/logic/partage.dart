@@ -23,7 +23,7 @@ Equivalent equivalentDeSeance(WorkoutSession s) => equivalentPour(s.volume, grai
 /// qui a au moins une série faite, dans l'ordre de la séance. Comme partout,
 /// les échauffements ne comptent pas dans le nombre de séries.
 List<String> lignesDetail(WorkoutSession s, ExerciseRepo exos, {int max = 8}) {
-  int comptees(SessionExercise e) => e.seriesFaites.where((x) => x.type.counts).length;
+  int comptees(SessionExercise e) => compterSeries(e.seriesFaites.map((x) => x.type));
   final lignes = <String>[
     for (final e in s.exercices)
       if (comptees(e) > 0) '${comptees(e)} × ${exos.nameOf(e.exerciseId)}',

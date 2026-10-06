@@ -80,7 +80,9 @@ void main() {
     expect(find.text('Terminer'), findsOneWidget);
     expect(find.text('Minuteur de repos : 2:00'), findsOneWidget);
     expect(find.text('Ajouter une note…'), findsOneWidget);
-    expect(find.text('12-15'), findsNWidgets(4), reason: 'la fourchette de la routine tient lieu de valeur');
+    // L'exercice de la maquette se fait un bras après l'autre : quatre séries prévues, huit lignes gauche, droite.
+    final paires = d.sessions.active!.exercices.single.series.any((s) => s.type == SetType.gauche);
+    expect(find.text('12-15'), findsNWidgets(paires ? 8 : 4), reason: 'la fourchette de la routine tient lieu de valeur');
 
     // Valider deux séries : la ligne passe au vert et le repos démarre.
     await t.tap(find.bySemanticsLabel('Valider la série').first);
@@ -92,7 +94,8 @@ void main() {
     final series = d.sessions.active!.exercices.single.series;
     expect(series.where((s) => s.fait).length, 2);
     expect(series.first.reps, 12);
-    expect(find.text('2'), findsWidgets);
+    // Une gauche et une droite validées : une série au compteur.
+    expect(find.text(paires ? '1' : '2'), findsWidgets);
     await capture(t, '04-saisie-des-series');
     expect(t.takeException(), isNull);
 

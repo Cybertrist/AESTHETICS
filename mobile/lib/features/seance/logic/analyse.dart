@@ -343,9 +343,8 @@ abstract final class Surcharge {
     return out;
   }
 
-  /// L'haltère juste au-dessus de [kg] sur le râtelier d'une salle : un par
-  /// kilo jusqu'à 10 kg (1, 2, 3... 10), puis de 2 en 2 (12, 14, 16...).
-  static double haltereSuivant(double kg) => kg < 10 ? kg.floorToDouble() + 1 : (kg / 2).floorToDouble() * 2 + 2;
+  /// L'haltère juste au-dessus de [kg] sur le râtelier : voir [Strength.haltereSuivant].
+  static double haltereSuivant(double kg) => Strength.haltereSuivant(kg);
 
   static const _fourchettes = [(3, 5), (5, 8), (8, 12), (12, 15), (15, 20)];
 

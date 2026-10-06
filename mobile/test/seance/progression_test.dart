@@ -2,6 +2,8 @@ import 'package:aesthetic/core/data/data.dart';
 import 'package:aesthetic/core/logic/logic.dart';
 import 'package:aesthetic/core/models/models.dart';
 import 'package:aesthetic/features/entrainer/bibliotheque/logic/exercise_index.dart';
+import 'package:aesthetic/features/entrainer/routines/logic/program_plan.dart';
+import 'package:aesthetic/features/entrainer/routines/logic/progression.dart';
 import 'package:aesthetic/features/seance/logic/analyse.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -218,6 +220,46 @@ void main() {
     expect(data.exercises.byId('hip-thrust')!.musclesPrincipaux, [Muscle.fessiers]);
     expect(data.exercises.byId('assisted-dips')!.suivi, ExerciseTracking.poidsDuCorpsAssiste);
     expect(data.exercises.byId('curl-a-l-elastique')!.nom, "Leg curl debout à l'élastique");
+  });
+
+  test('une gauche et une droite comptent pour une série', () {
+    const g = SetType.gauche, d = SetType.droite;
+    expect(compterSeries([g, d, g, d, g, d]), 3);
+    expect(compterSeries([SetType.echauffement, SetType.normale, SetType.echec]), 2);
+    expect(compterSeries([g]), 1, reason: 'un côté fait sans l’autre compte déjà pour une série');
+    expect(poidsDesSeries([g, d, g]), 1.5);
+    // Trois paires au squat bulgare : trois séries dans la séance, et trois pour les quadriceps.
+    final s = WorkoutSession(id: 'u', nom: 'Jambes', debut: jour(1), fin: jour(1).add(const Duration(hours: 1)), exercices: [
+      SessionExercise(id: 'e', exerciseId: 'squat-bulgare', series: [
+        for (var i = 0; i < 6; i++) WorkoutSet(id: 'w$i', type: i.isEven ? g : d, poids: 20, reps: 10, fait: true),
+      ]),
+    ]);
+    expect(s.nbSeriesFaites, 3);
+    expect(Strength.setsParMuscle([s], data.exercises.byId)[Muscle.quadriceps], 3);
+    // Le volume, lui, reste tout ce qui a été soulevé, des deux côtés.
+    expect(s.volume, 6 * 20 * 10);
+  });
+
+  test('programme aux haltères : la charge monte à l’haltère suivant, et la décharge tombe sur un haltère', () async {
+    const curl = 'curl-marteau';
+    final routine = Routine(id: 'r', nom: 'Bras', creeLe: DateTime(2026), exercices: const [
+      RoutineExercise(id: 'a', exerciseId: curl, series: [PlannedSet(poids: 16, reps: 10), PlannedSet(poids: 16, reps: 10)]),
+    ]);
+    await data.sessions.save(seance(jour(1), [(16, 10), (16, 10)], exo: curl));
+    final monte = appliquerProgression(routine: routine, plan: const ProgramPlan(programId: 'p'), semaine: 0, sessions: data.sessions, lookup: data.exercises.byId);
+    expect([for (final p in monte.routine.exercices.single.series) p.poids], [18.0, 18.0], reason: 'de 16 à 18 kg, pas 18,5');
+    expect(monte.ajustements.single.texte, contains('haltère suivant'));
+    // Une semaine de décharge : 90 % de 16 kg font 14,4 kg, soit l'haltère de 14.
+    final decharge = appliquerProgression(
+      routine: routine,
+      plan: const ProgramPlan(programId: 'p', progression: ProgressionType.aucune, dechargeToutesLes: 1),
+      semaine: 0,
+      sessions: data.sessions,
+      lookup: data.exercises.byId,
+    );
+    expect(decharge.decharge, isTrue);
+    expect(decharge.routine.exercices.single.series.first.poids, 14);
+    expect([for (final kg in [7.4, 10.4, 11.2, 14.4, 17.1]) Strength.arrondirHaltere(kg)], [7.0, 10.0, 12.0, 14.0, 18.0]);
   });
 
   group('unilatéral', () {

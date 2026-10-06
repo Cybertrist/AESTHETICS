@@ -49,7 +49,7 @@ Map<Muscle, double> seriesParMuscle(Iterable<RoutineExercise> exercices, Exercis
   for (final re in exercices) {
     final ex = lookup(re.exerciseId);
     if (ex == null) continue;
-    final n = re.series.where((s) => s.type.counts).length.toDouble();
+    final n = poidsDesSeries(re.series.map((s) => s.type));
     if (n == 0) continue;
     for (final m in ex.musclesSecondaires) {
       out[m] = (out[m] ?? 0) + n * 0.5;

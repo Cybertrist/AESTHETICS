@@ -45,7 +45,7 @@ abstract final class Strength {
       for (final e in s.exercices) {
         final ex = lookup(e.exerciseId);
         if (ex == null) continue;
-        final n = e.seriesFaites.where((x) => x.type.counts).length;
+        final n = poidsDesSeries(e.seriesFaites.map((x) => x.type));
         if (n == 0) continue;
         for (final m in ex.musclesPrincipaux) {
           out[m] = (out[m] ?? 0) + n;
@@ -211,6 +211,14 @@ abstract final class Strength {
     }
     return poids <= 0 ? r.repsSansCharge : r.repsA(poids);
   }
+
+  /// L'haltère juste au-dessus de [kg] sur le râtelier d'une salle : un par
+  /// kilo jusqu'à 10 kg (1, 2, 3... 10), puis de 2 en 2 (12, 14, 16...).
+  static double haltereSuivant(double kg) => kg < 10 ? kg.floorToDouble() + 1 : (kg / 2).floorToDouble() * 2 + 2;
+
+  /// L'haltère du râtelier le plus proche de [kg] : au kilo jusqu'à 10 kg,
+  /// au nombre pair au-delà.
+  static double arrondirHaltere(double kg) => kg <= 10 ? kg.roundToDouble().clamp(1, 10).toDouble() : (kg / 2).roundToDouble() * 2;
 
   /// Arrondi au pas du matériel (2,5 kg par défaut).
   static double arrondir(double poids, [double pas = 2.5]) => pas <= 0 ? poids : (poids / pas).round() * pas;

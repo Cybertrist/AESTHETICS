@@ -343,7 +343,7 @@ abstract final class ProgresStats {
       for (final e in s.exercices) {
         final ex = lookup(e.exerciseId);
         if (ex == null) continue;
-        final n = e.seriesFaites.where((x) => x.type.counts).length;
+        final n = poidsDesSeries(e.seriesFaites.map((x) => x.type));
         if (n == 0) continue;
         if (ex.musclesPrincipaux.contains(m)) {
           acc[e.exerciseId] = (acc[e.exerciseId] ?? 0) + n;
@@ -454,7 +454,7 @@ abstract final class ProgresStats {
     for (final s in sessions) {
       final vus = <String>{};
       for (final e in s.exercices) {
-        final n = e.seriesFaites.where((x) => x.type.counts).length;
+        final n = compterSeries(e.seriesFaites.map((x) => x.type));
         if (n == 0) continue;
         series[e.exerciseId] = (series[e.exerciseId] ?? 0) + n;
         volume[e.exerciseId] = (volume[e.exerciseId] ?? 0) + e.volume;

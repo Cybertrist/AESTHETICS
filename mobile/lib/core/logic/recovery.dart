@@ -29,7 +29,7 @@ abstract final class Recovery {
       for (final e in s.exercices) {
         final ex = lookup(e.exerciseId);
         if (ex == null) continue;
-        final n = e.seriesFaites.where((x) => x.type.counts).length;
+        final n = poidsDesSeries(e.seriesFaites.map((x) => x.type));
         if (n == 0) continue;
         void add(Muscle m, double poids) {
           final reste = 1 - heures / heuresRecuperation(m);

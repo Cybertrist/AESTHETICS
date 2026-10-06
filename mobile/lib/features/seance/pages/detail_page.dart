@@ -262,7 +262,7 @@ class _ExerciceDetail extends StatelessWidget {
     final ex = exos.byId(se.exerciseId);
     final suivi = ex?.suivi ?? ExerciseTracking.poidsReps;
     final labels = libellesSeries(se.series);
-    final comptees = se.seriesFaites.where((x) => x.type.counts).length;
+    final comptees = compterSeries(se.seriesFaites.map((x) => x.type));
     final meilleure = se.series.where((x) => x.fait && x.type.counts).fold<WorkoutSet?>(
           null,
           (a, x) => a == null || Strength.setOneRm(x) > Strength.setOneRm(a) ? x : a,
