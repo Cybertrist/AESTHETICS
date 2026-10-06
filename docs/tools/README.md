@@ -39,6 +39,9 @@ Chaque commande fait la version française, puis l'anglaise dans `docs/en/`.
   le feuillette et photographie chaque page pendant qu'elle se construit,
   vingt fois par seconde ; ffmpeg assemble `docs/schemas/resume-mensuel.webp`
   et `resume-annuel.webp`. `SANS_TEST=1` assemble sans refaire les images.
+  Le même test écrit `schemas/resume.demo.json`, les chiffres de ces deux
+  résumés : le schéma `resume` les lit, et montre donc le même mois que les
+  films.
 - `emulateur.sh` : prend les captures brutes sur l'émulateur. L'application
   ouvre chaque page par un lien (`aesthetics://ouvrir?chemin=…`, celui de
   ses widgets) : un écran, une ligne. Seuls les écrans de la séance en

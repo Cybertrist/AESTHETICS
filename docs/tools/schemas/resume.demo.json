@@ -1,0 +1,428 @@
+{
+ "mois": {
+  "seances": [
+   {
+    "nom": "Pull",
+    "minutes": 68,
+    "volume": 5729
+   },
+   {
+    "nom": "Course à pied",
+    "minutes": 41,
+    "volume": 0
+   },
+   {
+    "nom": "Legs",
+    "minutes": 68,
+    "volume": 14600
+   },
+   {
+    "nom": "Push",
+    "minutes": 69,
+    "volume": 4723
+   },
+   {
+    "nom": "Push",
+    "minutes": 67,
+    "volume": 4525
+   },
+   {
+    "nom": "Pull",
+    "minutes": 71,
+    "volume": 5887
+   },
+   {
+    "nom": "Legs",
+    "minutes": 72,
+    "volume": 14530
+   },
+   {
+    "nom": "Push",
+    "minutes": 73,
+    "volume": 4689
+   },
+   {
+    "nom": "Push",
+    "minutes": 72,
+    "volume": 4612
+   },
+   {
+    "nom": "Pull",
+    "minutes": 68,
+    "volume": 5825
+   },
+   {
+    "nom": "Rameur",
+    "minutes": 30,
+    "volume": 0
+   },
+   {
+    "nom": "Legs",
+    "minutes": 72,
+    "volume": 14320
+   },
+   {
+    "nom": "Push",
+    "minutes": 67,
+    "volume": 4804
+   },
+   {
+    "nom": "Push",
+    "minutes": 70,
+    "volume": 4768
+   },
+   {
+    "nom": "Pull",
+    "minutes": 70,
+    "volume": 5656
+   },
+   {
+    "nom": "Course à pied",
+    "minutes": 36,
+    "volume": 0
+   },
+   {
+    "nom": "Legs",
+    "minutes": 68,
+    "volume": 14403
+   },
+   {
+    "nom": "Push",
+    "minutes": 69,
+    "volume": 4561
+   },
+   {
+    "nom": "Push",
+    "minutes": 73,
+    "volume": 4800
+   },
+   {
+    "nom": "Pull",
+    "minutes": 68,
+    "volume": 5869
+   },
+   {
+    "nom": "Course à pied",
+    "minutes": 38,
+    "volume": 0
+   }
+  ],
+  "nbSeances": 21,
+  "minutes": 1338,
+  "volume": 124298,
+  "ecartSeances": 5,
+  "ecartVolume": 1,
+  "jours": [
+   1,
+   2,
+   3,
+   6,
+   7,
+   8,
+   10,
+   13,
+   14,
+   15,
+   16,
+   17,
+   20,
+   21,
+   22,
+   23,
+   24,
+   27,
+   28,
+   29,
+   30
+  ],
+  "volumes": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   99141,
+   113020,
+   129692,
+   127277,
+   122681,
+   124298
+  ],
+  "serie": 27,
+  "toile": [
+   {
+    "muscle": "pectoraux",
+    "mois": 0.8,
+    "avant": 1.0
+   },
+   {
+    "muscle": "deltoidesLateraux",
+    "mois": 0.7272727272727273,
+    "avant": 0.9090909090909091
+   },
+   {
+    "muscle": "triceps",
+    "mois": 0.6181818181818182,
+    "avant": 0.7727272727272727
+   },
+   {
+    "muscle": "grandDorsal",
+    "mois": 0.5,
+    "avant": 0.4
+   },
+   {
+    "muscle": "biceps",
+    "mois": 0.5227272727272727,
+    "avant": 0.41818181818181815
+   },
+   {
+    "muscle": "abdominaux",
+    "mois": 0.0,
+    "avant": 0.0
+   },
+   {
+    "muscle": "quadriceps",
+    "mois": 0.36363636363636365,
+    "avant": 0.36363636363636365
+   },
+   {
+    "muscle": "ischios",
+    "mois": 0.38181818181818183,
+    "avant": 0.38181818181818183
+   },
+   {
+    "muscle": "trapezes",
+    "mois": 0.17727272727272728,
+    "avant": 0.19090909090909092
+   }
+  ],
+  "nbRecords": 10,
+  "records": [
+   {
+    "id": "tractions",
+    "nom": "Tractions",
+    "serie": "12,5 kg × 9"
+   },
+   {
+    "id": "ecarte-a-la-poulie-vis-a-vis",
+    "nom": "Écarté à la poulie vis-à-vis",
+    "serie": "15 kg × 14"
+   },
+   {
+    "id": "mollets-debout-machine",
+    "nom": "Mollets debout machine",
+    "serie": "75 kg × 13"
+   },
+   {
+    "id": "curl-marteau",
+    "nom": "Curl marteau",
+    "serie": "15 kg × 10"
+   },
+   {
+    "id": "developpe-incline-halteres",
+    "nom": "Développé incliné haltères",
+    "serie": "28 kg × 8"
+   }
+  ],
+  "favoris": [
+   {
+    "id": "developpe-couche",
+    "nom": "Développé couché",
+    "series": 32
+   },
+   {
+    "id": "developpe-incline-halteres",
+    "nom": "Développé incliné haltères",
+    "series": 32
+   },
+   {
+    "id": "developpe-militaire",
+    "nom": "Développé militaire",
+    "series": 24
+   },
+   {
+    "id": "extension-triceps-poulie-haute",
+    "nom": "Extension triceps poulie haute",
+    "series": 24
+   },
+   {
+    "id": "ecarte-a-la-poulie-vis-a-vis",
+    "nom": "Écarté à la poulie vis-à-vis",
+    "series": 24
+   }
+  ],
+  "objet": {
+   "nom": "camion de pompiers",
+   "etiquette": "× 9",
+   "image": "fire_engine_3d.png"
+  }
+ },
+ "annee": {
+  "seances": [
+   {
+    "nom": "Avril · 15 séances",
+    "minutes": 1070,
+    "volume": 99141
+   },
+   {
+    "nom": "Mai · 16 séances",
+    "minutes": 1126,
+    "volume": 113020
+   },
+   {
+    "nom": "Juin · 18 séances",
+    "minutes": 1270,
+    "volume": 129692
+   },
+   {
+    "nom": "Juillet · 19 séances",
+    "minutes": 1297,
+    "volume": 127277
+   },
+   {
+    "nom": "Août · 20 séances",
+    "minutes": 1336,
+    "volume": 122681
+   },
+   {
+    "nom": "Septembre · 21 séances",
+    "minutes": 1338,
+    "volume": 124298
+   },
+   {
+    "nom": "Octobre · 1 séance",
+    "minutes": 73,
+    "volume": 14533
+   }
+  ],
+  "nbSeances": 110,
+  "minutes": 7513,
+  "volume": 730641,
+  "ecartSeances": null,
+  "ecartVolume": null,
+  "jours": [],
+  "volumes": [
+   0,
+   0,
+   0,
+   99141,
+   113020,
+   129692,
+   127277,
+   122681,
+   124298,
+   14533,
+   0,
+   0
+  ],
+  "serie": 27,
+  "toile": [
+   {
+    "muscle": "pectoraux",
+    "mois": 1.0,
+    "avant": 0.0
+   },
+   {
+    "muscle": "deltoidesLateraux",
+    "mois": 0.9090909090909091,
+    "avant": 0.0
+   },
+   {
+    "muscle": "triceps",
+    "mois": 0.7727272727272727,
+    "avant": 0.0
+   },
+   {
+    "muscle": "grandDorsal",
+    "mois": 0.5098039215686274,
+    "avant": 0.0
+   },
+   {
+    "muscle": "biceps",
+    "mois": 0.5329768270944741,
+    "avant": 0.0
+   },
+   {
+    "muscle": "abdominaux",
+    "mois": 0.0,
+    "avant": 0.0
+   },
+   {
+    "muscle": "quadriceps",
+    "mois": 0.44563279857397503,
+    "avant": 0.0
+   },
+   {
+    "muscle": "ischios",
+    "mois": 0.4679144385026738,
+    "avant": 0.0
+   },
+   {
+    "muscle": "trapezes",
+    "mois": 0.20588235294117646,
+    "avant": 0.0
+   }
+  ],
+  "nbRecords": 18,
+  "records": [
+   {
+    "id": "developpe-incline-halteres",
+    "nom": "Développé incliné haltères",
+    "serie": "28 kg × 8"
+   },
+   {
+    "id": "elevations-laterales",
+    "nom": "Élévations latérales",
+    "serie": "10 kg × 14"
+   },
+   {
+    "id": "mollets-debout-machine",
+    "nom": "Mollets debout machine",
+    "serie": "75 kg × 13"
+   },
+   {
+    "id": "curl-marteau",
+    "nom": "Curl marteau",
+    "serie": "15 kg × 10"
+   },
+   {
+    "id": "extension-triceps-poulie-haute",
+    "nom": "Extension triceps poulie haute",
+    "serie": "27,5 kg × 10"
+   }
+  ],
+  "favoris": [
+   {
+    "id": "developpe-couche",
+    "nom": "Développé couché",
+    "series": 204
+   },
+   {
+    "id": "developpe-incline-halteres",
+    "nom": "Développé incliné haltères",
+    "series": 204
+   },
+   {
+    "id": "developpe-militaire",
+    "nom": "Développé militaire",
+    "series": 153
+   },
+   {
+    "id": "extension-triceps-poulie-haute",
+    "nom": "Extension triceps poulie haute",
+    "series": 153
+   },
+   {
+    "id": "ecarte-a-la-poulie-vis-a-vis",
+    "nom": "Écarté à la poulie vis-à-vis",
+    "series": 153
+   }
+  ],
+  "objet": {
+   "nom": "statue de l'île de Pâques",
+   "etiquette": "× 66",
+   "image": "moai_3d.png"
+  }
+ }
+}

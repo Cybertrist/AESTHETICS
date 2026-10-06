@@ -18,9 +18,11 @@ for f in face_base dos_base face_pectoraux face_deltoidesAnterieurs face_biceps 
   cp "$APPLI/body/pack/$f.webp" "$SORTIE/corps/" && echo "  corps/$f.webp"
 done
 
-# L'objet en 3D de la page « en objets » du résumé (Fluent Emoji, licence MIT).
+# L'objet en 3D de la page « en objets » du résumé (Fluent Emoji, licence MIT) :
+# celui que l'application a choisi pour le mois de la démo.
 mkdir -p "$SORTIE/objets"
-cp "$APPLI/objets/elephant_3d.png" "$SORTIE/objets/" && echo "  objets/elephant_3d.png"
+OBJET="$(cd "$D" && node -p "require('./schemas/resume.demo.json').mois.objet.image")"
+cp "$APPLI/objets/$OBJET" "$SORTIE/objets/" && echo "  objets/$OBJET"
 
 # Les poses : les exercices montrés dans les téléphones des schémas.
 # pose <nom rangé> <nom possible dans l'appli>...
@@ -40,3 +42,5 @@ pose squat squat
 pose lat-pulldown lat-pulldown
 pose deadlift deadlift
 pose barbell-row barbell-row
+pose overhead-press ohp
+pose triceps-pushdown tricep-pushdown
