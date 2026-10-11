@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../social/data/social_repo.dart';
+import '../../social/routes.dart';
 import '../../../app/navigation.dart';
 import '../../../core/data/data.dart';
 import '../../../core/env.dart';
@@ -186,6 +188,28 @@ class _ReglagesPageState extends State<ReglagesPage> {
                       onTap: () => context.push(ReglagesSection.coach.path),
                     ),
                   ]),
+                groupe('Profil', [
+                  if (context.watch<SocialRepo?>() != null)
+                    Ligne(
+                      trace: Trace.crayon,
+                      titre: 'Modifier mon profil',
+                      detail: 'Photo, prénom, pseudo, phrase',
+                      onTap: () => context.push(SocialPaths.modifierProfil),
+                    ),
+                  Ligne(
+                    trace: Trace.trophee,
+                    titre: 'Mon objectif',
+                    valeur: context.watch<ProfileRepo>().profile?.objectif.label,
+                    onTap: () => context.push('${Paths.profil}/modifier?section=objectif'),
+                  ),
+                  if (context.watch<SocialRepo?>() != null)
+                    Ligne(
+                      trace: Trace.silhouette,
+                      titre: 'Ce que je montre',
+                      valeur: context.watch<ProfileRepo>().profile?.acces.titre,
+                      onTap: () => context.push(SocialPaths.confidentialite),
+                    ),
+                ]),
                 groupe('Données', [
                   Ligne(
                     trace: Trace.donnees,

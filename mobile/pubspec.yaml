@@ -45,8 +45,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   home_widget: ^0.10.0
-
-
+  qr_flutter: ^4.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -64,6 +63,7 @@ flutter:
     - assets/images/
     # Objets 3D du bilan et des cartes de fin de séance (licence MIT, voir docs/SOURCES_OBJETS.md).
     - assets/objets/
+    - assets/reactions/
     - assets/sons/
     - assets/sons/decompte/
   fonts:

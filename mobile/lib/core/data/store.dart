@@ -36,6 +36,10 @@ class Store {
   /// Dernière écriture qui a échoué (disque plein, par exemple), ou null.
   Object? derniereErreurEcriture;
 
+  /// Prévenus après chaque écriture réussie, avec le nom de la collection :
+  /// c'est ce qui déclenche la copie sur le serveur.
+  final List<void Function(String name)> ecouteurs = [];
+
   /// Ouvre le stockage. La démo vit dans son propre dossier pour ne
   /// jamais toucher aux vraies données.
   static Future<Store> open({bool demo = false}) async {
@@ -133,7 +137,11 @@ class Store {
     // Une écriture qui échoue ne bloque pas les suivantes, mais elle remonte
     // à celui qui l'a demandée : une donnée non enregistrée ne doit pas
     // passer pour enregistrée.
-    final next = previous.then((_) => _write(name, data));
+    final next = previous.then((_) => _write(name, data)).then((_) {
+      for (final e in [...ecouteurs]) {
+        e(name);
+      }
+    });
     _queues[name] = next.then((_) {}, onError: (Object e) {
       derniereErreurEcriture = e;
     });

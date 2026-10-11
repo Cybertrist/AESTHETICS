@@ -13,6 +13,7 @@ import '../aujourdhui/logic/resume_jour.dart' show ResumeSemaine;
 import '../aujourdhui/pages/serie_page.dart' show Flamme;
 import '../aujourdhui/widgets/accueil.dart' show CarteCetteSemaine;
 import '../entrainer/routines/logic/suggestion.dart';
+import '../entrainer/routines/logic/vignettes.dart' show RoutinePrefs;
 import '../entrainer/routines/widgets/ligne_routine.dart' show VignetteRoutineVue;
 import '../progres/logic/tableau.dart';
 import '../progres/ui/communs.dart' show AnneauRecup;
@@ -72,7 +73,11 @@ class _Cadre extends StatelessWidget {
 }
 
 /// La routine à lancer un jour donné, et l'adresse qui la démarre.
-({Routine? routine, int rang, String chemin}) routineDuJour(BuildContext context, DateTime jour) {
+///
+/// Un jour de repos ([repos]), la routine est celle de la prochaine séance,
+/// attendue le [prochain] ; l'appui ouvre alors son aperçu au lieu de la
+/// démarrer.
+({Routine? routine, int rang, String chemin, bool repos, DateTime? prochain}) routineDuJour(BuildContext context, DateTime jour) {
   final routines = context.read<RoutineRepo>();
   final sessions = context.read<SessionRepo>();
   final actif = context.read<ProgramRepo>().active;
@@ -90,12 +95,19 @@ class _Cadre extends StatelessWidget {
     id = cycle.length == 7 ? cycle[jour.weekday - 1] : cycle[rangDansCycle(cycle, sessions.sessions, depuis: actif!.debuteLe)];
   }
   final routine = id == null ? null : routines.byId(id);
-  if (routine == null) return (routine: null, rang: 0, chemin: SeancePaths.vide);
+  if (routine == null) return (routine: null, rang: 0, chemin: SeancePaths.vide, repos: false, prochain: null);
   final dansProgramme = actif != null && actif.routineIds.contains(routine.id);
+  final programId = dansProgramme ? actif.id : null;
+  // Un programme de sept routines a une séance par jour : jamais de repos.
+  final prefs = RoutinePrefs.of(context.read<Store>());
+  final choisis = [for (final x in cycle) prefs.vignetteDe(x)?.jour];
+  final repos = cycle.length != 7 && jourDeRepos(jour: jour, seances: sessions.sessions, joursChoisis: choisis);
   return (
     routine: routine,
     rang: dansProgramme ? actif.routineIds.indexOf(routine.id) : ids.indexOf(routine.id),
-    chemin: SeancePaths.routine(routine.id, programId: dansProgramme ? actif.id : null),
+    chemin: repos ? SeancePaths.apercu(routine.id, programId: programId) : SeancePaths.routine(routine.id, programId: programId),
+    repos: repos,
+    prochain: repos ? prochainJourDeSeance(jour: jour, seances: sessions.sessions, joursChoisis: choisis) : null,
   );
 }
 
@@ -172,6 +184,43 @@ class VueLancer extends StatelessWidget {
     }
     final r = routineDuJour(context, jour);
     final routine = r.routine;
+    if (r.repos && routine != null) {
+      // Jour de repos : la lune à la place de la routine, et la prochaine
+      // séance annoncée avec son jour.
+      final prochain = r.prochain;
+      final quand = prochain == null
+          ? 'Ensuite'
+          : (Dates.memeJour(prochain, DateTime(jour.year, jour.month, jour.day + 1)) ? 'Demain' : const ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'][prochain.weekday - 1]);
+      return _Cadre(
+        taille: WidgetEcran.lancer.taille,
+        padding: const EdgeInsets.fromLTRB(14, 14, 16, 14),
+        child: Row(
+          children: [
+            Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(color: c.surface2, borderRadius: BorderRadius.circular(15)),
+              child: const Icon(Icons.bedtime_rounded, size: 30, color: Colors.white),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('AUJOURD\'HUI', maxLines: 1, style: _t(11, FontWeight.w600, c.text2, espace: 1.4)),
+                  const SizedBox(height: 1),
+                  Text('Repos', maxLines: 1, style: _t(17.5, FontWeight.w800, c.text, hauteur: 1.25)),
+                  Text('$quand · ${routine.nom}', maxLines: 1, overflow: TextOverflow.ellipsis, style: _t(13, FontWeight.w400, c.text2, hauteur: 1.3)),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            VignetteRoutineVue(routine: routine, rang: r.rang, taille: 52, fond: _fond),
+          ],
+        ),
+      );
+    }
     return _Cadre(
       taille: WidgetEcran.lancer.taille,
       padding: const EdgeInsets.fromLTRB(14, 14, 16, 14),

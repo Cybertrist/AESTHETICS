@@ -505,15 +505,12 @@ void main() {
       for (final tuile in ['Mensurations', 'Photos', 'Records', 'Séances']) {
         expect(find.text(tuile), findsNothing, reason: tuile);
       }
-      expect(find.text('Prendre du muscle · 5 séances par semaine'), findsOneWidget);
+      // L'objectif n'est plus sur le profil : il se lit et se change dans les réglages.
+      expect(find.text('Prendre du muscle'), findsNothing);
+      expect(find.textContaining('séances par semaine'), findsNothing);
       expect(find.byType(GrilleMois), findsOneWidget);
       await t.runAsync(() => photo(t, 'profil-chiffres'));
 
-      await t.tap(find.textContaining('5 séances par semaine'));
-      await attendre(t);
-      expect(find.textContaining('voisin /bienvenue/modifier/objectif'), findsOneWidget);
-      router.go('/profil');
-      await attendre(t);
       await t.tap(find.byType(GrilleMois));
       await attendre(t);
       expect(find.textContaining('voisin /progres/calendrier'), findsOneWidget);
@@ -522,33 +519,29 @@ void main() {
       await t.tap(find.bySemanticsLabel('Réglages').first);
       await attendre(t);
       expect(find.text('ENTRAÎNEMENT'), findsOneWidget);
+      await t.tap(find.text('Mon objectif'));
+      await attendre(t);
+      expect(find.textContaining('voisin /bienvenue/modifier/objectif'), findsOneWidget);
       expect(t.takeException(), isNull);
     });
 
-    testWidgets('phrase du profil : on l’écrit, elle s’affiche et se garde, on peut la retirer', (t) async {
+    testWidgets('phrase du profil : elle s’affiche, mais ne se change pas d’un appui sur le profil', (t) async {
       await polices(t);
       ecran(t);
       final data = await donnees(t);
       await monter(t, data, '/profil');
-      expect(find.textContaining('Ajoute une phrase'), findsOneWidget);
-      await t.tap(find.textContaining('Ajoute une phrase'));
-      await attendre(t);
-      await t.enterText(find.byType(TextField), '  La douleur est temporaire, mais la fierté dure toute une vie.  ');
-      await t.tap(find.text('Enregistrer'));
+      expect(find.textContaining('Ajoute une phrase'), findsNothing);
+      await t.runAsync(() => data.profile.update((p) => p.copyWith(phrase: 'La douleur est temporaire, mais la fierté dure toute une vie.')));
       await attendre(t);
       expect(find.text('La douleur est temporaire, mais la fierté dure toute une vie.'), findsOneWidget);
-      expect(data.profile.profile!.phrase, 'La douleur est temporaire, mais la fierté dure toute une vie.');
       // Elle survit à l'enregistrement du profil.
       expect(UserProfile.fromJson(data.profile.profile!.toJson()).phrase, data.profile.profile!.phrase);
-      expect(t.takeException(), isNull);
       await t.runAsync(() => photo(t, 'profil-phrase'));
-
       await t.tap(find.textContaining('La douleur est temporaire'));
       await attendre(t);
-      await t.tap(find.text('Retirer la phrase'));
-      await attendre(t);
-      expect(data.profile.profile!.phrase, isEmpty);
-      expect(find.textContaining('Ajoute une phrase'), findsOneWidget);
+      expect(find.byType(TextField), findsNothing);
+      expect(find.text('Retirer la phrase'), findsNothing);
+      expect(t.takeException(), isNull);
     });
 
     testWidgets('sans prénom, sans séance, sans poids : un avatar propre et des singuliers', (t) async {
@@ -563,7 +556,7 @@ void main() {
       expect(find.text('Aucune séance ce mois-ci'), findsOneWidget);
       // Sans série en cours, pas de pastille « 0 sem. ».
       expect(find.textContaining('sem.'), findsNothing);
-      expect(find.textContaining('1 séance par semaine'), findsOneWidget);
+      expect(find.bySemanticsLabel('0 séance'), findsOneWidget);
       expect(t.takeException(), isNull);
       await t.runAsync(() => photo(t, 'profil-sans-prenom-360'));
     });

@@ -15,6 +15,7 @@ import '../features/profil/routes.dart';
 import '../features/progres/routes.dart';
 import '../features/sante/routes.dart';
 import '../features/seance/routes.dart';
+import '../features/social/routes.dart';
 import 'coquille_appli.dart';
 import 'dev/composants_page.dart';
 import 'navigation.dart';
@@ -73,6 +74,7 @@ GoRouter createRouter(AppData data) => GoRouter(
             ...santeRoutes(),
             ...profilRoutes().where((r) => !_estProfil(r)),
             ...importRoutes(),
+            ...socialRoutes(),
             GoRoute(
               path: Paths.composants,
               builder: (context, state) => const ComposantsPage(),

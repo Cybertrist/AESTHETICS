@@ -4,11 +4,14 @@ import 'package:provider/provider.dart';
 
 import '../../../core/data/data.dart';
 import '../../../core/env.dart';
+import '../../../core/models/models.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/ui/ui.dart';
 import '../logic/accueil.dart';
 import '../logic/pas_repo.dart';
 import '../routes.dart';
+import '../../social/data/social_repo.dart';
+import '../../social/pages/communaute_page.dart' show CartePublication;
 import '../widgets/accueil.dart';
 import '../widgets/cartes.dart';
 
@@ -33,6 +36,9 @@ class AujourdhuiPage extends StatefulWidget {
 class _AujourdhuiPageState extends State<AujourdhuiPage> with WidgetsBindingObserver {
   /// L'alerte « fichier illisible » a été lue et refermée.
   bool _alerteFermee = false;
+
+  /// Ce que montre le fil : tout, mes amis, ou moi.
+  FiltreFil _fil = FiltreFil.tout;
 
   @override
   void initState() {
@@ -76,6 +82,7 @@ class _AujourdhuiPageState extends State<AujourdhuiPage> with WidgetsBindingObse
     final mq = MediaQuery.paddingOf(context);
     const ecart = SizedBox(height: 25);
 
+    final social = context.watch<SocialRepo?>();
     final gauche = <Widget>[
       if (mois != null) ...[
         CarteResumeMensuel(
@@ -84,7 +91,8 @@ class _AujourdhuiPageState extends State<AujourdhuiPage> with WidgetsBindingObse
         ),
         ecart,
       ],
-      CarteCetteSemaine(maintenant: now),
+      // Avec la communauté, la semaine se lit dans Progrès : l'accueil est le fil.
+      if (social == null) CarteCetteSemaine(maintenant: now),
       if (!Env.muscuSeule) ...[
         ecart,
         const CarteCoach(),
@@ -94,15 +102,37 @@ class _AujourdhuiPageState extends State<AujourdhuiPage> with WidgetsBindingObse
         const GrilleSante(),
       ],
     ];
-    final droite = <Widget>[
-      TitreDernieresSeances(lien: terminees.isNotEmpty),
-      const SizedBox(height: 11.5),
-      if (recentes.isEmpty)
-        const AccueilVide()
+    Widget carte(WorkoutSession s) => CarteSeance(session: s, records: records[s.id] ?? 0, maintenant: now);
+    // Le fil : mes séances, celles de mes amis, ou les deux mêlées.
+    final cartes = <Widget>[
+      if (social == null || _fil == FiltreFil.moi)
+        for (final s in recentes) carte(s)
+      else if (_fil == FiltreFil.amis)
+        for (final pub in social.fil) CartePublication(pub)
       else
-        for (final (i, s) in recentes.indexed) ...[
+        // Mêlées par date, la plus récente en haut.
+        ...([
+          for (final s in recentes) (s.fin ?? s.debut, carte(s)),
+          for (final pub in social.fil) (pub.date, CartePublication(pub) as Widget),
+        ]..sort((a, b) => b.$1.compareTo(a.$1)))
+            .map((e) => e.$2),
+    ];
+    final droite = <Widget>[
+      if (social == null) ...[
+        TitreDernieresSeances(lien: terminees.isNotEmpty),
+        const SizedBox(height: 11.5),
+      ],
+      if (cartes.isEmpty)
+        (social != null && _fil == FiltreFil.amis)
+            ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 30),
+                child: Text('Les séances de tes amis apparaîtront ici.', textAlign: TextAlign.center, style: TextStyle(fontFamily: AppTokens.fontUi, fontSize: 14.5, color: c.text2)),
+              )
+            : const AccueilVide()
+      else
+        for (final (i, w) in cartes.indexed) ...[
           if (i > 0) const SizedBox(height: 12.5),
-          CarteSeance(session: s, records: records[s.id] ?? 0, maintenant: now),
+          w,
         ],
     ];
 
@@ -120,7 +150,7 @@ class _AujourdhuiPageState extends State<AujourdhuiPage> with WidgetsBindingObse
                 physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
                 padding: EdgeInsets.fromLTRB(CotesAccueil.marge, mq.top + 12.5, CotesAccueil.marge, 32),
                 children: [
-                  EnTeteAccueil(maintenant: now),
+                  EnTeteAccueil(maintenant: now, fil: _fil, onFil: (f) => setState(() => _fil = f)),
                   if (alerte) ...[
                     ecart,
                     AlerteDonnees(fichiers: abimes, onFermer: () => setState(() => _alerteFermee = true)),
@@ -137,7 +167,7 @@ class _AujourdhuiPageState extends State<AujourdhuiPage> with WidgetsBindingObse
                     )
                   else ...[
                     ...gauche,
-                    const SizedBox(height: 22.5),
+                    if (gauche.isNotEmpty) const SizedBox(height: 22.5),
                     ...droite,
                   ],
                 ],

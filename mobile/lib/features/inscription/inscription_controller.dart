@@ -202,7 +202,10 @@ class InscriptionController extends ChangeNotifier {
     required HealthRepo sante,
   }) async {
     final ancien = profils.profile;
-    final profil = draft.toProfile();
+    // Les questions ne portent ni la phrase, ni les unités, ni le profil
+    // public : on les reprend du profil d'avant.
+    final neuf = draft.toProfile();
+    final profil = ancien == null ? neuf : neuf.gardant(ancien);
     await profils.save(profil);
     await draft.toExtras().save(store);
     await reglages.update((s) => s.copyWith(

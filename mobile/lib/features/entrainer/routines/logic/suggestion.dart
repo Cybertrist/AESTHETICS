@@ -121,6 +121,53 @@ int rangDansCycle(List<String> cycle, Iterable<WorkoutSession> seances, {DateTim
   return rang;
 }
 
+/// Vrai si [jour] est un jour sans séance.
+///
+/// L'habitude décide d'abord : on regarde les [semaines] dernières semaines.
+/// Un jour de la semaine entraîné au moins trois fois est un jour de séance ;
+/// entraîné une fois au plus, alors qu'on s'entraîne en moyenne au moins une
+/// fois par semaine, c'est un jour de repos.
+///
+/// Sans habitude nette, les cartes de jour choisies pour les routines du
+/// programme tranchent ([joursChoisis], null pour une routine sans jour
+/// choisi) : si chacune a son jour et qu'aucune n'est posée sur ce jour-là,
+/// c'est un jour de repos. Dans le doute, ce n'en est pas un.
+bool jourDeRepos({
+  required DateTime jour,
+  required Iterable<WorkoutSession> seances,
+  List<int?> joursChoisis = const [],
+  int semaines = 8,
+}) {
+  final j = _jour(jour);
+  final debut = DateTime(j.year, j.month, j.day - 7 * semaines);
+  final faits = <DateTime>{};
+  for (final s in seances) {
+    if (s.enCours) continue;
+    final d = _jour(s.debut);
+    if (d.isBefore(debut) || !d.isBefore(j)) continue;
+    faits.add(d);
+  }
+  final meme = faits.where((d) => d.weekday == j.weekday).length;
+  if (meme >= 3) return false;
+  if (meme <= 1 && faits.length >= semaines) return true;
+  return joursChoisis.isNotEmpty && !joursChoisis.contains(null) && !joursChoisis.contains(j.weekday);
+}
+
+/// Le prochain jour de séance après [jour] (dans la semaine qui suit), ou
+/// null si aucun ne se dégage.
+DateTime? prochainJourDeSeance({
+  required DateTime jour,
+  required Iterable<WorkoutSession> seances,
+  List<int?> joursChoisis = const [],
+}) {
+  final j = _jour(jour);
+  for (var k = 1; k <= 7; k++) {
+    final d = DateTime(j.year, j.month, j.day + k);
+    if (!jourDeRepos(jour: d, seances: seances, joursChoisis: joursChoisis)) return d;
+  }
+  return null;
+}
+
 const _mois = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
 
 /// « 25 septembre », avec « 1er » pour le premier du mois.

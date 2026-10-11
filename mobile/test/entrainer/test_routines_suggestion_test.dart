@@ -113,6 +113,55 @@ void main() {
     });
   });
 
+  group('jour de repos', () {
+    // Mercredi 7 octobre 2026 ; huit semaines de lundi, mardi, jeudi, vendredi.
+    final mercredi = DateTime(2026, 10, 7, 9);
+    final semaines = [1, 2, 3, 4, 5, 6, 7, 8];
+    List<WorkoutSession> quatreJours() => [
+          for (final (ecart, r) in [(-2, 'a'), (-1, 'b'), (1, 'c'), (2, 'd')]) ..._habitude(r, DateTime(2026, 10, 7 + ecart), semaines),
+        ];
+
+    test('l\'habitude : un jour jamais entraîné est un repos, les autres non', () {
+      final s = quatreJours();
+      expect(jourDeRepos(jour: mercredi, seances: s), isTrue);
+      expect(jourDeRepos(jour: DateTime(2026, 10, 8, 12), seances: s), isFalse);
+      expect(jourDeRepos(jour: DateTime(2026, 10, 10, 12), seances: s), isTrue, reason: 'samedi');
+      expect(prochainJourDeSeance(jour: mercredi, seances: s), DateTime(2026, 10, 8));
+      expect(prochainJourDeSeance(jour: DateTime(2026, 10, 9), seances: s), DateTime(2026, 10, 12), reason: 'du vendredi au lundi');
+    });
+
+    test('une séance isolée ce jour-là ne suffit pas, trois oui', () {
+      final s = quatreJours();
+      expect(jourDeRepos(jour: mercredi, seances: [...s, ..._habitude('e', mercredi, [3])]), isTrue);
+      expect(jourDeRepos(jour: mercredi, seances: [...s, ..._habitude('e', mercredi, [1, 3, 5])]), isFalse);
+    });
+
+    test('peu d\'historique : dans le doute, pas de repos', () {
+      expect(jourDeRepos(jour: mercredi, seances: const []), isFalse);
+      expect(jourDeRepos(jour: mercredi, seances: _habitude('a', DateTime(2026, 10, 5), [1, 2, 3])), isFalse);
+      expect(prochainJourDeSeance(jour: mercredi, seances: const []), DateTime(2026, 10, 8));
+    });
+
+    test('sans habitude nette, les jours choisis pour les routines tranchent', () {
+      expect(jourDeRepos(jour: mercredi, seances: const [], joursChoisis: [1, 2, 4, 5]), isTrue);
+      expect(jourDeRepos(jour: mercredi, seances: const [], joursChoisis: [1, 3, 5]), isFalse);
+      expect(jourDeRepos(jour: mercredi, seances: const [], joursChoisis: [1, 2, null, 5]), isFalse, reason: 'une routine sans jour choisi');
+      expect(prochainJourDeSeance(jour: mercredi, seances: const [], joursChoisis: [1, 2, 4, 5]), DateTime(2026, 10, 8));
+    });
+
+    test('l\'habitude passe devant les jours choisis', () {
+      // Trois routines posées sur lundi, mardi, jeudi mais faites aussi le mercredi.
+      final s = [for (var e = -6; e <= -1; e++) ..._habitude('a', DateTime(2026, 10, 8 + e), semaines)];
+      expect(jourDeRepos(jour: mercredi, seances: s, joursChoisis: [1, 2, 4]), isFalse);
+      expect(jourDeRepos(jour: DateTime(2026, 10, 8, 12), seances: s, joursChoisis: [1, 2, 4]), isTrue, reason: 'jeudi jamais fait');
+    });
+
+    test('une séance en cours ou d\'aujourd\'hui ne compte pas', () {
+      final s = [...quatreJours(), _seance('e', DateTime(2026, 10, 7, 8)), _seance('e', DateTime(2026, 9, 30, 8), finie: false)];
+      expect(jourDeRepos(jour: mercredi, seances: s), isTrue);
+    });
+  });
+
   group('dernière fois', () {
     test('autour du changement d\'heure et du nouvel an', () {
       expect(derniereFois(DateTime(2026, 10, 24, 23, 30), maintenant: DateTime(2026, 10, 25, 0, 30)), 'Hier');

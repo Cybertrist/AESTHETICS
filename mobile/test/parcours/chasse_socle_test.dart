@@ -19,10 +19,14 @@ import 'test_transverse_banc.dart';
 void main() {
   bool visible(Finder f) => f.hitTestable().evaluate().isNotEmpty;
 
+  // Avec le fil des amis, l'accueil n'affiche plus « Voir plus » ni
+  // « Historique » : on ouvre la page comme ces liens le faisaient.
+  void ouvrirDepuisAccueil(WidgetTester t, String chemin) => RetourOrigine.ouvrir(t.element(find.byType(AujourdhuiPage)), chemin);
+
   group('retour depuis une page ouverte par l\'accueil (14a)', () {
     testWidgets('« Voir plus » puis retour du téléphone : l\'accueil, pas Progrès', (t) async {
       final b = await Banc.monter(t);
-      await t.tap(find.text('Voir plus'));
+      ouvrirDepuisAccueil(t, '/progres/semaine');
       await b.pose();
       expect(visible(find.byType(SemainePage)), isTrue);
       expect(b.ongletActif, 'Progrès');
@@ -47,7 +51,7 @@ void main() {
 
     testWidgets('la flèche de la page ramène aussi à l\'accueil', (t) async {
       final b = await Banc.monter(t);
-      await t.tap(find.text('Voir plus'));
+      ouvrirDepuisAccueil(t, '/progres/semaine');
       await b.pose();
       Navigator.of(t.element(find.byType(SemainePage))).maybePop();
       await b.pose();
@@ -59,8 +63,7 @@ void main() {
 
     testWidgets('« Historique » puis retour : l\'accueil', (t) async {
       final b = await Banc.monter(t);
-      await t.ensureVisible(find.text('Historique'));
-      await t.tap(find.text('Historique'));
+      ouvrirDepuisAccueil(t, '/progres/calendrier');
       await b.pose();
       expect(visible(find.byType(CalendrierPage)), isTrue);
       await b.retourSysteme();
@@ -72,7 +75,7 @@ void main() {
 
     testWidgets('changer d\'onglet soi-même annule ce retour', (t) async {
       final b = await Banc.monter(t);
-      await t.tap(find.text('Voir plus'));
+      ouvrirDepuisAccueil(t, '/progres/semaine');
       await b.pose();
       await b.onglet('Accueil');
       expect(RetourOrigine.origine, isNull);

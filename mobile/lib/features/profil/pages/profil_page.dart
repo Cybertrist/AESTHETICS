@@ -12,6 +12,8 @@ import '../../../core/models/models.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/ui/ui.dart';
 import '../../progres/logic/tableau.dart';
+import '../../social/data/social_repo.dart';
+import '../../social/routes.dart';
 import '../data/career.dart';
 import '../data/photo_profil.dart';
 import '../routes.dart';
@@ -107,25 +109,13 @@ class ProfilPage extends StatelessWidget {
   }
 }
 
-/// Le bandeau bleu : la roue des réglages dans le coin en haut à droite,
-/// la photo, le prénom et la phrase libre en bas ; dessous, la pastille de
-/// l'objectif. Le bandeau prend la hauteur qu'on lui donne.
+/// Le bandeau : la photo à gauche ; à sa droite le prénom et la roue des
+/// réglages sur une ligne, puis une ligne « 458 séances · 4 amis » ; dessous,
+/// la phrase libre sur toute la largeur. Ni pastille ni objectif : il se
+/// change dans les réglages. Le bandeau prend la hauteur qu'on lui donne.
 class _Entete extends StatelessWidget {
   const _Entete({required this.profil});
   final UserProfile profil;
-
-  /// Longueur maximale de la phrase du profil.
-  static const longueurPhrase = 140;
-
-  Future<void> _ecrirePhrase(BuildContext context) async {
-    final repo = context.read<ProfileRepo>();
-    final texte = await showPanneauBas<String>(
-      context,
-      titre: 'Ta phrase',
-      builder: (context) => _SaisiePhrase(initiale: profil.phrase),
-    );
-    if (texte != null) await repo.update((p) => p.copyWith(phrase: texte.trim()));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +136,7 @@ class _Entete extends StatelessWidget {
             width: double.infinity,
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(e(20)),
+              borderRadius: BorderRadius.circular(e(24)),
               gradient: const RadialGradient(center: Alignment(-0.4, -0.5), radius: 1.25, colors: [Color(0xFF8FC2E3), Color(0xFF2C5676), Color(0xFF0D1A24)], stops: [0, 0.6, 1]),
             ),
             child: Stack(
@@ -164,16 +154,11 @@ class _Entete extends StatelessWidget {
                 Positioned.fill(
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withValues(alpha: 0.05), Colors.black.withValues(alpha: 0.8)]),
+                      gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black.withValues(alpha: 0.24), Colors.black.withValues(alpha: 0.84)]),
                     ),
                   ),
                 ),
                 _contenuBandeau(context, c, avecPhoto: avecPhoto, photo: photo, sansPrenom: sansPrenom, cote: cote, phrase: phrase),
-                Positioned(
-                  top: e(8),
-                  right: e(8),
-                  child: BoutonRond(trace: Trace.reglages, label: 'Réglages', taille: 36, tailleIcone: e(17), fond: Colors.black.withValues(alpha: 0.35), onTap: () => context.push(Paths.reglages)),
-                ),
               ],
             ),
           ),
@@ -184,14 +169,42 @@ class _Entete extends StatelessWidget {
   }
 
   Widget _contenuBandeau(BuildContext context, AppColors c, {required bool avecPhoto, required String? photo, required bool sansPrenom, required double cote, required String phrase}) {
+    final social = context.watch<SocialRepo?>();
+    final seances = context.watch<SessionRepo>().sessions.where((s) => !s.enCours).length;
+    final ombre = [Shadow(blurRadius: 10, offset: const Offset(0, 1), color: Colors.black.withValues(alpha: 0.35))];
+    final mot = txt(13, FontWeight.w500, Colors.white.withValues(alpha: 0.75), interligne: 1.2);
+    final chiffre = txt(13, FontWeight.w700, Colors.white, interligne: 1.2);
+
+    // Une donnée de la ligne : son icône, son chiffre en gras, son mot.
+    Widget donnee(Trace trace, int n, String singulier, {VoidCallback? onTap}) {
+      final libelle = n > 1 ? '${singulier}s' : singulier;
+      final contenu = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconeTrait(trace, taille: e(14), couleur: Colors.white.withValues(alpha: 0.8)),
+          SizedBox(width: e(5)),
+          Text('$n', style: chiffre),
+          SizedBox(width: e(3.5)),
+          Text(libelle, style: mot),
+          if (onTap != null) ...[SizedBox(width: e(3)), IconeTrait(Trace.chevron, taille: e(9), couleur: Colors.white.withValues(alpha: 0.5))],
+        ],
+      );
+      return Semantics(
+        button: onTap != null,
+        label: '$n $libelle',
+        excludeSemantics: true,
+        child: onTap == null ? contenu : GestureDetector(behavior: HitTestBehavior.opaque, onTap: onTap, child: contenu),
+      );
+    }
+
     return Padding(
-      padding: EdgeInsets.fromLTRB(e(12), e(10), e(10), e(12)),
+      padding: EdgeInsets.all(e(14.5)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Semantics(
                 button: true,
@@ -205,7 +218,7 @@ class _Entete extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: c.surface2,
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.black, width: e(2.5), strokeAlign: BorderSide.strokeAlignOutside),
+                      border: Border.all(color: Colors.black.withValues(alpha: 0.55), width: e(2), strokeAlign: BorderSide.strokeAlignOutside),
                     ),
                     clipBehavior: Clip.antiAlias,
                     alignment: Alignment.center,
@@ -218,35 +231,63 @@ class _Entete extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: e(12)),
+              SizedBox(width: e(11)),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Le prénom laisse la place de la roue à droite : sur un
-                    // écran court, le bandeau est bas et la roue arrive à sa hauteur.
-                    Padding(
-                      padding: EdgeInsets.only(right: e(38)),
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () => context.push('${Paths.profil}/modifier'),
-                        child: Text(sansPrenom ? 'Mon profil' : profil.prenom.trim(), maxLines: 1, overflow: TextOverflow.ellipsis, style: txt(21, FontWeight.w800, Colors.white, espacement: -0.01)),
+                    // Le prénom et la roue partagent une ligne : chacun sa
+                    // place, rien ne passe sous la roue. Un nom long rétrécit
+                    // un peu, puis se coupe.
+                    SizedBox(
+                      height: e(36),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: LayoutBuilder(
+                              builder: (context, box) => GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () => context.push(social == null ? '${Paths.profil}/modifier' : SocialPaths.modifierProfil),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.centerLeft,
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(maxWidth: box.maxWidth * 1.3),
+                                    child: Text(
+                                      sansPrenom ? 'Mon profil' : profil.prenom.trim(),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: txt(19, FontWeight.w800, Colors.white, interligne: 1.25, espacement: -0.01).copyWith(shadows: ombre),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: e(7)),
+                          BoutonRond(trace: Trace.reglages, label: 'Réglages', taille: 36, tailleIcone: e(17), fond: Colors.black.withValues(alpha: 0.34), onTap: () => context.push(Paths.reglages)),
+                        ],
                       ),
                     ),
-                    // La phrase libre : la tienne, ou une invitation discrète à l'écrire.
-                    Semantics(
-                      button: true,
-                      label: phrase.isEmpty ? 'Ajouter une phrase' : 'Modifier ta phrase : $phrase',
-                      excludeSemantics: true,
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () => _ecrirePhrase(context),
-                        child: Text(
-                          phrase.isEmpty ? 'Ajoute une phrase : ta devise, ton but.' : phrase,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: txt(11.5, FontWeight.w400, Colors.white.withValues(alpha: phrase.isEmpty ? 0.6 : 0.9), interligne: 1.35),
+                    SizedBox(height: e(5.5)),
+                    // Mes séances et mes amis, en une ligne ; les amis se touchent.
+                    SizedBox(
+                      height: e(18),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            donnee(Trace.haltere, seances, 'séance'),
+                            if (social != null) ...[
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: e(7)),
+                                child: Text('·', style: txt(13, FontWeight.w700, Colors.white.withValues(alpha: 0.4), interligne: 1.2)),
+                              ),
+                              donnee(Trace.silhouette, social.amis.length, 'ami', onTap: () => context.push(SocialPaths.amis)),
+                            ],
+                          ],
                         ),
                       ),
                     ),
@@ -255,103 +296,47 @@ class _Entete extends StatelessWidget {
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  List<Widget> _sousBandeau(BuildContext context, AppColors c) => [
-    SizedBox(height: e(9)),
-    Material(
-      color: c.surface,
-      shape: const StadiumBorder(),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () => context.push('${Paths.profil}/modifier?section=objectif'),
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(e(12), e(6), e(9), e(6)),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                child: Text(
-                  '${profil.objectif.label} · ${Fmt.pluriel(profil.joursParSemaine, 'séance par semaine', 'séances par semaine')}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: txt(11.5, FontWeight.w600, c.text),
-                ),
-              ),
-              SizedBox(width: e(5)),
-              IconeTrait(Trace.chevron, taille: e(11), couleur: c.text2),
-            ],
-          ),
-        ),
-      ),
-    ),
-    SizedBox(height: e(6)),
-  ];
-}
-
-/// Champ de saisie de la phrase du profil, dans le panneau du bas.
-class _SaisiePhrase extends StatefulWidget {
-  const _SaisiePhrase({required this.initiale});
-  final String initiale;
-
-  @override
-  State<_SaisiePhrase> createState() => _SaisiePhraseState();
-}
-
-class _SaisiePhraseState extends State<_SaisiePhrase> {
-  late final _ctrl = TextEditingController(text: widget.initiale);
-
-  @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    return Padding(
-      // Le panneau remonte avec le clavier.
-      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _ctrl,
-            autofocus: true,
-            minLines: 2,
-            maxLines: 4,
-            maxLength: _Entete.longueurPhrase,
-            textCapitalization: TextCapitalization.sentences,
-            style: txt(13, FontWeight.w400, c.text, interligne: 1.4),
-            cursorColor: c.text,
-            decoration: InputDecoration(
-              hintText: 'La douleur est temporaire, la fierté dure toute une vie.',
-              hintStyle: txt(13, FontWeight.w400, c.text3, interligne: 1.4),
-              counterStyle: txt(10, FontWeight.w400, c.text2),
-              filled: true,
-              fillColor: AppTokens.surface3,
-              contentPadding: EdgeInsets.all(e(12)),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(e(14)), borderSide: BorderSide.none),
-            ),
-          ),
-          SizedBox(height: e(10)),
-          BoutonPrincipal(label: 'Enregistrer', onPressed: () => Navigator.pop(context, _ctrl.text)),
-          if (widget.initiale.trim().isNotEmpty) ...[
-            SizedBox(height: e(4)),
-            TextButton(
-              onPressed: () => Navigator.pop(context, ''),
-              child: Text('Retirer la phrase', style: txt(12, FontWeight.w600, c.text2)),
-            ),
+          // La phrase libre, sur toute la largeur. Elle ne se touche pas : elle
+          // se change dans « Modifier le profil », pas par un appui malheureux.
+          if (phrase.isNotEmpty) ...[
+            SizedBox(height: e(12.5)),
+            Text(phrase, maxLines: 4, overflow: TextOverflow.ellipsis, style: txt(12.6, FontWeight.w400, Colors.white.withValues(alpha: 0.86), interligne: 1.43)),
           ],
         ],
       ),
     );
   }
+
+  /// Sous le bandeau, avec la communauté : modifier mon profil, et le voir
+  /// comme les autres le voient.
+  List<Widget> _sousBandeau(BuildContext context, AppColors c) => [
+    if (context.watch<SocialRepo?>() != null) ...[
+      SizedBox(height: e(10)),
+      Row(
+        children: [
+          Expanded(child: _bouton(c, 'Modifier le profil', () => context.push(SocialPaths.modifierProfil))),
+          SizedBox(width: e(8)),
+          Expanded(child: _bouton(c, 'Mon profil public', () => context.push(SocialPaths.monProfil))),
+        ],
+      ),
+    ],
+    SizedBox(height: e(6)),
+  ];
+
+  Widget _bouton(AppColors c, String texte, VoidCallback onTap) => Material(
+        color: c.surface,
+        shape: const StadiumBorder(),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            height: e(42),
+            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(horizontal: e(10)),
+            child: FittedBox(fit: BoxFit.scaleDown, child: Text(texte, maxLines: 1, style: txt(13.5, FontWeight.w600, c.text))),
+          ),
+        ),
+      );
 }
 
 /// Le mois en cours, avec les mêmes pastilles que le calendrier de Progrès ;

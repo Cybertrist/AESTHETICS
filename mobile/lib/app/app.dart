@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../core/data/data.dart';
+import '../features/social/data/social_repo.dart';
 import '../core/theme/accent_controller.dart';
 import 'orientation.dart';
 import 'router.dart';
@@ -88,6 +89,8 @@ class _AestheticAppState extends State<AestheticApp> {
         ChangeNotifierProvider<NutritionRepo>.value(value: d.nutrition),
         ChangeNotifierProvider<HealthRepo>.value(value: d.health),
         ChangeNotifierProvider<CoachRepo>.value(value: d.coach),
+        // Amis, fil et coach : un aperçu en mémoire, sans serveur.
+        ChangeNotifierProvider<SocialRepo>(create: (_) => SocialRepo()),
       ],
       child: Consumer<AccentController>(
         builder: (context, accent, _) => MaterialApp.router(

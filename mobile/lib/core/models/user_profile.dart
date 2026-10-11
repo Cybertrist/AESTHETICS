@@ -20,6 +20,15 @@ enum Objectif {
   const Objectif(this.label, this.description);
   final String label;
   final String description;
+
+  /// Prendre du poids est-il une bonne nouvelle ? Non pour sécher, oui pour
+  /// prendre du muscle ou de la force ; sans sens voulu (recomposition,
+  /// forme), `null`.
+  bool? get monterDePoidsEstBien => switch (this) {
+        secher => false,
+        prendreDuMuscle || force => true,
+        recomposition || forme => null,
+      };
 }
 
 enum Niveau {
@@ -67,6 +76,35 @@ enum UnitePoids {
   final String label;
 }
 
+/// Qui voit mon profil dans la communauté.
+enum AccesProfil {
+  tous('Tout le monde', 'Tous ceux qui ont AESTHETICS voient ton profil.'),
+  amis('Mes amis', 'Les autres ne voient que ton prénom et ta photo.'),
+  personne('Personne', 'Même tes amis ne voient que ton prénom et ta photo.');
+
+  const AccesProfil(this.titre, this.detail);
+  final String titre;
+  final String detail;
+}
+
+/// Ce que montre le profil public, élément par élément.
+enum Visible {
+  seances,
+  charges,
+  serie,
+  badges,
+  records,
+  lieu,
+  nbSeances,
+  nbAmis,
+  heures,
+  objectif,
+  niveau;
+
+  /// Les réglages arrivés après coup : montrés tant qu'on n'y a pas touché.
+  static const recents = {nbSeances, nbAmis, heures, objectif, niveau};
+}
+
 /// Profil créé à l'inscription.
 class UserProfile {
   const UserProfile({
@@ -89,8 +127,16 @@ class UserProfile {
     this.phrase = '',
     this.pouces = false,
     this.miles = false,
+    this.pseudo = '',
+    this.ville = '',
+    this.salle = '',
+    this.acces = AccesProfil.amis,
+    this.montre = montreParDefaut,
     required this.creeLe,
   });
+
+  /// Montré tant que rien n'est réglé : tout, sauf les charges et le lieu.
+  static const montreParDefaut = {Visible.seances, Visible.serie, Visible.badges, Visible.records, ...Visible.recents};
 
   final String id;
   final String prenom;
@@ -119,7 +165,23 @@ class UserProfile {
   /// Tours du corps affichés en pouces, distances en miles.
   final bool pouces;
   final bool miles;
+
+  /// Le nom par lequel mes amis me trouvent, sans « @ ». Vide : pas encore choisi.
+  final String pseudo;
+  final String ville;
+
+  /// Le nom de ma salle (« Basic-Fit Brest »).
+  final String salle;
+
+  /// Qui voit mon profil, et ce qu'il montre.
+  final AccesProfil acces;
+  final Set<Visible> montre;
   final DateTime creeLe;
+
+  /// Version de la liste [montre] dans le fichier : elle dit quels réglages
+  /// existaient quand la liste a été écrite.
+  static const versionMontre = 2;
+  bool get _montreParDefaut => montre.length == montreParDefaut.length && montre.containsAll(montreParDefaut);
 
   int? get age {
     final n = naissance;
@@ -153,6 +215,12 @@ class UserProfile {
     String? phrase,
     bool? pouces,
     bool? miles,
+    String? pseudo,
+    String? ville,
+    String? salle,
+    AccesProfil? acces,
+    Set<Visible>? montre,
+    bool sansPhoto = false,
   }) =>
       UserProfile(
         id: id,
@@ -170,11 +238,29 @@ class UserProfile {
         materiel: materiel ?? this.materiel,
         unitePoids: unitePoids ?? this.unitePoids,
         objectifsNutrition: objectifsNutrition ?? this.objectifsNutrition,
-        photo: photo ?? this.photo,
+        photo: sansPhoto ? null : photo ?? this.photo,
         phrase: phrase ?? this.phrase,
         pouces: pouces ?? this.pouces,
         miles: miles ?? this.miles,
+        pseudo: pseudo ?? this.pseudo,
+        ville: ville ?? this.ville,
+        salle: salle ?? this.salle,
+        acces: acces ?? this.acces,
+        montre: montre ?? this.montre,
         creeLe: creeLe,
+      );
+
+  /// Ce profil, avec tout ce que les questions de l'inscription ne posent
+  /// pas repris de [ancien] : la phrase, les unités, le profil public.
+  UserProfile gardant(UserProfile ancien) => copyWith(
+        phrase: ancien.phrase,
+        pouces: ancien.pouces,
+        miles: ancien.miles,
+        pseudo: ancien.pseudo,
+        ville: ancien.ville,
+        salle: ancien.salle,
+        acces: ancien.acces,
+        montre: ancien.montre,
       );
 
   factory UserProfile.fromJson(Json j) => UserProfile(
@@ -201,6 +287,19 @@ class UserProfile {
         phrase: asString(j['phrase']) ?? '',
         pouces: asBool(j['pouces']),
         miles: asBool(j['miles']),
+        pseudo: asString(j['pseudo']) ?? '',
+        ville: asString(j['ville']) ?? '',
+        salle: asString(j['salle']) ?? '',
+        acces: enumByName(AccesProfil.values, j['acces'], AccesProfil.amis),
+        // Une liste vide est un choix (ne rien montrer) ; une clé absente, le réglage de départ.
+        // Une liste écrite avant les derniers réglages ne dit rien d'eux : ils restent montrés.
+        montre: j['montre'] is List
+            ? {
+                for (final v in Visible.values)
+                  if (asStringList(j['montre']).contains(v.name)) v,
+                if (asInt(j['montreV']) != versionMontre) ...Visible.recents,
+              }
+            : montreParDefaut,
         creeLe: asDate(j['creeLe']) ?? DateTime.now(),
       );
 
@@ -224,6 +323,12 @@ class UserProfile {
         'phrase': phrase.isEmpty ? null : phrase,
         'pouces': pouces ? true : null,
         'miles': miles ? true : null,
+        'pseudo': pseudo.isEmpty ? null : pseudo,
+        'ville': ville.isEmpty ? null : ville,
+        'salle': salle.isEmpty ? null : salle,
+        'acces': acces == AccesProfil.amis ? null : acces.name,
+        'montre': _montreParDefaut ? null : [for (final v in Visible.values) if (montre.contains(v)) v.name],
+        'montreV': _montreParDefaut ? null : versionMontre,
         'creeLe': dateOut(creeLe),
       });
 }

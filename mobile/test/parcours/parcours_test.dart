@@ -346,7 +346,7 @@ Future<void> _jouer(WidgetTester t, Size taille, {double texte = 1}) async {
 
   // La flamme ouvre la page « série de semaines ».
   p.etape('accueil, flamme');
-  await p.toucher(find.descendant(of: find.byType(EnTeteAccueil), matching: find.byType(InkWell)), 'flamme', defilant: p.defilantDe(AujourdhuiPage));
+  await p.toucher(find.bySemanticsLabel(RegExp(r'^Série de \d+ semaine')), 'flamme', defilant: p.defilantDe(AujourdhuiPage));
   p.attendu(p.lieu == '/aujourdhui/serie', 'page de la série ouverte par la flamme');
   p.present(find.byType(SeriePage), 'page de la série');
   // En paysage, le titre du calendrier est sous le pli : la liste ne le
@@ -356,9 +356,11 @@ Future<void> _jouer(WidgetTester t, Size taille, {double texte = 1}) async {
   await p.toucher(find.bySemanticsLabel('Retour'), 'retour de la série');
   p.attendu(p.lieu == '/', 'retour à l\'accueil après la flamme');
 
-  // « Voir plus » : le bilan de la semaine, dans l'onglet Progrès.
-  p.etape('accueil, voir plus');
-  await p.toucher(find.text('Voir plus'), '« Voir plus »');
+  // Le bilan de la semaine, dans l'onglet Progrès : avec le fil des amis,
+  // l'accueil n'a plus de « Voir plus », la page s'ouvre comme il le faisait.
+  p.etape('accueil, bilan de la semaine');
+  RetourOrigine.ouvrir(t.element(find.byType(AujourdhuiPage)), '/progres/semaine');
+  await p.pose();
   p.attendu(p.lieu == '/progres/semaine', 'bilan de la semaine');
   await p.ecran('semaine');
   await p.onglet('Accueil');

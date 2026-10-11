@@ -9,25 +9,8 @@ import '../../../core/ui/ui.dart';
 
 enum _Source { camera, galerie, retirer }
 
-/// Profil sans photo (copyWith ne sait pas remettre un champ à null).
-UserProfile sansPhoto(UserProfile p) => UserProfile(
-      id: p.id,
-      prenom: p.prenom,
-      sexe: p.sexe,
-      naissance: p.naissance,
-      tailleCm: p.tailleCm,
-      poidsKg: p.poidsKg,
-      poidsCibleKg: p.poidsCibleKg,
-      objectif: p.objectif,
-      niveau: p.niveau,
-      activite: p.activite,
-      joursParSemaine: p.joursParSemaine,
-      dureeSeanceMin: p.dureeSeanceMin,
-      materiel: p.materiel,
-      unitePoids: p.unitePoids,
-      objectifsNutrition: p.objectifsNutrition,
-      creeLe: p.creeLe,
-    );
+/// Profil sans photo.
+UserProfile sansPhoto(UserProfile p) => p.copyWith(sansPhoto: true);
 
 /// Propose de prendre, choisir ou retirer la photo de profil, puis
 /// l'enregistre dans le dossier privé. Rend vrai si le profil a changé.
