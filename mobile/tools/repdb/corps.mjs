@@ -50,7 +50,7 @@ const VUES = {
       gracilis: ['adducteurs'],
       pectineus_sartorius: ['adducteurs'],
       gracilis_gastrocnemius: ['mollets'],
-      tibialis_anterior: ['mollets'],
+      tibialis_anterior: ['tibialAnterieur'],
       sternocleidomastoid: ['cou'],
     },
   },

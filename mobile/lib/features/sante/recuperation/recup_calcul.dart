@@ -21,9 +21,10 @@ typedef ConseilRecup = ({MuscleRegion groupe, Muscle phare, int pourcentage});
 abstract final class Recup {
   static const seuilPret = 90;
 
-  /// Les dix-huit groupes suivis (ni le cou ni les abducteurs, qu'on ne
-  /// cible presque jamais seuls).
-  static final suivis = Muscle.values.where((m) => m != Muscle.cou && m != Muscle.abducteurs).toList();
+  /// Les dix-huit groupes suivis (ni le cou, ni les abducteurs, ni le tibial
+  /// antérieur, qu'on ne cible presque jamais seuls).
+  static final suivis =
+      Muscle.values.where((m) => m != Muscle.cou && m != Muscle.abducteurs && m != Muscle.tibialAnterieur).toList();
 
   /// Les six vignettes de l'écran principal.
   static const principaux = [
@@ -48,7 +49,7 @@ abstract final class Recup {
 
   /// Vue et cadrage du personnage où le muscle se voit le mieux.
   static (BodyView, BodyFraming) cadrage(Muscle m) => switch (m) {
-        Muscle.quadriceps || Muscle.adducteurs => (BodyView.front, BodyFraming.jambes),
+        Muscle.quadriceps || Muscle.adducteurs || Muscle.tibialAnterieur => (BodyView.front, BodyFraming.jambes),
         Muscle.ischios || Muscle.fessiers || Muscle.mollets || Muscle.abducteurs => (BodyView.back, BodyFraming.jambes),
         Muscle.deltoidesPosterieurs ||
         Muscle.triceps ||
@@ -66,7 +67,7 @@ abstract final class Recup {
         Muscle.quadriceps || Muscle.adducteurs => (1.9, -0.86),
         Muscle.ischios => (1.9, -0.8),
         Muscle.fessiers || Muscle.abducteurs => (2.2, -1),
-        Muscle.mollets => (2, 0.68),
+        Muscle.mollets || Muscle.tibialAnterieur => (2, 0.68),
         // Haut du corps : resserré sur le muscle, sans perdre les bras.
         Muscle.pectoraux || Muscle.rhomboides => (1.5, -0.55),
         Muscle.deltoidesAnterieurs || Muscle.deltoidesLateraux || Muscle.deltoidesPosterieurs => (1.45, -0.7),

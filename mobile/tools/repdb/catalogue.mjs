@@ -56,6 +56,7 @@ const MUSCLES = {
   hamstrings: 'ischios',
   gastrocnemius: 'mollets',
   soleus: 'mollets',
+  tibialis_anterior: 'tibialAnterieur',
 };
 
 // Matériel du pack vers les clés de Equipements.labels (lib/core/models/exercise.dart).
@@ -106,7 +107,7 @@ const CATEGORIE_DU_MUSCLE = {
   abdominaux: 'abdos', obliques: 'abdos',
   fessiers: 'fessiers', abducteurs: 'fessiers',
   quadriceps: 'jambes', adducteurs: 'jambes',
-  ischios: 'ischios', mollets: 'mollets',
+  ischios: 'ischios', mollets: 'mollets', tibialAnterieur: 'tibial',
 };
 const CATEGORIE_DE_LA_ZONE = {
   chest: 'pectoraux', back: 'dos', shoulders: 'epaules', core: 'abdos', upper_arms: 'biceps',

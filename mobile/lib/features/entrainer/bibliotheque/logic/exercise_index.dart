@@ -95,6 +95,7 @@ const _motsMuscle = <Muscle, String>{
   Muscle.abducteurs: 'jambes',
   Muscle.mollets: 'jambes',
   Muscle.cou: 'nuque',
+  Muscle.tibialAnterieur: 'jambes tibia tibial',
 };
 
 /// Entrée indexée : textes déjà normalisés, pour une recherche instantanée

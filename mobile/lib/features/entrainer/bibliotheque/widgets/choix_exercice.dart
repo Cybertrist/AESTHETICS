@@ -252,7 +252,7 @@ const _parties = <(String, List<Muscle>)>[
   ('Bras', [Muscle.biceps, Muscle.triceps, Muscle.avantBras]),
   ('Dos', [Muscle.trapezes, Muscle.rhomboides, Muscle.grandDorsal, Muscle.lombaires]),
   ('Abdos', [Muscle.abdominaux, Muscle.obliques]),
-  ('Jambes', [Muscle.quadriceps, Muscle.ischios, Muscle.fessiers, Muscle.adducteurs, Muscle.abducteurs, Muscle.mollets]),
+  ('Jambes', [Muscle.quadriceps, Muscle.ischios, Muscle.fessiers, Muscle.adducteurs, Muscle.abducteurs, Muscle.mollets, Muscle.tibialAnterieur]),
   ('Cou', [Muscle.cou]),
 ];
 
@@ -303,6 +303,7 @@ const _groupeDe = <String, String>{
   'ischios': 'Ischios',
   'fessiers': 'Fessiers',
   'mollets': 'Mollets',
+  'tibial': 'Tibial',
   'abdos': 'Abdos',
 };
 

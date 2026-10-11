@@ -46,9 +46,9 @@ void main() {
   Exercise ex(String id) => catalogue.firstWhere((e) => e.id == id);
 
   group('catalogue sur le disque', () {
-    test('608 exercices, identifiants uniques, muscles et libellés connus', () {
-      expect(catalogue, hasLength(608));
-      expect(catalogue.map((e) => e.id).toSet(), hasLength(608));
+    test('637 exercices, identifiants uniques, muscles et libellés connus', () {
+      expect(catalogue, hasLength(637));
+      expect(catalogue.map((e) => e.id).toSet(), hasLength(637));
       for (final e in catalogue) {
         expect(e.musclesPrincipaux, isNotEmpty, reason: e.id);
         expect(e.musclesPrincipaux.toSet().intersection(e.musclesSecondaires.toSet()), isEmpty, reason: e.id);
@@ -70,7 +70,15 @@ void main() {
       }
       expect(manquants, isEmpty);
       // Les maintiens et les étirements n'ont qu'une pose fixe.
-      expect(sansAnimation, 112);
+      expect(sansAnimation, 124);
+    });
+
+    test('le tibial antérieur est un muscle à part, ciblé par son relevé à la kettlebell', () {
+      final e = ex('kettlebell-tibialis-raise');
+      expect(e.musclesPrincipaux, [Muscle.tibialAnterieur]);
+      expect(e.categorie, 'tibial');
+      expect(catalogue.where((x) => x.musclesPrincipaux.contains(Muscle.tibialAnterieur)), hasLength(1));
+      expect(File('assets/body/pack/face_tibialAnterieur.webp').existsSync(), isTrue);
     });
   });
 

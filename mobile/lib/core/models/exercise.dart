@@ -176,6 +176,7 @@ abstract final class Categories {
     'ischios': 'Ischio-jambiers',
     'fessiers': 'Fessiers',
     'mollets': 'Mollets',
+    'tibial': 'Tibial antérieur',
     'abdos': 'Abdos',
     'cardio': 'Cardio',
     'completCorps': 'Corps complet',

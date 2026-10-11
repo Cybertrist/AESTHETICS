@@ -94,6 +94,7 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
         Muscle.ischios => 'ischios',
         Muscle.quadriceps || Muscle.adducteurs || Muscle.abducteurs => 'jambes',
         Muscle.mollets => 'mollets',
+        Muscle.tibialAnterieur => 'tibial',
         Muscle.cou => 'cou',
       };
 

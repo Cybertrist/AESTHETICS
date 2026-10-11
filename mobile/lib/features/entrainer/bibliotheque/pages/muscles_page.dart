@@ -33,6 +33,7 @@ const musclesExplorateur = <Muscle>[
   Muscle.adducteurs,
   Muscle.abducteurs,
   Muscle.mollets,
+  Muscle.tibialAnterieur,
   Muscle.cou,
 ];
 

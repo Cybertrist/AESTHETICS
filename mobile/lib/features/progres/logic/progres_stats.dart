@@ -205,8 +205,8 @@ abstract final class ProgresStats {
   static const seriesMin = 10.0;
   static const seriesMax = 20.0;
 
-  /// Muscles pris en compte pour repérer les oublis (le cou s'entraîne rarement).
-  static final musclesSuivis = Muscle.values.where((m) => m != Muscle.cou).toList();
+  /// Muscles pris en compte pour repérer les oublis (le cou et le tibial antérieur s'entraînent rarement).
+  static final musclesSuivis = Muscle.values.where((m) => m != Muscle.cou && m != Muscle.tibialAnterieur).toList();
 
   static StatutMuscle statut(double series) =>
       series < seriesMin ? StatutMuscle.neglige : (series > seriesMax ? StatutMuscle.auDessus : StatutMuscle.cible);

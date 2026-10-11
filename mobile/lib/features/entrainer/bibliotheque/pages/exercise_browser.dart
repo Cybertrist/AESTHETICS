@@ -46,6 +46,7 @@ class MuscleGroup {
     MuscleGroup('Ischios', {Muscle.ischios}, BodyView.back, BodyFraming.jambes, 1.9, -0.8),
     MuscleGroup('Fessiers', {Muscle.fessiers, Muscle.abducteurs}, BodyView.back, BodyFraming.jambes, 2.2, -1),
     MuscleGroup('Mollets', {Muscle.mollets}, BodyView.back, BodyFraming.jambes, 2, 0.68),
+    MuscleGroup('Tibial', {Muscle.tibialAnterieur}, BodyView.front, BodyFraming.jambes, 2, 0.68),
   ];
 }
 
@@ -205,6 +206,7 @@ const _musclesDeCategorie = <String, List<Muscle>>{
   'ischios': [Muscle.ischios],
   'fessiers': [Muscle.fessiers, Muscle.abducteurs],
   'mollets': [Muscle.mollets],
+  'tibial': [Muscle.tibialAnterieur],
   'abdos': [Muscle.abdominaux, Muscle.obliques],
   'cou': [Muscle.cou],
 };

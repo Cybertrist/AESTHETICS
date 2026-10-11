@@ -38,7 +38,8 @@ enum Muscle {
   adducteurs('Adducteurs', MuscleRegion.jambes, MuscleSide.face),
   abducteurs('Abducteurs', MuscleRegion.jambes, MuscleSide.lesDeux),
   mollets('Mollets', MuscleRegion.jambes, MuscleSide.dos),
-  cou('Cou', MuscleRegion.cou, MuscleSide.face);
+  cou('Cou', MuscleRegion.cou, MuscleSide.face),
+  tibialAnterieur('Tibial antérieur', MuscleRegion.jambes, MuscleSide.face);
 
   const Muscle(this.label, this.region, this.side);
   final String label;
@@ -104,5 +105,6 @@ enum Muscle {
     'adductors': adducteurs, 'abductors': abducteurs,
     'calves': mollets, 'calf': mollets, 'mollet': mollets,
     'neck': cou,
+    'tibialisanterior': tibialAnterieur, 'tibialis': tibialAnterieur, 'shins': tibialAnterieur, 'shin': tibialAnterieur, 'tibial': tibialAnterieur, 'tibia': tibialAnterieur,
   };
 }
