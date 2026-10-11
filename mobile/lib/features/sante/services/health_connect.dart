@@ -8,6 +8,7 @@ import '../../../core/data/data.dart';
 import '../../../core/logic/dates.dart';
 import '../../../core/models/models.dart';
 import 'activite_journal.dart';
+import 'corps_hc.dart';
 
 /// État de la liaison avec Health Connect.
 enum EtatHc {
@@ -174,10 +175,13 @@ class HealthConnectService {
     }
   }
 
-  Future<List<HealthDataPoint>> _lire(List<HealthDataType> types, DateTime debut, DateTime fin) async {
+  /// [strict] : une lecture qui échoue remonte l'erreur au lieu de rendre
+  /// une liste vide.
+  Future<List<HealthDataPoint>> _lire(List<HealthDataType> types, DateTime debut, DateTime fin, {bool strict = false}) async {
     try {
       return await _h.getHealthDataFromTypes(types: types, startTime: debut, endTime: fin);
     } catch (_) {
+      if (strict) rethrow;
       return const [];
     }
   }
@@ -232,34 +236,147 @@ class HealthConnectService {
     return nuits.length;
   }
 
-  Future<int> _poids(HealthRepo repo, DateTime debut, DateTime fin) async {
-    final points = await _lire([HealthDataType.WEIGHT, HealthDataType.BODY_FAT_PERCENTAGE], debut, fin);
-    final existantes = repo.measurements;
-    final out = <BodyMeasurement>[];
-    for (final p in points) {
-      final v = _num(p);
-      if (v <= 0) continue;
-      final date = p.dateFrom.toLocal();
-      final poids = p.type == HealthDataType.WEIGHT;
-      final id = 'hc-${poids ? 'p' : 'mg'}-${p.uuid}';
-      // Déjà saisie à la main ce jour-là avec la même valeur : on n'ajoute rien.
-      final doublon = existantes.any((m) =>
-          m.id != id &&
-          m.source != 'health connect' &&
-          Dates.memeJour(m.date, date) &&
-          (poids ? (m.poidsKg != null && (m.poidsKg! - v).abs() < 0.15) : (m.masseGrassePct != null && (m.masseGrassePct! - v).abs() < 0.3)));
-      if (doublon) continue;
-      out.add(BodyMeasurement(
-        id: id,
-        date: date,
-        poidsKg: poids ? v : null,
-        // Certaines balances donnent une fraction (0,15) plutôt qu'un pourcentage.
-        masseGrassePct: poids ? null : (v <= 1 ? v * 100 : v),
-        source: 'health connect',
-      ));
+  static const _corps = [HealthDataType.WEIGHT, HealthDataType.BODY_FAT_PERCENTAGE];
+
+  /// Types du corps (poids, masse grasse) dont la lecture est accordée.
+  Future<List<HealthDataType>> _corpsAccordes() async {
+    final out = <HealthDataType>[];
+    for (final t in _corps) {
+      try {
+        if (await _h.hasPermissions([t], permissions: [HealthDataAccess.READ]) == true) out.add(t);
+      } catch (_) {}
     }
-    if (out.isNotEmpty) await repo.addMeasurementsAll(out);
-    return out.where((m) => m.poidsKg != null).length;
+    return out;
+  }
+
+  /// Où en est la lecture du poids et de la masse grasse, sans rien demander.
+  Future<EtatHc> etatCorps() async {
+    if (!_android) return EtatHc.indisponible;
+    try {
+      await _init();
+      final s = await _h.getHealthConnectSdkStatus();
+      if (s == HealthConnectSdkStatus.sdkUnavailable || s == null) return EtatHc.aInstaller;
+      if (s == HealthConnectSdkStatus.sdkUnavailableProviderUpdateRequired) return EtatHc.aMettreAJour;
+      return (await _corpsAccordes()).isEmpty ? EtatHc.nonAutorise : EtatHc.connecte;
+    } catch (_) {
+      return EtatHc.indisponible;
+    }
+  }
+
+  /// Demande ce qui manque pour lire le poids et la masse grasse, rien
+  /// d'autre : la lecture des deux, puis l'historique au-delà de 30 jours
+  /// (une autorisation à part).
+  Future<bool> demanderCorps() async {
+    if (!_android) return false;
+    await _init();
+    if ((await _corpsAccordes()).length < _corps.length) {
+      try {
+        await _h.requestAuthorization(_corps, permissions: [for (final _ in _corps) HealthDataAccess.READ]);
+      } catch (_) {}
+    }
+    final ok = (await _corpsAccordes()).isNotEmpty;
+    try {
+      if (ok && await _h.isHealthDataHistoryAvailable() && !await _h.isHealthDataHistoryAuthorized()) {
+        await _h.requestHealthDataHistoryAuthorization();
+      }
+    } catch (_) {}
+    return ok;
+  }
+
+  bool _corpsEnCours = false;
+
+  /// Relit le poids et la masse grasse des [jours] derniers jours (tout
+  /// l'historique avec null) et met les saisies à jour, sans rien demander :
+  /// sans autorisation, rien ne se passe. Rend le nombre de jours mis à jour.
+  Future<int> importerCorps(HealthRepo repo, {int? jours = 30}) async {
+    if (!_android || _corpsEnCours) return 0;
+    _corpsEnCours = true;
+    try {
+      await _init();
+      if ((await _corpsAccordes()).isEmpty) return 0;
+      final fin = DateTime.now();
+      return await _poids(repo, jours == null ? DateTime(2000) : Dates.jour(fin).subtract(Duration(days: jours - 1)), fin);
+    } catch (_) {
+      return 0;
+    } finally {
+      _corpsEnCours = false;
+    }
+  }
+
+  /// Ce que Health Connect accorde pour le corps, sans rien demander.
+  Future<AccesCorps> accesCorps() async {
+    if (!_android) return const (poids: false, gras: false, historique: false);
+    try {
+      await _init();
+      final types = await _corpsAccordes();
+      var historique = false;
+      try {
+        historique = await _h.isHealthDataHistoryAuthorized();
+      } catch (_) {}
+      return (poids: types.contains(HealthDataType.WEIGHT), gras: types.contains(HealthDataType.BODY_FAT_PERCENTAGE), historique: historique);
+    } catch (_) {
+      return const (poids: false, gras: false, historique: false);
+    }
+  }
+
+  /// Mois vides de suite après lesquels on arrête de remonter.
+  static const _moisVidesMax = 18;
+
+  /// Relit tout ce que Health Connect garde du poids et de la masse grasse,
+  /// mois par mois en remontant, et range chaque mois au fur et à mesure.
+  /// [surAvancee] reçoit le total après chaque mois. S'arrête après
+  /// [_moisVidesMax] mois vides de suite.
+  Future<BilanCorps> importerToutCorps(HealthRepo repo, {void Function(BilanCorps bilan, DateTime mois)? surAvancee}) async {
+    var bilan = const BilanCorps();
+    if (!_android || _corpsEnCours) return bilan;
+    _corpsEnCours = true;
+    try {
+      await _init();
+      final accordes = await _corpsAccordes();
+      if (accordes.isEmpty) return bilan;
+      final maintenant = DateTime.now();
+      var vides = 0;
+      for (var i = 0; vides < _moisVidesMax && i < 12 * 30; i++) {
+        final debut = DateTime(maintenant.year, maintenant.month - i);
+        final fin = i == 0 ? maintenant : DateTime(maintenant.year, maintenant.month - i + 1);
+        final releves = await _relevesCorps(debut, fin, accordes: accordes, strict: true);
+        vides = releves.isEmpty ? vides + 1 : 0;
+        if (releves.isNotEmpty) bilan = bilan.avec(releves, await _ranger(repo, releves));
+        surAvancee?.call(bilan, debut);
+      }
+      return bilan;
+    } finally {
+      _corpsEnCours = false;
+    }
+  }
+
+  Future<List<ReleveHc>> _relevesCorps(DateTime debut, DateTime fin, {List<HealthDataType> accordes = _corps, bool strict = false}) async {
+    // Un type à la fois : l'un peut être accordé sans l'autre.
+    final points = [for (final t in accordes) ...await _lire([t], debut, fin, strict: strict)];
+    return [
+      for (final p in points)
+        (
+          date: p.dateFrom.toLocal(),
+          poidsKg: p.type == HealthDataType.WEIGHT ? _num(p) : null,
+          grasPct: p.type == HealthDataType.BODY_FAT_PERCENTAGE ? _num(p) : null,
+        ),
+    ];
+  }
+
+  /// Range les pesées lues dans un fichier, comme celles de Health Connect.
+  Future<BilanCorps> rangerPesees(HealthRepo repo, List<ReleveHc> releves) async =>
+      releves.isEmpty ? const BilanCorps() : const BilanCorps().avec(releves, await _ranger(repo, releves));
+
+  Future<int> _poids(HealthRepo repo, DateTime debut, DateTime fin) async => _ranger(repo, await _relevesCorps(debut, fin));
+
+  /// Range des relevés dans les saisies ; rend le nombre de jours modifiés.
+  Future<int> _ranger(HealthRepo repo, List<ReleveHc> releves) async {
+    final fusion = CorpsHc.fusionner(repo.measurements, releves);
+    for (final id in fusion.aRetirer) {
+      await repo.deleteMeasurement(id);
+    }
+    if (fusion.aEcrire.isNotEmpty) await repo.addMeasurementsAll(fusion.aEcrire);
+    return fusion.aEcrire.length;
   }
 
   Future<int> _activite(ActiviteJournal journal, Set<DonneeHc> permis, DateTime debut, DateTime fin) async {

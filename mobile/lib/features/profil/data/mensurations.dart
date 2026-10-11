@@ -139,6 +139,43 @@ abstract final class Mensurations {
     return out;
   }
 
+  /// Point d'où compter le chemin parcouru : la valeur la plus haute de la
+  /// série ([plusBas] : la plus basse). À égalité, la plus récente.
+  static PointMesure? repere(List<PointMesure> serie, {bool plusBas = false}) {
+    PointMesure? r;
+    for (final p in serie) {
+      if (r == null || (plusBas ? p.valeur <= r.valeur : p.valeur >= r.valeur)) r = p;
+    }
+    return r;
+  }
+
+  /// Chemin parcouru jusqu'à la dernière valeur d'une série, depuis
+  /// [repere] ; depuis la première valeur quand le repère manque ou qu'il
+  /// est la dernière valeur elle-même. Null avec moins de deux valeurs ;
+  /// [ecart] est null quand rien n'a bougé.
+  static ({PointMesure debut, double? ecart})? parcours(List<PointMesure> serie, PointMesure? repere) {
+    if (serie.length < 2) return null;
+    final debut = repere == null || repere.id == serie.last.id ? serie.first : repere;
+    return (debut: debut, ecart: ecart(debut.valeur, serie.last.valeur));
+  }
+
+  /// Chemin parcouru par le poids depuis son sommet : la pesée la plus
+  /// haute (la plus basse quand l'objectif est de prendre du poids).
+  static ({PointMesure debut, double? ecart})? parcoursPoids(Iterable<BodyMeasurement> ms, Objectif? objectif) {
+    final serie = seriePoids(ms);
+    return parcours(serie, repere(serie, plusBas: objectif?.monterDePoidsEstBien ?? false));
+  }
+
+  /// Point de la série le plus proche d'une date ; à écart égal, celui
+  /// d'après.
+  static PointMesure? proche(List<PointMesure> serie, DateTime date) {
+    PointMesure? r;
+    for (final p in serie) {
+      if (r == null || p.date.difference(date).abs() <= r.date.difference(date).abs()) r = p;
+    }
+    return r;
+  }
+
   /// Écart entre deux valeurs, null quand rien n'a bougé.
   static double? ecart(double avant, double apres) {
     final d = _arrondi(apres - avant);

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../app/navigation.dart';
 import '../../core/models/models.dart';
 import 'data/mensurations.dart';
+import 'mensurations/balance_page.dart';
 import 'mensurations/historique_page.dart';
 import 'mensurations/mensurations_page.dart';
 import 'mensurations/mesure_page.dart';
@@ -25,6 +26,9 @@ abstract final class ProfilPaths {
 
   /// Historique des saisies.
   static const historique = '/profil/mensurations/historique';
+
+  /// Balance connectée : import des pesées de Health Connect.
+  static const balance = '/profil/mensurations/balance';
 
   /// Photos de progression.
   static const photos = '/profil/photos';
@@ -85,6 +89,11 @@ List<RouteBase> profilRoutes() => [
                 path: 'historique',
                 parentNavigatorKey: rootNavigatorKey,
                 builder: (context, state) => const HistoriquePage(),
+              ),
+              GoRoute(
+                path: 'balance',
+                parentNavigatorKey: rootNavigatorKey,
+                builder: (context, state) => const BalancePage(),
               ),
               GoRoute(
                 path: 'saisie',

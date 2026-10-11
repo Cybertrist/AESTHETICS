@@ -8,6 +8,7 @@ import '../../../../core/theme/theme.dart';
 import '../../../../core/ui/ui.dart';
 import '../../../../core/env.dart';
 import '../../data/backup_service.dart';
+import '../../routes.dart';
 import '../../widgets/maquette.dart';
 
 /// Réglages > Données : importer, exporter, sauvegarder, restaurer, effacer.
@@ -122,6 +123,13 @@ class _DonneesSectionState extends State<DonneesSection> {
                   detail: 'Depuis le fichier CSV exporté par ton ancienne appli',
                   detailLignes: 2,
                   onTap: () => context.push('/import'),
+                ),
+                Ligne(
+                  trace: Trace.jauge,
+                  titre: 'Importer mes pesées',
+                  detail: 'Poids et taux de gras, depuis ta balance connectée ou le fichier de son appli',
+                  detailLignes: 2,
+                  onTap: () => context.push(ProfilPaths.balance),
                 ),
                 Ligne(
                   trace: Trace.horloge,

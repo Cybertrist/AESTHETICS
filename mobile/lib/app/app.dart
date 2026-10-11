@@ -14,6 +14,7 @@ import '../core/theme/accent_controller.dart';
 import 'orientation.dart';
 import 'router.dart';
 import '../features/ecran_accueil/atelier.dart';
+import '../features/sante/services/health_connect.dart';
 
 /// Racine de l'appli : dépôts fournis par Provider, thème selon l'accent.
 class AestheticApp extends StatefulWidget {
@@ -43,10 +44,19 @@ class _AestheticAppState extends State<AestheticApp> {
     if (Platform.isAndroid && !Platform.environment.containsKey('FLUTTER_TEST')) {
       HomeWidget.initiallyLaunchedFromHomeWidget().then(_ouvrirLien).catchError((_) {});
       _liens = HomeWidget.widgetClicked.listen(_ouvrirLien, onError: (_) {});
+      // Les pesées de la balance arrivent seules : à l'ouverture et à chaque
+      // retour dans l'appli.
+      _retourAppli = AppLifecycleListener(onResume: _lireBalance);
+      _lireBalance();
     }
   }
 
   StreamSubscription<Uri?>? _liens;
+  AppLifecycleListener? _retourAppli;
+
+  void _lireBalance() {
+    if (widget.data.profile.hasProfile) HealthConnectService.instance.importerCorps(widget.data.health);
+  }
 
   void _ouvrirLien(Uri? lien) {
     final chemin = cheminDuLien(lien);
@@ -57,6 +67,7 @@ class _AestheticAppState extends State<AestheticApp> {
   @override
   void dispose() {
     _liens?.cancel();
+    _retourAppli?.dispose();
     _router.dispose();
     super.dispose();
   }

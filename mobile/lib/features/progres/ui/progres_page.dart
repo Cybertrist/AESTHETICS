@@ -9,6 +9,7 @@ import '../../../core/logic/logic.dart';
 import '../../../core/models/models.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/ui/ui.dart';
+import '../../profil/data/mensurations.dart';
 import '../../sante/recuperation/recup_calcul.dart';
 import '../logic/tableau.dart';
 import '../progres_paths.dart';
@@ -332,36 +333,27 @@ class _ProgresPageState extends State<ProgresPage> {
         PeriodeProgres.annee => 'vs ${debut.year - 1}${enCours ? ' à la même date' : ''}',
       };
 
-  /// « 76,7 kg · +2,6 » : le dernier poids et l'écart sur trente jours.
+  /// « −18,2 kg depuis juin » : le même chemin parcouru que la page
+  /// Mensurations. Le dernier poids seul quand il n'y a rien à comparer.
   Widget _poids(BuildContext context, HealthRepo sante, DateTime now) {
     final c = context.colors;
     final style = ts(14, FontWeight.w400, c.text2, hauteur: 1.35);
-    final serie = sante.weightSeries();
-    if (serie.isEmpty) return Text('À renseigner', maxLines: 1, style: style);
-    final dernier = serie.last;
-    final seuil = dernier.date.subtract(const Duration(days: 30));
-    final base = serie.lastWhere((p) => !p.date.isAfter(seuil), orElse: () => serie.first);
-    // Arrondi au dixième avant de décider : un écart qui s'écrirait « 0 » ne
-    // s'affiche pas.
-    final dixiemes = ((dernier.kg - base.kg) * 10).round();
-    final ecart = dixiemes / 10;
-    final montre = dixiemes != 0;
-    return Text.rich(
-      TextSpan(
-        text: Fmt.poids(dernier.kg),
-        children: [
-          if (montre) ...[
-            const TextSpan(text: ' · '),
-            TextSpan(
-              text: '${ecart > 0 ? '+' : '-'}${Fmt.n(ecart.abs())}',
-              style: ts(14, FontWeight.w700, ecart > 0 ? c.success : c.error, hauteur: 1.35),
-            ),
-          ],
-        ],
-      ),
+    final mesures = sante.measurements;
+    final dernier = sante.latestWeight;
+    if (dernier == null) return Text('À renseigner', maxLines: 1, style: style);
+    final profil = context.watch<ProfileRepo>();
+    final objectif = profil.profile?.objectif;
+    final chemin = Mensurations.parcoursPoids(mesures, objectif);
+    final ecart = chemin?.ecart;
+    if (ecart == null) return Text(Fmt.poids(dernier, profil.unite), maxLines: 1, overflow: TextOverflow.ellipsis, style: style);
+    // Même règle que la page Mensurations : vert quand le poids va dans le
+    // sens de l'objectif, gris quand l'objectif n'en donne pas.
+    final monterEstBien = objectif?.monterDePoidsEstBien;
+    return Text(
+      '${ecart > 0 ? '+' : '−'}${Fmt.n(Fmt.poidsAffiche(ecart.abs(), profil.unite))} ${profil.unite.label} depuis ${Mensurations.moisDe(chemin!.debut.date, maintenant: now)}',
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: style,
+      style: ts(14, FontWeight.w700, monterEstBien == null ? c.text2 : ((ecart > 0) == monterEstBien ? c.success : c.error), hauteur: 1.35),
     );
   }
 }

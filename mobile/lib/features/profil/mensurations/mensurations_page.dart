@@ -253,10 +253,19 @@ class _CartePoids extends StatelessWidget {
     }
     final gras = Mensurations.serieGras(mesures);
 
-    // Une colonne : titre, valeur, et l'écart depuis la première saisie dès
-    // qu'il y en a deux. Pas de courbe ici : juste les chiffres.
-    Widget colonne(String titre, String valeur, List<PointMesure> points, {required String Function(double) ecartTexte, required bool? monterEstBien}) {
-      final ecart = points.length < 2 ? null : Mensurations.ecart(points.first.valeur, points.last.valeur);
+    // Le chemin parcouru se compte depuis le sommet : la pesée la plus haute
+    // (la plus basse quand l'objectif est de prendre du poids). Le taux de
+    // gras part du même moment.
+    final repere = Mensurations.repere(serie, plusBas: objectif?.monterDePoidsEstBien ?? false);
+    final repereGras = repere == null ? null : Mensurations.proche(gras, repere.date);
+
+    // Une colonne : titre, valeur, et l'écart depuis le repère dès qu'il y a
+    // deux saisies. Pas de courbe ici : juste les chiffres.
+    Widget colonne(String titre, String valeur, List<PointMesure> points, PointMesure? depuis, {required String Function(double) ecartTexte, required bool? monterEstBien}) {
+      // Au sommet aujourd'hui : on compare à la première saisie.
+      final chemin = Mensurations.parcours(points, depuis);
+      final debut = chemin?.debut;
+      final ecart = chemin?.ecart;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
@@ -268,9 +277,9 @@ class _CartePoids extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(valeur, maxLines: 1, style: txt(17, FontWeight.w800, c.text)),
           ),
-          if (points.length > 1)
+          if (chemin != null)
             Text(
-              ecart == null ? 'stable depuis ${Mensurations.moisDe(points.first.date)}' : '${ecart > 0 ? '+' : '−'}${ecartTexte(ecart.abs())} depuis ${Mensurations.moisDe(points.first.date)}',
+              ecart == null ? 'stable depuis ${Mensurations.moisDe(debut!.date)}' : '${ecart > 0 ? '+' : '−'}${ecartTexte(ecart.abs())} depuis ${Mensurations.moisDe(debut!.date)}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: txt(10.5, FontWeight.w600, ecart == null || monterEstBien == null ? c.text2 : ((ecart > 0) == monterEstBien ? c.success : c.error)),
@@ -289,15 +298,12 @@ class _CartePoids extends StatelessWidget {
               'Poids',
               Fmt.poids(serie.last.valeur, unite),
               serie,
+              repere,
               ecartTexte: (d) => '${Fmt.n(Fmt.poidsAffiche(d, unite))} ${unite.label}',
               // Vert quand le poids va dans le sens de l'objectif : en baisse
               // pour sécher, en hausse pour prendre du muscle ou de la force.
               // Sans sens voulu (recomposition, forme), l'écart reste gris.
-              monterEstBien: switch (objectif) {
-                Objectif.secher => false,
-                Objectif.prendreDuMuscle || Objectif.force => true,
-                Objectif.recomposition || Objectif.forme || null => null,
-              },
+              monterEstBien: objectif?.monterDePoidsEstBien,
             ),
           ),
           SizedBox(width: e(14)),
@@ -306,6 +312,7 @@ class _CartePoids extends StatelessWidget {
               'Taux de gras',
               gras.isEmpty ? 'à saisir' : '${Fmt.n(gras.last.valeur)} %',
               gras,
+              repereGras,
               ecartTexte: (d) => '${Fmt.n(d)} %',
               monterEstBien: false,
             ),
