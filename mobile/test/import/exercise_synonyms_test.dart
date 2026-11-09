@@ -95,7 +95,7 @@ void main() {
 
     test('sans équivalent : exercice personnel déjà rempli, jamais un voisin faux', skip: sansCatalogue, () {
       final m = ExerciseMatcher(reel!);
-      for (final n in ['Lever Seated Row', 'Lever Seated Reverse Fly', 'Lever Seated Dip', 'High Pulley Overhead Tricep Extension']) {
+      for (final n in ['Lever Seated Row', 'Lever Seated Reverse Fly', 'Lever Seated Dip']) {
         final r = m.rapprocher(n);
         expect(r.statut, StatutRapprochement.nouveau, reason: n);
         expect(r.choisi, isNull);

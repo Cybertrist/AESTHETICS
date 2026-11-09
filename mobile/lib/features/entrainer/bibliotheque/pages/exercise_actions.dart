@@ -8,6 +8,8 @@ import '../../../../core/logic/logic.dart';
 import '../../../../core/models/models.dart';
 import '../../../../core/ui/ui.dart';
 import '../logic/exercise_notes.dart';
+import '../logic/fusion.dart';
+import 'picker_page.dart';
 
 /// Ce que la suppression d'un exercice perso entraîne, en clair.
 String messageSuppression({required int seances, required int routines}) {
@@ -131,5 +133,47 @@ abstract final class ExerciseActions {
     await ExerciseNotes.of(store).set(e.id, null);
     if (context.mounted) Toasts.success(context, 'Exercice supprimé');
     return true;
+  }
+
+  /// Fusionne un exercice perso avec un exercice du catalogue, après
+  /// confirmation : ses séances, routines, objectifs, favori et note passent
+  /// sur l'exercice du catalogue, puis le perso disparaît. Sans [vers], le
+  /// sélecteur s'ouvre sur le catalogue, les plus proches par le nom en tête.
+  /// Rend l'identifiant du catalogue une fois la fusion faite.
+  static Future<String?> fusionner(BuildContext context, Exercise perso, {String? vers}) async {
+    final data = context.read<AppData>();
+    final cibleId = vers ??
+        await pickExerciseCatalogue(
+          context,
+          titre: 'Fusionner avec…',
+          sousTitre: 'L’exercice du catalogue qui remplace ${perso.nom}',
+          enTete: EquivalentsCatalogue.proches(data.exercises.catalogue, perso),
+        );
+    if (cibleId == null || !context.mounted) return null;
+    final Exercise cible;
+    try {
+      cible = FusionExercices.verifier(data.exercises, perso.id, cibleId).$2;
+    } on FusionImpossible catch (e) {
+      Toasts.error(context, e.message);
+      return null;
+    }
+    final bilan = await FusionExercices.bilanDe(data, perso.id);
+    if (!context.mounted) return null;
+    final ok = await showConfirmDialog(
+      context,
+      title: 'Fusionner avec « ${cible.nom} » ?',
+      message: messageFusion(bilan, perso: perso.nom, catalogue: cible.nom),
+      confirmLabel: 'Fusionner',
+      icon: Icons.merge_rounded,
+    );
+    if (!ok || !context.mounted) return null;
+    try {
+      await FusionExercices.appliquer(data, de: perso.id, vers: cible.id);
+    } on FusionImpossible catch (e) {
+      if (context.mounted) Toasts.error(context, e.message);
+      return null;
+    }
+    if (context.mounted) Toasts.success(context, '« ${perso.nom} » fusionné avec « ${cible.nom} »');
+    return cible.id;
   }
 }

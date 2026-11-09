@@ -11,6 +11,7 @@ import '../../commun/corps_colore.dart';
 import '../../commun/elements.dart';
 import '../../commun/traits.dart';
 import '../logic/exercise_index.dart';
+import '../logic/fusion.dart';
 import '../widgets/exercise_media.dart';
 import '../widgets/multi_choice_dialog.dart';
 
@@ -125,12 +126,15 @@ class BrowserConfig {
     this.autofocus = false,
     this.numbered = false,
     this.search = true,
+    this.catalogueSeul = false,
+    this.enTete = const [],
+    this.onFusion,
   });
 
   /// Toucher un exercice (mode consultation) : ouvre sa fiche.
   final ValueChanged<Exercise>? onOpen;
 
-  /// « ? » en mode sélection : ouvre la fiche.
+  /// Icône de fiche en mode sélection : ouvre la fiche.
   final ValueChanged<Exercise>? onInfo;
 
   /// Mode sélection : ids choisis, dans l'ordre.
@@ -156,6 +160,17 @@ class BrowserConfig {
 
   /// Champ de recherche en tête (masqué si la page a le sien).
   final bool search;
+
+  /// Sans les exercices perso (fusion d'un perso avec le catalogue).
+  final bool catalogueSeul;
+
+  /// Exercices montrés en premier tant que rien n'est cherché ni filtré
+  /// (les plus proches par le nom, pour une fusion).
+  final List<String> enTete;
+
+  /// Ligne « Existe maintenant dans le catalogue » sous les filtres : un perso
+  /// et son équivalent sûr. Sans elle, la ligne n'apparaît pas.
+  final void Function(Exercise perso, String catalogueId)? onFusion;
 }
 
 /// Liste filtrable autonome (bibliothèque, sélecteur).
@@ -253,6 +268,8 @@ List<Widget> exerciseBrowserSlivers(BuildContext context, ExerciseBrowserControl
     SliverToBoxAdapter(child: _Raccourcis(ctrl: ctrl)),
     SliverToBoxAdapter(child: _Filtres(ctrl: ctrl, repo: repo, cfg: cfg)),
     if (f.equipements.isNotEmpty || _categoriesHorsRaccourci(f) || _musclesHorsRaccourci(f)) SliverToBoxAdapter(child: _FiltresActifs(ctrl: ctrl)),
+    if (cfg.onFusion != null && repo.loaded && f.query.trim().isEmpty && (f.scope == LibraryScope.tous || f.scope == LibraryScope.perso))
+      SliverToBoxAdapter(child: _SuggestionsFusion(repo: repo, onFusion: cfg.onFusion!)),
   ];
 
   if (!repo.loaded) {
@@ -273,14 +290,19 @@ List<Widget> exerciseBrowserSlivers(BuildContext context, ExerciseBrowserControl
     ];
   }
 
-  final list = _index.filtrer(
+  var list = _index.filtrer(
     catalogue: repo.catalogue,
-    perso: repo.perso,
+    perso: cfg.catalogueSeul ? const [] : repo.perso,
     filtres: f,
     favoris: repo.favoris,
     recents: ctrl.recents,
     frequences: ctrl.freq,
   );
+  if (cfg.enTete.isNotEmpty && f.vide) {
+    final rang = {for (final (i, id) in cfg.enTete.indexed) id: i};
+    final tete = list.where((e) => rang.containsKey(e.id)).toList()..sort((a, b) => rang[a.id]!.compareTo(rang[b.id]!));
+    list = [...tete, ...list.where((e) => !rang.containsKey(e.id))];
+  }
 
   final titre = switch (f.scope) {
     LibraryScope.tous => f.query.trim().isEmpty && f.actifs == 0 ? 'Tous les exercices' : 'Résultats',
@@ -346,7 +368,7 @@ List<Widget> exerciseBrowserSlivers(BuildContext context, ExerciseBrowserControl
   final sel = cfg.selection;
   void apercu(Exercise e) => showExerciseApercu(context, e, onFiche: cfg.onOpen == null && cfg.onInfo == null ? null : () => (cfg.onInfo ?? cfg.onOpen)!(e));
   void toucher(Exercise e) => sel != null ? cfg.onToggle?.call(e) : (cfg.onOpen != null ? cfg.onOpen!(e) : apercu(e));
-  // Le « ? » : la fiche en mode sélection, l'aperçu animé sinon.
+  // L'icône de fiche : la fiche en mode sélection, l'aperçu animé sinon.
   void aide(Exercise e) => sel != null && cfg.onInfo != null ? cfg.onInfo!(e) : apercu(e);
 
   if (ctrl.grille) {
@@ -429,6 +451,56 @@ List<Widget> exerciseBrowserSlivers(BuildContext context, ExerciseBrowserControl
   ];
 }
 
+/// Les persos qui existent maintenant dans le catalogue, une ligne discrète
+/// chacun (trois au plus) : la fusion se propose, jamais ne s'impose.
+class _SuggestionsFusion extends StatelessWidget {
+  const _SuggestionsFusion({required this.repo, required this.onFusion});
+
+  final ExerciseRepo repo;
+  final void Function(Exercise perso, String catalogueId) onFusion;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final l = EquivalentsCatalogue.suggestions(repo.catalogue, repo.perso);
+    if (l.isEmpty) return const SizedBox.shrink();
+    final gris = TexteEntrainer.detail(context);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(margeEcran - 8, 4, margeEcran - 8, 2),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final (perso, id) in l.take(3))
+            InkWell(
+              borderRadius: AppTokens.radius12,
+              onTap: () => onFusion(perso, id),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text.rich(
+                        TextSpan(children: [
+                          TextSpan(text: '« ${perso.nom} » existe maintenant dans le catalogue : '),
+                          TextSpan(text: repo.nameOf(id), style: gris.copyWith(color: c.text, fontWeight: FontWeight.w600)),
+                        ]),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: gris,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    IconeTrait(Trait.chevronDroit, size: 18, color: c.text2),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 bool _estRaccourci(LibraryFilters f) =>
     f.muscles.isEmpty || MuscleGroup.all.any((g) => g.muscles.length == f.muscles.length && g.muscles.containsAll(f.muscles));
 
@@ -485,7 +557,7 @@ class _Aide extends StatelessWidget {
             width: 40,
             height: 44,
             child: Center(
-              child: Text('?', style: TextStyle(fontFamily: AppTokens.fontUi, fontSize: 18, fontWeight: FontWeight.w600, color: context.colors.text2)),
+              child: IconeTrait(Trait.fiche, size: 22, color: context.colors.text2),
             ),
           ),
         ),
@@ -493,7 +565,7 @@ class _Aide extends StatelessWidget {
 }
 
 /// Carte d'exercice de la grille : image sur une tuile grise, signet en
-/// haut à gauche, « ? » en haut à droite, nom et muscle dessous.
+/// haut à gauche, icône de fiche en haut à droite, nom et muscle dessous.
 class CarteExercice extends StatelessWidget {
   const CarteExercice({
     super.key,
@@ -518,7 +590,7 @@ class CarteExercice extends StatelessWidget {
   /// Cadre blanc (sélection, fiche ouverte à côté).
   final bool choisi;
 
-  /// Pastille blanche à la place du « ? » (sélection multiple).
+  /// Pastille blanche à la place de l'icône de fiche (sélection multiple).
   final bool coche;
   final int? numero;
 
@@ -594,8 +666,8 @@ class CarteExercice extends StatelessWidget {
                                   onTap: onAide,
                                   radius: 24,
                                   child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(14, 6, 11, 14),
-                                    child: Text('?', style: TextStyle(fontFamily: AppTokens.fontUi, fontSize: 16, height: 1.35, fontWeight: FontWeight.w600, color: gris)),
+                                    padding: const EdgeInsets.fromLTRB(14, 7.5, 7.5, 14),
+                                    child: IconeTrait(Trait.fiche, size: 20, color: gris),
                                   ),
                                 ),
                               ),

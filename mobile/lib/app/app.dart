@@ -34,6 +34,10 @@ class _AestheticAppState extends State<AestheticApp> {
   late final GoRouter _router = createRouter(widget.data);
   late final RetourTelephone _retour = RetourTelephone(_router, widget.data);
 
+  /// Amis, fil et coach : un aperçu en mémoire, sans serveur. Gardé même
+  /// quand la communauté est coupée, pour la retrouver telle quelle.
+  late final SocialRepo _social = SocialRepo();
+
   @override
   void initState() {
     super.initState();
@@ -69,6 +73,7 @@ class _AestheticAppState extends State<AestheticApp> {
     _liens?.cancel();
     _retourAppli?.dispose();
     _router.dispose();
+    _social.dispose();
     super.dispose();
   }
 
@@ -100,37 +105,38 @@ class _AestheticAppState extends State<AestheticApp> {
         ChangeNotifierProvider<NutritionRepo>.value(value: d.nutrition),
         ChangeNotifierProvider<HealthRepo>.value(value: d.health),
         ChangeNotifierProvider<CoachRepo>.value(value: d.coach),
-        // Amis, fil et coach : un aperçu en mémoire, sans serveur.
-        ChangeNotifierProvider<SocialRepo>(create: (_) => SocialRepo()),
       ],
-      child: Consumer<AccentController>(
-        builder: (context, accent, _) => MaterialApp.router(
-          title: 'Aesthetics',
-          debugShowCheckedModeBanner: false,
-          theme: accent.theme,
-          darkTheme: accent.theme,
-          themeMode: ThemeMode.dark,
-          routeInformationProvider: _router.routeInformationProvider,
-          routeInformationParser: _router.routeInformationParser,
-          routerDelegate: _router.routerDelegate,
-          backButtonDispatcher: _retour,
-          // Texte agrandi du système : suivi jusqu'à 1,3. Au-delà, les écrans
-          // denses (saisie des séries, mensurations) se chevauchent.
-          builder: (context, child) => MediaQuery.withClampedTextScaling(
-            maxScaleFactor: AestheticApp.texteMax,
-            // Portrait sur téléphone, libre sur pliant ouvert et tablette.
-            child: NotificationListener<NavigationNotification>(
-              onNotification: _retourGere,
-              child: AtelierEcranAccueil(child: VerrouOrientation(child: child ?? const SizedBox.shrink())),
+      // La communauté n'existe pour les écrans que si elle est allumée dans
+      // les Réglages : coupée, ils lisent `null` et cachent amis, fil et
+      // profil public.
+      child: Selector<SettingsRepo, bool>(
+        selector: (_, r) => r.settings.communaute,
+        builder: (context, communaute, child) => ChangeNotifierProvider<SocialRepo?>.value(value: communaute ? _social : null, child: child),
+        child: Consumer<AccentController>(
+          builder: (context, accent, _) => MaterialApp.router(
+            title: 'Aesthetics',
+            debugShowCheckedModeBanner: false,
+            theme: accent.theme,
+            darkTheme: accent.theme,
+            themeMode: ThemeMode.dark,
+            routeInformationProvider: _router.routeInformationProvider,
+            routeInformationParser: _router.routeInformationParser,
+            routerDelegate: _router.routerDelegate,
+            backButtonDispatcher: _retour,
+            // Texte agrandi du système : suivi jusqu'à 1,3. Au-delà, les écrans
+            // denses (saisie des séries, mensurations) se chevauchent.
+            builder: (context, child) => MediaQuery.withClampedTextScaling(
+              maxScaleFactor: AestheticApp.texteMax,
+              // Portrait sur téléphone, libre sur pliant ouvert et tablette.
+              child: NotificationListener<NavigationNotification>(
+                onNotification: _retourGere,
+                child: AtelierEcranAccueil(child: VerrouOrientation(child: child ?? const SizedBox.shrink())),
+              ),
             ),
+            locale: const Locale('fr', 'FR'),
+            supportedLocales: const [Locale('fr', 'FR')],
+            localizationsDelegates: const [GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate],
           ),
-          locale: const Locale('fr', 'FR'),
-          supportedLocales: const [Locale('fr', 'FR')],
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
         ),
       ),
     );

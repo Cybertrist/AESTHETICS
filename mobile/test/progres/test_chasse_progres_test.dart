@@ -59,6 +59,14 @@ WorkoutSession _s(String id, DateTime d, String exo, List<(double, int)> sets, {
       ],
     );
 
+/// Un lundi, la démo n'a encore aucune séance dans la semaine : on recule
+/// d'une semaine pour que la page des muscles ait de quoi s'afficher.
+Future<void> _semaineRemplie(WidgetTester t) async {
+  if (find.text('Aucune séance cette semaine').evaluate().isEmpty) return;
+  await t.tap(find.bySemanticsLabel('Semaine précédente'));
+  await _attendre(t);
+}
+
 Future<void> _attendre(WidgetTester t, {int tours = 4}) async {
   for (var i = 0; i < tours; i++) {
     await t.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 150)));
@@ -486,6 +494,7 @@ void main() {
       final router = GoRouter.of(t.element(find.byType(ProgresPage)));
       router.go('/progres/muscles');
       await _attendre(t);
+      await _semaineRemplie(t);
       await t.tap(find.text('Volume'));
       await _attendre(t);
       expect(t.takeException(), isNull);
@@ -525,6 +534,7 @@ void main() {
   group('barres de muscles', () {
     testWidgets('le chevron est celui de la maquette', (t) async {
       await _banc(t, chemin: '/progres/muscles', taille: const Size(380, 1500));
+      await _semaineRemplie(t);
       expect(find.descendant(of: find.byType(BarreMuscle), matching: find.byType(Chevron)), findsWidgets);
       expect(find.descendant(of: find.byType(BarreMuscle), matching: find.byType(Icon)), findsNothing);
     });

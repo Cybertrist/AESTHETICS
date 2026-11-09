@@ -1,6 +1,6 @@
 # Catalogue d'exercices : source, licence, limites
 
-Le catalogue, les animations et le personnage viennent d'un pack d'exercices acheté (RepDB, licence commerciale Standard, au nom de Tristan) : **637 exercices** en français, dont **513 animés** (pack v1.46 du 8 octobre 2026). Tout est embarqué, rien ne dépend du réseau.
+Le catalogue, les animations et le personnage viennent d'un pack d'exercices acheté (RepDB, licence commerciale Standard, au nom de Tristan) : **701 exercices** en français, dont **544 animés** (pack v1.53 du 8 novembre 2026). Tout est embarqué, rien ne dépend du réseau.
 
 ## Ce que l'appli embarque
 
@@ -30,6 +30,6 @@ Le pack peut être embarqué dans l'appli et modifié (taille, compression). Il 
 ## Limites
 
 - Les animations pèsent lourd : c'est le prix de la netteté en grand.
-- Les maintiens et étirements (124 exercices) n'ont pas d'animation, seulement leur pose : c'est voulu par le pack.
+- Les maintiens et étirements (157 exercices) n'ont pas d'animation, seulement leur pose : c'est voulu par le pack.
 - Le pack n'a qu'un personnage masculin.
 - Le tibial antérieur (pack v1.46) est un muscle à part (`Muscle.tibialAnterieur`), avec son calque de face, sa tuile et sa catégorie « Tibial antérieur » ; un seul exercice le cible, il n'entre donc ni dans la récupération ni dans les muscles oubliés.

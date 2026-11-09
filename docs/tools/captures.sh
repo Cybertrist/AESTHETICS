@@ -34,7 +34,7 @@ $(ecran 06-repos 'Le repos' 'L’anneau bleu, dix secondes de plus ou de moins.'
 $(ecran 11-fin-records 'La fin de séance' 'Le record battu, en grand, et la charge de la prochaine fois.')
 $(ecran 11a-fin-comparaison 'Le poids de la séance' 'Le volume soulevé, converti en objets.')
 $(ecran 12a-partage 'Le partage' 'Des cartes à faire défiler, prêtes à envoyer.')
-$(ecran 09-exercices 'Les exercices' 'Les muscles en tuiles, 608 exercices, la recherche.')
+$(ecran 09-exercices 'Les exercices' 'Les muscles en tuiles, 701 exercices, la recherche.')
 $(ecran 07-fiche-a-propos 'Une fiche' 'L’animation, les muscles ciblés, comment faire.')
 $(ecran 08b-fiche-records 'Ses records' 'L’historique de chaque record, écusson « PR ».')
 $(ecran 13c-progres-annee 'Les progrès' 'Semaine, mois ou année : le volume, les muscles, le résumé.')

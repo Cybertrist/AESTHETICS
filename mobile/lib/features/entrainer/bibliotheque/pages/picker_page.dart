@@ -51,6 +51,16 @@ Future<String?> pickExercise(BuildContext context, {String titre = 'Choisir un e
   return r?.firstOrNull;
 }
 
+/// Choix d'un seul exercice du catalogue, sans les persos ni « Créer » :
+/// [enTete] passe en premier tant que rien n'est cherché.
+Future<String?> pickExerciseCatalogue(BuildContext context, {required String titre, String? sousTitre, List<String> enTete = const []}) async {
+  final r = await Navigator.of(context, rootNavigator: true).push<List<String>>(MaterialPageRoute(
+    fullscreenDialog: true,
+    builder: (_) => ExercisePickerPage(multi: false, titre: titre, sousTitre: sousTitre, catalogueSeul: true, enTete: enTete),
+  ));
+  return r?.firstOrNull;
+}
+
 /// Même chose que [pickExercises], avec les noms attendus par le module routines.
 Future<List<String>?> choisirExercices(
   BuildContext context, {
@@ -69,6 +79,8 @@ class ExercisePickerPage extends StatefulWidget {
     this.sousTitre,
     this.boutonLabel = 'Ajouter',
     this.musclesInitiaux = const {},
+    this.catalogueSeul = false,
+    this.enTete = const [],
   });
 
   final bool multi;
@@ -77,6 +89,8 @@ class ExercisePickerPage extends StatefulWidget {
   final String? sousTitre;
   final String boutonLabel;
   final Set<Muscle> musclesInitiaux;
+  final bool catalogueSeul;
+  final List<String> enTete;
 
   @override
   State<ExercisePickerPage> createState() => _ExercisePickerPageState();
@@ -130,8 +144,10 @@ class _ExercisePickerPageState extends State<ExercisePickerPage> {
         onToggle: _toggle,
         onInfo: (e) => ouvrirFicheExercice(context, e.id),
         dejaPresents: widget.dejaPresents,
-        onCreate: _create,
+        onCreate: widget.catalogueSeul ? null : _create,
         numbered: widget.multi,
+        catalogueSeul: widget.catalogueSeul,
+        enTete: widget.enTete,
       ),
     );
 
@@ -191,7 +207,7 @@ class _ExercisePickerPageState extends State<ExercisePickerPage> {
 
     final sousTitre = widget.sousTitre ??
         (widget.multi
-            ? (_sel.isEmpty ? 'Touche pour choisir, le « ? » ouvre la fiche' : '${_sel.length} choisi${_sel.length > 1 ? 's' : ''}, dans cet ordre')
+            ? (_sel.isEmpty ? 'Touche un exercice pour le choisir' : '${_sel.length} choisi${_sel.length > 1 ? 's' : ''}, dans cet ordre')
             : 'Touche un exercice pour le choisir');
 
     return PopScope(

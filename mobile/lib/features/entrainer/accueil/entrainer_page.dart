@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/ui/ui.dart';
 import '../../seance/seance_paths.dart';
+import '../bibliotheque/pages/exercise_actions.dart';
 import '../bibliotheque/pages/exercise_browser.dart';
 import '../bibliotheque/pages/exercise_detail_page.dart';
 import '../bibliotheque/pages/exercise_edit_page.dart';
@@ -134,6 +135,10 @@ class _EntrainerPageState extends State<EntrainerPage> {
                   onOpen: (e) => ouvrirFicheExercice(context, e.id),
                   onCreate: _creerExercice,
                   onMuscles: () => context.push('/entrainer/muscles'),
+                  onFusion: (perso, id) async {
+                    final fait = await ExerciseActions.fusionner(context, perso, vers: id);
+                    if (fait != null && context.mounted) await ouvrirFicheExercice(context, fait);
+                  },
                 ),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 28)),

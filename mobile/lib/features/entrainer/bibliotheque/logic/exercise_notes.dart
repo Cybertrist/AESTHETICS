@@ -11,11 +11,22 @@ class ExerciseNotes extends ChangeNotifier {
   static final Map<Store, ExerciseNotes> _instances = {};
 
   /// Une instance par store (la démo et la vraie appli ont chacune le leur).
-  static ExerciseNotes of(Store store) => _instances.putIfAbsent(store, () => ExerciseNotes._(store).._load());
+  static ExerciseNotes of(Store store) => _instances.putIfAbsent(store, () {
+        final n = ExerciseNotes._(store);
+        n._pret = n._load();
+        return n;
+      });
 
   final Store _store;
   Map<String, String> _notes = {};
   bool loaded = false;
+  Future<void> _pret = Future.value();
+
+  /// Terminé quand les notes sont lues (à attendre avant d'en réécrire plusieurs).
+  Future<void> get pret => _pret;
+
+  /// Toutes les notes, par identifiant d'exercice.
+  Map<String, String> get toutes => Map.unmodifiable(_notes);
 
   Future<void> _load() async {
     try {
@@ -37,6 +48,13 @@ class ExerciseNotes extends ChangeNotifier {
     } else {
       _notes[exerciseId] = t;
     }
+    notifyListeners();
+    await _store.write(_file, _notes);
+  }
+
+  /// Remplace toutes les notes d'un coup (fusion de deux exercices).
+  Future<void> remplacer(Map<String, String> notes) async {
+    _notes = Map.of(notes);
     notifyListeners();
     await _store.write(_file, _notes);
   }

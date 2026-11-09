@@ -84,13 +84,15 @@ class ExerciseDetailPage extends StatelessWidget {
 }
 
 /// Trois points de la fiche (réutilisés par le volet du Fold ouvert).
-List<Widget> ficheActions(BuildContext context, Exercise e, {VoidCallback? onDeleted}) => [
-      BoutonNu(trait: Trait.points, label: 'Plus d’actions', onTap: () => _menu(context, e, onDeleted)),
+/// [onFusionne] reçoit l'exercice du catalogue après une fusion ; sans lui,
+/// la fiche du perso laisse place à celle du catalogue.
+List<Widget> ficheActions(BuildContext context, Exercise e, {VoidCallback? onDeleted, ValueChanged<String>? onFusionne}) => [
+      BoutonNu(trait: Trait.points, label: 'Plus d’actions', onTap: () => _menu(context, e, onDeleted, onFusionne)),
     ];
 
-enum _Menu { entrainer, routine, modifier, variante, supprimer }
+enum _Menu { entrainer, routine, modifier, variante, fusionner, supprimer }
 
-Future<void> _menu(BuildContext context, Exercise e, VoidCallback? onDeleted) async {
+Future<void> _menu(BuildContext context, Exercise e, VoidCallback? onDeleted, ValueChanged<String>? onFusionne) async {
   final enCours = context.read<SessionRepo>().hasActive;
   final r = await showPanneauBas<_Menu>(
     context,
@@ -105,6 +107,7 @@ Future<void> _menu(BuildContext context, Exercise e, VoidCallback? onDeleted) as
           ligne(_Menu.routine, const IconeTrait(Trait.plus, size: 25), 'Ajouter à une routine'),
           if (e.perso) ligne(_Menu.modifier, const IconeTrait(Trait.crayon, size: 25), 'Modifier'),
           ligne(_Menu.variante, const IconeTrait(Trait.dupliquer, size: 25), 'Créer une variante perso'),
+          if (e.perso) ligne(_Menu.fusionner, const Icon(Icons.merge_rounded, size: 25), 'Fusionner avec un exercice du catalogue'),
           if (e.perso) ligne(_Menu.supprimer, const IconeTrait(Trait.corbeille, size: 25), 'Supprimer', rouge: true),
         ],
       );
@@ -123,6 +126,17 @@ Future<void> _menu(BuildContext context, Exercise e, VoidCallback? onDeleted) as
       if (!context.mounted) return;
       final modifiee = await ExerciseEditPage.open(context, existing: copie);
       if (context.mounted) await ouvrirFicheExercice(context, (modifiee ?? copie).id);
+    case _Menu.fusionner:
+      final nav = Navigator.of(context, rootNavigator: true);
+      final id = await ExerciseActions.fusionner(context, e);
+      if (id == null || !context.mounted) return;
+      if (onFusionne != null) {
+        onFusionne(id);
+      } else {
+        // La fiche du perso n'a plus d'exercice : celle du catalogue la remplace.
+        await nav.maybePop();
+        nav.push(MaterialPageRoute<void>(builder: (_) => ExerciseDetailPage(exerciseId: id)));
+      }
     case _Menu.supprimer:
       final ok = await ExerciseActions.supprimer(context, e);
       if (ok && context.mounted) {

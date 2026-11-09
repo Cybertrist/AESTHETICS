@@ -31,6 +31,8 @@ const MUSCLES = {
   lateral_deltoid: 'deltoidesLateraux',
   supraspinatus: 'deltoidesLateraux',
   posterior_deltoid: 'deltoidesPosterieurs',
+  // Coiffe des rotateurs (pack v1.51) : l'appli n'a pas ce muscle, il travaille avec l'arrière de l'épaule.
+  infraspinatus_teres_minor: 'deltoidesPosterieurs',
   biceps_brachii: 'biceps',
   brachialis: 'biceps',
   triceps_brachii: 'triceps',
@@ -72,7 +74,7 @@ const MATERIEL = {
   plates: 'disque',
   flat_bench: 'banc', incline_bench: 'banc', decline_bench: 'banc',
   treadmill: 'cardio', elliptical: 'cardio', rower: 'cardio', air_bike: 'cardio', stationary_bike: 'cardio',
-  stair_climber: 'cardio', stepmill: 'cardio', ski_erg: 'cardio', jump_rope: 'cardio',
+  stair_climber: 'cardio', stepmill: 'cardio', ski_erg: 'cardio', jump_rope: 'cardio', bicycle: 'cardio',
   // Barre de traction, station à dips, anneaux, sangles : on travaille avec son poids.
   pull_up_bar: 'poids du corps', dip_station: 'poids du corps', rings: 'poids du corps',
   suspension_trainer: 'poids du corps', climbing_rope: 'poids du corps', plyo_box: 'poids du corps',

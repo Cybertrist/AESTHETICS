@@ -26,7 +26,7 @@ import 'reglages/unites_section.dart';
 enum ReglagesSection {
   unites('unites', 'Unités'),
   entrainement('entrainement', 'Paramètres de séance'),
-  notifications('notifications', 'Rappels'),
+  notifications('notifications', 'Notifications'),
   sante('sante', 'Santé'),
   coach('coach', 'Coach'),
   donnees('donnees', 'Mes données'),
@@ -168,7 +168,7 @@ class _ReglagesPageState extends State<ReglagesPage> {
                   ),
                   Ligne(
                     trace: Trace.cloche,
-                    titre: 'Rappels',
+                    titre: 'Notifications',
                     valeur: rappels == 0 ? 'Aucun' : Fmt.pluriel(rappels, 'actif'),
                     onTap: () => context.push(ReglagesSection.notifications.path),
                   ),
@@ -189,6 +189,13 @@ class _ReglagesPageState extends State<ReglagesPage> {
                     ),
                   ]),
                 groupe('Profil', [
+                  LigneBascule(
+                    trace: Trace.silhouette,
+                    titre: 'Communauté',
+                    detail: 'Amis, fil de leurs séances, profil public',
+                    valeur: s.communaute,
+                    onChanged: (v) => context.read<SettingsRepo>().update((x) => x.copyWith(communaute: v)),
+                  ),
                   if (context.watch<SocialRepo?>() != null)
                     Ligne(
                       trace: Trace.crayon,

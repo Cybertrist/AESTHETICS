@@ -50,6 +50,11 @@ GoRouter createRouter(AppData data) => GoRouter(
         if (!data.profile.hasProfile && !_libreSansProfil(state.matchedLocation)) {
           return Paths.bienvenue;
         }
+        // Communauté coupée dans les Réglages : ses pages ne s'ouvrent plus,
+        // même par un lien.
+        if (!data.settings.settings.communaute && state.matchedLocation.startsWith(SocialPaths.racine)) {
+          return Paths.aujourdhui;
+        }
         return null;
       },
       routes: [

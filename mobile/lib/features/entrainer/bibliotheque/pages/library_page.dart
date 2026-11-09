@@ -8,6 +8,7 @@ import '../../../../core/ui/ui.dart';
 import '../../commun/elements.dart';
 import '../../commun/traits.dart';
 import '../logic/exercise_index.dart';
+import 'exercise_actions.dart';
 import 'exercise_browser.dart';
 import 'exercise_detail_page.dart';
 import 'exercise_edit_page.dart';
@@ -46,6 +47,14 @@ class _ExerciseLibraryPageState extends State<ExerciseLibraryPage> {
     }
   }
 
+  /// Un perso qui existe maintenant dans le catalogue : la fusion, puis la
+  /// fiche du catalogue.
+  Future<void> _fusionner(Exercise perso, String id) async {
+    final fait = await ExerciseActions.fusionner(context, perso, vers: id);
+    final e = fait == null || !mounted ? null : context.read<ExerciseRepo>().byId(fait);
+    if (e != null) _open(e);
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
@@ -59,6 +68,7 @@ class _ExerciseLibraryPageState extends State<ExerciseLibraryPage> {
         selectedId: wide ? _selected : null,
         // Page pleine : l'explorateur s'ouvre par-dessus, sur le même navigateur.
         onMuscles: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const MusclesPage())),
+        onFusion: _fusionner,
       ),
     );
     final entete = EnTetePage(titre: widget.title);
@@ -72,7 +82,16 @@ class _ExerciseLibraryPageState extends State<ExerciseLibraryPage> {
         : Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              EnTetePage(titre: e.nom, retour: false, actions: ficheActions(context, e, onDeleted: () => setState(() => _selected = null))),
+              EnTetePage(
+                titre: e.nom,
+                retour: false,
+                actions: ficheActions(
+                  context,
+                  e,
+                  onDeleted: () => setState(() => _selected = null),
+                  onFusionne: (id) => setState(() => _selected = id),
+                ),
+              ),
               Expanded(child: ExerciseDetailView(key: ValueKey(e.id), exercise: e)),
             ],
           );

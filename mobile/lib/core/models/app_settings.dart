@@ -24,6 +24,10 @@ class AppSettings {
     this.joursRappel = const [1, 3, 5],
     this.rappelsEau = false,
     this.rappelsComplements = false,
+    this.notifsDemandes = true,
+    this.notifsReactions = true,
+    this.notifsSeancesAmis = false,
+    this.communaute = false,
     this.premierJourSemaine = DateTime.monday,
     this.santeConnectee = false,
     this.coachApiKey,
@@ -78,6 +82,16 @@ class AppSettings {
   final List<int> joursRappel;
   final bool rappelsEau;
   final bool rappelsComplements;
+
+  /// Ce que mes amis peuvent me faire savoir : une demande d'ami, une
+  /// réaction ou un commentaire, une séance qu'ils viennent de finir.
+  final bool notifsDemandes;
+  final bool notifsReactions;
+  final bool notifsSeancesAmis;
+
+  /// La communauté (amis, fil, profil public) : coupée par défaut, chacun
+  /// l'allume dans les Réglages s'il en veut.
+  final bool communaute;
   final int premierJourSemaine;
 
   /// Health Connect autorisé et synchronisé.
@@ -112,6 +126,10 @@ class AppSettings {
     List<int>? joursRappel,
     bool? rappelsEau,
     bool? rappelsComplements,
+    bool? notifsDemandes,
+    bool? notifsReactions,
+    bool? notifsSeancesAmis,
+    bool? communaute,
     int? premierJourSemaine,
     bool? santeConnectee,
     String? coachApiKey,
@@ -142,6 +160,10 @@ class AppSettings {
         joursRappel: joursRappel ?? this.joursRappel,
         rappelsEau: rappelsEau ?? this.rappelsEau,
         rappelsComplements: rappelsComplements ?? this.rappelsComplements,
+        notifsDemandes: notifsDemandes ?? this.notifsDemandes,
+        notifsReactions: notifsReactions ?? this.notifsReactions,
+        notifsSeancesAmis: notifsSeancesAmis ?? this.notifsSeancesAmis,
+        communaute: communaute ?? this.communaute,
         premierJourSemaine: premierJourSemaine ?? this.premierJourSemaine,
         santeConnectee: santeConnectee ?? this.santeConnectee,
         coachApiKey: clearCoachApiKey ? null : (coachApiKey ?? this.coachApiKey),
@@ -174,6 +196,10 @@ class AppSettings {
             : const [1, 3, 5],
         rappelsEau: asBool(j['rappelsEau']),
         rappelsComplements: asBool(j['rappelsComplements']),
+        notifsDemandes: asBool(j['notifsDemandes'], true),
+        notifsReactions: asBool(j['notifsReactions'], true),
+        notifsSeancesAmis: asBool(j['notifsSeancesAmis']),
+        communaute: asBool(j['communaute']),
         premierJourSemaine: asInt(j['premierJourSemaine']) ?? DateTime.monday,
         santeConnectee: asBool(j['santeConnectee']),
         coachApiKey: asString(j['coachApiKey']),
@@ -204,6 +230,10 @@ class AppSettings {
         'joursRappel': joursRappel,
         'rappelsEau': rappelsEau,
         'rappelsComplements': rappelsComplements,
+        'notifsDemandes': notifsDemandes,
+        'notifsReactions': notifsReactions,
+        'notifsSeancesAmis': notifsSeancesAmis,
+        'communaute': communaute,
         'premierJourSemaine': premierJourSemaine,
         'santeConnectee': santeConnectee,
         'coachApiKey': coachApiKey,
