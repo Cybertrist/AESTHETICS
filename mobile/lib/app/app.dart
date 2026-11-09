@@ -9,7 +9,11 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../core/data/data.dart';
+import '../features/compte/data/firebase.dart';
+import '../features/compte/logic/compte_repo.dart';
 import '../features/social/data/social_repo.dart';
+import '../features/social/data/source_firestore.dart';
+import '../features/social/data/synchro.dart';
 import '../core/theme/accent_controller.dart';
 import 'orientation.dart';
 import 'router.dart';
@@ -18,10 +22,14 @@ import '../features/sante/services/health_connect.dart';
 
 /// Racine de l'appli : dépôts fournis par Provider, thème selon l'accent.
 class AestheticApp extends StatefulWidget {
-  const AestheticApp({super.key, required this.data, required this.accent});
+  const AestheticApp({super.key, required this.data, required this.accent, this.compte});
 
   final AppData data;
   final AccentController accent;
+
+  /// Le compte Google et la copie sur le serveur ; null sans serveur (démo,
+  /// tests, construction sans Firebase).
+  final CompteRepo? compte;
 
   /// Plafond du texte agrandi par le système.
   static const texteMax = 1.3;
@@ -34,9 +42,20 @@ class _AestheticAppState extends State<AestheticApp> {
   late final GoRouter _router = createRouter(widget.data);
   late final RetourTelephone _retour = RetourTelephone(_router, widget.data);
 
-  /// Amis, fil et coach : un aperçu en mémoire, sans serveur. Gardé même
-  /// quand la communauté est coupée, pour la retrouver telle quelle.
-  late final SocialRepo _social = SocialRepo();
+  /// Amis, fil et coach. Gardé même quand la communauté est coupée, pour la
+  /// retrouver telle quelle ; coupée, la source n'écoute plus le serveur.
+  late final SocialRepo _social = _communaute();
+  SynchroSociale? _synchro;
+
+  /// La vraie communauté sur Firestore quand le serveur a démarré ; sinon
+  /// (démo, tests, construction sans Firebase) les personnes d'exemple.
+  SocialRepo _communaute() {
+    final base = ServeurFirebase.base, auth = ServeurFirebase.auth;
+    if (widget.data.demo || widget.compte == null || base == null || auth == null) return SocialRepo();
+    final source = SourceFirestore(base, store: widget.data.store);
+    _synchro = SynchroSociale(widget.data, source, comptes: auth.authStateChanges().map((u) => u?.uid));
+    return SocialRepo(source: source);
+  }
 
   @override
   void initState() {
@@ -50,13 +69,24 @@ class _AestheticAppState extends State<AestheticApp> {
       _liens = HomeWidget.widgetClicked.listen(_ouvrirLien, onError: (_) {});
       // Les pesées de la balance arrivent seules : à l'ouverture et à chaque
       // retour dans l'appli.
-      _retourAppli = AppLifecycleListener(onResume: _lireBalance);
+      _retourAppli = AppLifecycleListener(onResume: _auRetour);
       _lireBalance();
     }
+    // Ce qui n'a pas pu partir au dernier lancement (pas de réseau, appli
+    // fermée avant l'envoi) repart quelques secondes après l'ouverture.
+    widget.compte?.noterChangement();
   }
 
   StreamSubscription<Uri?>? _liens;
   AppLifecycleListener? _retourAppli;
+
+  void _auRetour() {
+    _lireBalance();
+    // Un envoi raté à la salle, ou des copies encore à comparer, repartent
+    // au retour dans l'appli.
+    final compte = widget.compte;
+    if (compte != null && (compte.envoiEnAttente || compte.aComparer)) compte.noterChangement();
+  }
 
   void _lireBalance() {
     if (widget.data.profile.hasProfile) HealthConnectService.instance.importerCorps(widget.data.health);
@@ -73,6 +103,7 @@ class _AestheticAppState extends State<AestheticApp> {
     _liens?.cancel();
     _retourAppli?.dispose();
     _router.dispose();
+    _synchro?.dispose();
     _social.dispose();
     super.dispose();
   }
@@ -106,6 +137,8 @@ class _AestheticAppState extends State<AestheticApp> {
         ChangeNotifierProvider<HealthRepo>.value(value: d.health),
         ChangeNotifierProvider<CoachRepo>.value(value: d.coach),
         ChangeNotifierProvider<ChargesRepo>.value(value: d.charges),
+        // Null sans serveur : les écrans le lisent en `CompteRepo?`.
+        ChangeNotifierProvider<CompteRepo?>.value(value: widget.compte),
       ],
       // La communauté n'existe pour les écrans que si elle est allumée dans
       // les Réglages : coupée, ils lisent `null` et cachent amis, fil et

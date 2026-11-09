@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -199,8 +198,7 @@ class _Entete extends StatelessWidget {
     final phrase = ouvert ? (a.phrase ?? '').trim() : '';
     // Un profil fermé ne montre que la photo, le prénom et le pseudo.
     final nbSeances = ouvert && a.montre.contains(Visible.nbSeances), nbAmis = ouvert && a.montre.contains(Visible.nbAmis);
-    final photo = a.photo;
-    final avecPhoto = photo != null && File(photo).existsSync();
+    final photo = imageDe(a, largeur: 240);
     final couleur = Color(a.couleur);
     final ombre = [Shadow(blurRadius: 10, offset: const Offset(0, 1), color: Colors.black.withValues(alpha: 0.35))];
     final mot = ts(14.5, FontWeight.w500, Colors.white.withValues(alpha: 0.75), hauteur: 1.2);
@@ -225,12 +223,12 @@ class _Entete extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          if (avecPhoto)
+          if (photo != null)
             Positioned.fill(
               child: ImageFiltered(
                 imageFilter: ui.ImageFilter.blur(sigmaX: 22, sigmaY: 22, tileMode: TileMode.mirror),
                 // Agrandie : le flou ne laisse pas voir les bords de l'image.
-                child: Transform.scale(scale: 1.25, child: Image.file(File(photo), fit: BoxFit.cover, cacheWidth: 240)),
+                child: Transform.scale(scale: 1.25, child: Image(image: photo, fit: BoxFit.cover)),
               ),
             ),
           Positioned.fill(

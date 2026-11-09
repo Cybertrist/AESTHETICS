@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../compte/logic/compte_repo.dart';
 import '../../social/data/social_repo.dart';
 import '../../social/routes.dart';
 import '../../../app/navigation.dart';
@@ -15,6 +16,7 @@ import '../data/prefs.dart';
 import '../widgets/maquette.dart';
 import 'reglages/a_propos_section.dart';
 import 'reglages/coach_section.dart';
+import 'reglages/compte_section.dart';
 import 'reglages/donnees_section.dart';
 import 'reglages/entrainement_section.dart';
 import 'reglages/notifications_section.dart';
@@ -29,6 +31,7 @@ enum ReglagesSection {
   notifications('notifications', 'Notifications'),
   sante('sante', 'Santé'),
   coach('coach', 'Coach'),
+  compte('compte', 'Compte'),
   donnees('donnees', 'Mes données'),
   aPropos('a-propos', 'À propos');
 
@@ -44,6 +47,7 @@ enum ReglagesSection {
         notifications => const NotificationsSection(),
         sante => const SanteSection(),
         coach => const CoachSection(),
+        compte => const CompteSection(),
         donnees => const DonneesSection(),
         aPropos => const AProposSection(),
       };
@@ -127,6 +131,7 @@ class _ReglagesPageState extends State<ReglagesPage> {
     final c = context.colors;
     final unite = context.watch<ProfileRepo>().unite;
     final s = context.watch<SettingsRepo>().settings;
+    final compte = context.watch<CompteRepo?>();
 
     Widget groupe(String titre, List<Widget> lignes, {bool premier = false}) => GroupeTitre(titre: titre, lignes: lignes, premier: premier);
 
@@ -186,6 +191,17 @@ class _ReglagesPageState extends State<ReglagesPage> {
                       titre: 'Coach',
                       valeur: (s.coachApiKey?.isNotEmpty ?? false) ? 'Clé enregistrée' : 'Hors ligne',
                       onTap: () => context.push(ReglagesSection.coach.path),
+                    ),
+                  ]),
+                // Le compte Google n'apparaît que si cette construction a un serveur.
+                if (compte != null)
+                  groupe('Compte', [
+                    Ligne(
+                      trace: Trace.bouclier,
+                      titre: compte.utilisateur?.email ?? 'Se connecter avec Google',
+                      detail: compte.connecte ? 'Copie de mes données sur le serveur' : 'Retrouver mes données sur un autre téléphone',
+                      valeur: CompteSection.valeur(compte),
+                      onTap: () => context.push(ReglagesSection.compte.path),
                     ),
                   ]),
                 groupe('Profil', [

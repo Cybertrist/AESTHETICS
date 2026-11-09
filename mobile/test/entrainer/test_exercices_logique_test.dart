@@ -46,9 +46,9 @@ void main() {
   Exercise ex(String id) => catalogue.firstWhere((e) => e.id == id);
 
   group('catalogue sur le disque', () {
-    test('701 exercices, identifiants uniques, muscles et libellés connus', () {
-      expect(catalogue, hasLength(701));
-      expect(catalogue.map((e) => e.id).toSet(), hasLength(701));
+    test('700 exercices, identifiants uniques, muscles et libellés connus', () {
+      expect(catalogue, hasLength(700));
+      expect(catalogue.map((e) => e.id).toSet(), hasLength(700));
       for (final e in catalogue) {
         expect(e.musclesPrincipaux, isNotEmpty, reason: e.id);
         expect(e.musclesPrincipaux.toSet().intersection(e.musclesSecondaires.toSet()), isEmpty, reason: e.id);

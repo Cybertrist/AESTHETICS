@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
+import '../../../app/navigation.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/ui/ui.dart';
 import '../data/social_repo.dart';
@@ -18,6 +21,15 @@ TextStyle ts(double taille, FontWeight poids, Color couleur, {double hauteur = 1
       fontFeatures: AppTokens.tabular,
     );
 
+/// La photo d'une personne : la mienne en fichier, celle d'un autre en
+/// vignette venue du serveur ; null sans photo.
+ImageProvider? imageDe(Ami a, {int? largeur}) {
+  final photo = a.photo;
+  if (photo != null && File(photo).existsSync()) return ResizeImage.resizeIfNeeded(largeur, null, FileImage(File(photo)));
+  final v = a.vignette;
+  return v == null || v.isEmpty ? null : MemoryImage(v);
+}
+
 /// La pastille d'une personne : sa photo, ou ses initiales sur sa couleur.
 class Pastille2 extends StatelessWidget {
   const Pastille2(this.ami, {super.key, this.taille = 50});
@@ -26,15 +38,15 @@ class Pastille2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final photo = ami.photo;
+    final image = imageDe(ami, largeur: (taille * 3).round());
     return Container(
       width: taille,
       height: taille,
       alignment: Alignment.center,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(color: Color(ami.couleur), shape: BoxShape.circle),
-      child: photo != null && File(photo).existsSync()
-          ? Image.file(File(photo), fit: BoxFit.cover, width: taille, height: taille, cacheWidth: (taille * 3).round())
+      child: image != null
+          ? Image(image: image, fit: BoxFit.cover, width: taille, height: taille, gaplessPlayback: true)
           : Text(
               ami.prenom.trim().isEmpty ? '?' : String.fromCharCode(ami.prenom.trim().runes.first).toUpperCase(),
               style: ts(taille * 0.42, FontWeight.w800, Colors.white, hauteur: 1),
@@ -107,12 +119,20 @@ class TitreSection extends StatelessWidget {
 }
 
 /// Le rappel que ces écrans sont un aperçu : rien n'est encore envoyé.
+/// Sur la vraie communauté, il disparaît ; le coach, lui, reste un aperçu.
 class BandeauApercu extends StatelessWidget {
-  const BandeauApercu({super.key});
+  const BandeauApercu({super.key, this.coach = false});
+
+  /// Un écran du coach : toujours un aperçu.
+  final bool coach;
+
+  /// Vrai quand le bandeau s'affiche ici.
+  static bool visible(BuildContext context) => context.watch<SocialRepo?>()?.apercu ?? true;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
+    if (!coach && !visible(context)) return const SizedBox.shrink();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(color: c.surface2, borderRadius: BorderRadius.circular(14)),
@@ -180,6 +200,35 @@ class Pilule extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// La communauté est allumée sans compte : une carte invite à se connecter
+/// avec Google (Réglages, Compte).
+class InvitationConnexion extends StatelessWidget {
+  const InvitationConnexion({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return CarteSociale(
+      padding: const EdgeInsets.fromLTRB(20, 22, 20, 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.group_outlined, color: c.text, size: 30),
+          const SizedBox(height: 12),
+          Text('Connecte-toi avec Google pour retrouver tes amis', style: ts(19, FontWeight.w700, c.text, hauteur: 1.25)),
+          const SizedBox(height: 6),
+          Text(
+            'Ton compte porte ton pseudo, tes amis et les séances que tu partages. Sans compte, tout le reste de l\'appli marche comme avant.',
+            style: ts(14, FontWeight.w500, c.text2, hauteur: 1.4),
+          ),
+          const SizedBox(height: 16),
+          BoutonPrincipal(label: 'Se connecter avec Google', onPressed: () => context.push('${Paths.reglages}/compte')),
+        ],
       ),
     );
   }

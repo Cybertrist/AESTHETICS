@@ -205,7 +205,7 @@ class RoutineExercise {
 
   factory RoutineExercise.fromJson(Json j) => RoutineExercise(
         id: asString(j['id']) ?? '',
-        exerciseId: asString(j['exerciseId']) ?? '',
+        exerciseId: asExercice(j['exerciseId']),
         series: asList(j['series'], PlannedSet.fromJson),
         reposSec: asInt(j['reposSec']) ?? 90,
         supersetId: asString(j['supersetId']),
@@ -548,7 +548,7 @@ class SessionExercise {
 
   factory SessionExercise.fromJson(Json j) => SessionExercise(
         id: asString(j['id']) ?? '',
-        exerciseId: asString(j['exerciseId']) ?? '',
+        exerciseId: asExercice(j['exerciseId']),
         series: asList(j['series'], WorkoutSet.fromJson),
         reposSec: asInt(j['reposSec']) ?? 90,
         supersetId: asString(j['supersetId']),
@@ -750,7 +750,7 @@ class PersonalRecord {
   final int? reps;
 
   factory PersonalRecord.fromJson(Json j) => PersonalRecord(
-        exerciseId: asString(j['exerciseId']) ?? '',
+        exerciseId: asExercice(j['exerciseId']),
         type: enumByName(RecordType.values, j['type'], RecordType.poidsMax),
         valeur: asDouble(j['valeur']) ?? 0,
         date: asDate(j['date']) ?? DateTime.now(),

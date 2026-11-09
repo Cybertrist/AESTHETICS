@@ -57,6 +57,20 @@ abstract final class CopieServeur {
   /// Taille d'un morceau, en caractères : bien sous la limite d'un document.
   static const tailleMorceau = 700000;
 
+  /// Les règles du serveur en gardent 20 (14 Mo compressés) : au-delà, la
+  /// copie ne part pas.
+  static const maxMorceaux = 20;
+
+  /// Le prénom tel que le serveur le garde : 200 unités UTF-16 au plus, sans
+  /// couper un emoji en deux.
+  static String? prenomCourt(String? p) {
+    if (p == null || p.length <= 200) return p;
+    var n = 200;
+    final u = p.codeUnitAt(n - 1);
+    if (u >= 0xD800 && u <= 0xDBFF) n--;
+    return p.substring(0, n);
+  }
+
   /// Les collections qui restent sur le téléphone : l'état du compte lui-même.
   static const horsCopie = {'compte'};
 
@@ -99,7 +113,7 @@ abstract final class CopieServeur {
       routines: n('routines'),
       morceaux: morceaux,
       octets: utf8.encode(json).length,
-      prenom: profil is Map && profil['prenom'] is String ? profil['prenom'] as String : null,
+      prenom: profil is Map && profil['prenom'] is String ? prenomCourt(profil['prenom'] as String) : null,
     );
   }
 }

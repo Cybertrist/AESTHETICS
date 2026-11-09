@@ -15,6 +15,11 @@ val proprietesCle = Properties().apply {
 }
 val clePresente = proprietesCle.containsKey("storeFile")
 
+// Firebase (compte Google, copie, communauté) : ses clés sont dans
+// app/google-services.json, ignoré par git. Sans lui, l'appli se construit
+// quand même et reste tout en local.
+if (file("google-services.json").exists()) apply(plugin = "com.google.gms.google-services")
+
 android {
     namespace = "fr.cybertrist.aesthetic"
     compileSdk = flutter.compileSdkVersion

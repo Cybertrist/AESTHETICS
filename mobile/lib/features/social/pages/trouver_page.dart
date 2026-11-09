@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../core/data/data.dart';
 import '../../../core/theme/theme.dart';
@@ -93,17 +94,35 @@ class ContactsPage extends StatelessWidget {
 class LienPage extends StatelessWidget {
   const LienPage({super.key});
 
-  /// Le lien que porte le code QR.
-  static String lien(String prenom) => 'aesthetics://ami?nom=${Uri.encodeQueryComponent(prenom.trim().toLowerCase())}';
-
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final prenom = context.watch<ProfileRepo>().profile?.prenom.trim() ?? '';
+    final profil = context.watch<ProfileRepo>().profile;
+    final prenom = profil?.prenom.trim() ?? '';
+    final pseudo = profil?.pseudo.trim() ?? '';
+    final repo = context.watch<SocialRepo?>();
+    final apercu = repo == null || repo.apercu;
+    // Le code et le lien portent mon pseudo : celui qui les ouvre m'envoie sa
+    // demande. Sur la vraie communauté, ils ne s'affichent qu'une fois le
+    // pseudo à moi sur le serveur : un pseudo pris mènerait chez un autre.
+    final pret = apercu || (!repo.aConnecter && pseudo.isNotEmpty && repo.etatPseudo == EtatPseudo.ok);
+    final lien = SocialRepo.lienAmi(pseudo.isEmpty ? prenom : pseudo);
+    final message = apercu
+        ? 'Aperçu : ton lien marchera avec les comptes.'
+        : repo.aConnecter
+            ? 'Connecte-toi avec Google pour que ton lien marche.'
+            : switch (repo.etatPseudo) {
+                EtatPseudo.pris => 'Ton pseudo est déjà pris : change-le dans ton profil.',
+                EtatPseudo.invalide => 'Choisis un pseudo dans ton profil pour que ton lien marche.',
+                _ when pseudo.isEmpty => 'Choisis un pseudo dans ton profil pour que ton lien marche.',
+                _ when !pret => 'Ton lien s\'active dès que ton profil est en ligne.',
+                _ => 'Ton ami scanne ce code ou ouvre ton lien : sa demande t\'arrive.',
+              };
+    final texte = 'Ajoute-moi sur AESTHETICS : @$pseudo\n$lien';
     const encre = Color(0xFF0B0B0C);
-    Widget bouton(IconData icone, String label, VoidCallback onTap, {bool retourne = false}) => Expanded(
+    Widget bouton(IconData icone, String label, VoidCallback? onTap, {bool retourne = false}) => Expanded(
           child: Material(
-            color: Colors.white,
+            color: onTap == null ? Colors.white.withValues(alpha: 0.35) : Colors.white,
             borderRadius: BorderRadius.circular(34),
             clipBehavior: Clip.antiAlias,
             child: InkWell(
@@ -161,15 +180,22 @@ class LienPage extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Text(prenom.isEmpty ? 'Moi' : prenom, maxLines: 1, overflow: TextOverflow.ellipsis, style: ts(24, FontWeight.w800, encre, hauteur: 1.2)),
+                                  if (pseudo.isNotEmpty) Text('@$pseudo', maxLines: 1, overflow: TextOverflow.ellipsis, style: ts(15, FontWeight.w600, encre.withValues(alpha: 0.6), hauteur: 1.3)),
                                   const SizedBox(height: 18),
                                   AspectRatio(
                                     aspectRatio: 1,
-                                    child: QrImageView(
-                                      data: lien(prenom),
-                                      padding: EdgeInsets.zero,
-                                      eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.square, color: encre),
-                                      dataModuleStyle: const QrDataModuleStyle(dataModuleShape: QrDataModuleShape.square, color: encre),
-                                    ),
+                                    child: pret
+                                        ? QrImageView(
+                                            data: lien,
+                                            padding: EdgeInsets.zero,
+                                            eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.square, color: encre),
+                                            dataModuleStyle: const QrDataModuleStyle(dataModuleShape: QrDataModuleShape.square, color: encre),
+                                          )
+                                        // Pas encore de code : une place grise.
+                                        : DecoratedBox(
+                                            decoration: BoxDecoration(color: encre.withValues(alpha: 0.06), borderRadius: BorderRadius.circular(16)),
+                                            child: Center(child: Icon(Icons.qr_code_2_rounded, size: 72, color: encre.withValues(alpha: 0.18))),
+                                          ),
                                   ),
                                   const SizedBox(height: 18),
                                   Text('AESTHETICS', style: ts(15, FontWeight.w800, encre, hauteur: 1.2).copyWith(letterSpacing: 1.2)),
@@ -185,13 +211,22 @@ class LienPage extends StatelessWidget {
                         const SizedBox(height: 12),
                         Row(
                           children: [
-                            bouton(Icons.reply_rounded, 'Partager le profil', () => bientot(context, 'Le partage de ton lien'), retourne: true),
+                            bouton(Icons.reply_rounded, 'Partager le profil', pret ? () => SharePlus.instance.share(ShareParams(text: texte, subject: 'AESTHETICS')) : null, retourne: true),
                             const SizedBox(width: 10),
-                            bouton(Icons.link_rounded, 'Copier le lien', () => bientot(context, 'Ton lien d\'ami')),
+                            bouton(
+                              Icons.link_rounded,
+                              'Copier le lien',
+                              pret
+                                  ? () {
+                                      Clipboard.setData(ClipboardData(text: lien));
+                                      Toasts.show(context, 'Lien copié.');
+                                    }
+                                  : null,
+                            ),
                           ],
                         ),
                         const SizedBox(height: 14),
-                        Text('Aperçu : ton lien marchera avec les comptes.', textAlign: TextAlign.center, style: ts(13, FontWeight.w500, c.text2)),
+                        Text(message, textAlign: TextAlign.center, style: ts(13, FontWeight.w500, c.text2, hauteur: 1.35)),
                       ],
                     ),
                   ),
@@ -202,6 +237,38 @@ class LienPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// Un lien ou un code d'ami ouvert : celui qui porte [pseudo] reçoit ma
+/// demande, et son profil s'ouvre. [remplacer] ferme la page d'où l'on vient
+/// (le scanner).
+Future<void> ouvrirLienAmi(BuildContext context, String pseudo, {bool remplacer = false}) async {
+  final repo = context.read<SocialRepo?>();
+  if (repo == null) return;
+  if (repo.aConnecter) {
+    Toasts.show(context, 'Connecte-toi avec Google pour ajouter tes amis.');
+    if (remplacer) context.pop();
+    return;
+  }
+  final id = await repo.ajouterParPseudo(pseudo);
+  if (!context.mounted) return;
+  if (id == null) {
+    Toasts.show(context, 'Personne ne porte le pseudo @$pseudo.');
+    if (remplacer) context.pop();
+    return;
+  }
+  if (id == repo.moi) {
+    Toasts.show(context, 'C\'est ton propre code.');
+    if (remplacer) context.pop();
+    return;
+  }
+  final a = repo.ami(id);
+  if (a != null && repo.demandeEnvoyee(id)) Toasts.show(context, 'Demande envoyée à ${a.prenom}.');
+  if (remplacer) {
+    context.pushReplacement(SocialPaths.ami(id));
+  } else {
+    context.push(SocialPaths.ami(id));
   }
 }
 
@@ -223,12 +290,13 @@ class _ScannerAmiPageState extends State<ScannerAmiPage> {
     super.dispose();
   }
 
-  void _onDetect(BarcodeCapture capture) {
-    if (_lu || !capture.barcodes.any((b) => (b.rawValue ?? '').startsWith('aesthetics://ami'))) return;
+  Future<void> _onDetect(BarcodeCapture capture) async {
+    if (_lu) return;
+    final pseudo = capture.barcodes.map((b) => SocialRepo.pseudoDuLien(b.rawValue)).nonNulls.firstOrNull;
+    if (pseudo == null) return;
     _lu = true;
     HapticFeedback.mediumImpact();
-    bientot(context, 'L\'ajout d\'un ami par son code');
-    context.pop();
+    await ouvrirLienAmi(context, pseudo, remplacer: true);
   }
 
   @override

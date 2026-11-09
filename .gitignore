@@ -47,3 +47,4 @@ mobile/assets/body/pack/
 
 # Recadrages des captures d autres applis qui ont servi de modèle au personnage
 mobile/tools/corps3d/refs_zoom/
+mobile/android/app/google-services.json

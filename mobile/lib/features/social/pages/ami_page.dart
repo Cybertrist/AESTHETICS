@@ -20,8 +20,30 @@ import 'trouver_page.dart';
 enum _Menu { retirer, bloquer, signaler }
 
 /// Le profil public d'une personne : ce qu'elle a choisi de montrer, et à qui.
-class AmiPage extends StatelessWidget {
+/// À l'ouverture, la source relit son profil (sur le serveur, il a pu changer).
+class AmiPage extends StatefulWidget {
   const AmiPage({super.key, required this.id});
+  final String id;
+
+  @override
+  State<AmiPage> createState() => _AmiPageState();
+}
+
+class _AmiPageState extends State<AmiPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) context.read<SocialRepo>().voir(widget.id);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => _VueAmi(id: widget.id);
+}
+
+class _VueAmi extends StatelessWidget {
+  const _VueAmi({required this.id});
   final String id;
 
   @override
@@ -30,7 +52,8 @@ class AmiPage extends StatelessWidget {
     final repo = context.watch<SocialRepo>();
     final a = repo.ami(id);
     if (a == null) {
-      return const SubPageScaffold(title: 'Profil', body: Center(child: Text('Ce profil n\'existe plus.')));
+      // Sur le serveur, le profil peut être encore en route.
+      return SubPageScaffold(title: 'Profil', body: Center(child: repo.apercu ? const Text('Ce profil n\'existe plus.') : const CircularProgressIndicator()));
     }
     final lien = repo.lien(id);
     if (lien == Lien.bloque) {
@@ -169,7 +192,7 @@ class _AjouterAmiPageState extends State<AjouterAmiPage> {
               style: ts(16, FontWeight.w600, c.text),
               cursorColor: c.text,
               decoration: InputDecoration(
-                hintText: 'Nom ou pseudo',
+                hintText: repo.apercu ? 'Nom ou pseudo' : 'Pseudo',
                 hintStyle: ts(16, FontWeight.w500, c.text3),
                 prefixIcon: Icon(Icons.search_rounded, color: c.text2),
                 filled: true,
@@ -181,7 +204,8 @@ class _AjouterAmiPageState extends State<AjouterAmiPage> {
             ),
           ),
           const SizedBox(height: 12),
-          if (!vide && trouves.isEmpty)
+          if (repo.aConnecter) const Padding(padding: EdgeInsets.symmetric(horizontal: margeSociale), child: InvitationConnexion()),
+          if (!vide && trouves.isEmpty && !repo.aConnecter)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 24),
               child: Text('Personne à ce nom.', textAlign: TextAlign.center, style: ts(14.5, FontWeight.w500, c.text2)),
@@ -208,7 +232,9 @@ class MesAmisPage extends StatelessWidget {
         padding: const EdgeInsets.only(top: 4, bottom: 40),
         children: [
           const Padding(padding: EdgeInsets.symmetric(horizontal: margeSociale), child: BandeauApercu()),
-          if (repo.amis.isEmpty)
+          if (repo.aConnecter)
+            const Padding(padding: EdgeInsets.fromLTRB(margeSociale, 8, margeSociale, 0), child: InvitationConnexion())
+          else if (repo.amis.isEmpty)
             Padding(
               padding: const EdgeInsets.fromLTRB(30, 50, 30, 20),
               child: Column(
@@ -439,7 +465,20 @@ class _ModifierProfilPageState extends State<ModifierProfilPage> {
           ),
           const SizedBox(height: 26),
           champ('Prénom', _prenom, 'Tristan'),
-          champ('Pseudo', _pseudo, 'tristan.jcr', prefixe: '@', formats: _pseudoPermis, longueur: 20, aide: 'Tes amis te trouvent avec.'),
+          champ(
+            'Pseudo',
+            _pseudo,
+            'tristan.jcr',
+            prefixe: '@',
+            formats: _pseudoPermis,
+            longueur: 20,
+            // Ce que le serveur dit du pseudo enregistré.
+            aide: switch (context.watch<SocialRepo?>()?.etatPseudo) {
+              EtatPseudo.pris => 'Déjà pris par quelqu’un d’autre : choisis-en un autre.',
+              EtatPseudo.invalide => '3 caractères au moins : lettres, chiffres, point, tiret bas.',
+              _ => 'Tes amis te trouvent avec.',
+            },
+          ),
           champ('Ta phrase', _phrase, 'Ta devise, ton but.', longueur: 140, lignes: 3),
           champ('Ville', _ville, 'Brest'),
           champ('Ma salle', _salle, 'Basic-Fit Brest'),

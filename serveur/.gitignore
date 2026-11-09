@@ -1,0 +1,3 @@
+# Dépendances des tests et journaux de l'émulateur
+node_modules/
+*-debug.log

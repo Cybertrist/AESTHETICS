@@ -153,9 +153,14 @@ function suivi(r, categorie, equipement, vieux) {
   return 'poidsReps';
 }
 
+// Exercices du pack qui sont la même machine qu'un autre : leurs noms deviennent des alias de celui qui
+// reste (lib/core/models/json.dart, exercicesFondus, relit les anciens fichiers).
+const FONDUS = { 'machine-chest-fly': 'pec-deck' };
+
 const idsPris = new Set();
 const sortie = [];
 for (const r of pack) {
+  if (FONDUS[r.id]) continue;
   const vieux = identifiants[r.id];
   let id = vieux?.id ?? r.id;
   // Un identifiant du pack peut être celui d'un autre exercice historique.
@@ -200,6 +205,13 @@ for (const r of pack) {
     media,
     source: `repdb:${r.id}`,
   });
+}
+
+for (const [de, vers] of Object.entries(FONDUS)) {
+  const r = pack.find((x) => x.id === de);
+  const e = sortie.find((x) => x.source === `repdb:${vers}`);
+  if (!r || !e) throw new Error(`Fusion impossible : ${de} vers ${vers}`);
+  e.alias = uniques([...e.alias, propre(r.name_fr), r.name_en, ...(r.synonyms || [])]).filter((a) => cle(a) !== cle(e.nom));
 }
 
 // Les exercices historiques d'abord (les plus courants), puis le reste par nom.

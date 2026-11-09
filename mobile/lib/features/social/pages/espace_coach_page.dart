@@ -53,7 +53,7 @@ class EspaceCoachPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(margeSociale, 4, margeSociale, 40),
         children: [
-          const BandeauApercu(),
+          const BandeauApercu(coach: true),
           const SizedBox(height: 14),
           CarteSociale(
             child: Row(

@@ -1,0 +1,391 @@
+rules_version = '2';
+
+// Règles Firestore d'AESTHETICS. Le contrat est dans CONCEPTION.md.
+//
+// Offre gratuite : ni Cloud Functions ni Storage, donc toute la sécurité
+// tient ici. Rien n'est lisible sans être connecté, et chaque écriture est
+// validée : propriétaire, clés permises, types, longueurs. Les dates que le
+// serveur peut fixer valent `request.time` : un téléphone ne peut pas
+// antidater une demande ni une réaction.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // --- Utilitaires -------------------------------------------------------
+
+    function connecte() {
+      return request.auth != null;
+    }
+
+    function moi() {
+      return request.auth.uid;
+    }
+
+    // Un chemin de document écrit en texte (« demandes/a_b ») : `$(x)` ne
+    // ferait qu'un seul segment des barres obliques.
+    function chemin(suite) {
+      return path('/databases/' + database + '/documents/' + suite);
+    }
+
+    // `a` a `b` dans sa liste d'amis. Les deux sens sont écrits ensemble,
+    // un seul suffit donc à lire l'amitié.
+    function estAmi(a, b) {
+      return exists(/databases/$(database)/documents/amis/$(a)/liste/$(b));
+    }
+
+    // `a` a bloqué `b`.
+    function aBloque(a, b) {
+      return exists(/databases/$(database)/documents/blocages/$(a)/liste/$(b));
+    }
+
+    // L'un des deux a bloqué l'autre.
+    function bloques(a, b) {
+      return aBloque(a, b) || aBloque(b, a);
+    }
+
+    // La carte publique d'un profil (l'accès s'y relit).
+    function carte(uid) {
+      return get(/databases/$(database)/documents/profils/$(uid)).data;
+    }
+
+    // Les données envoyées, et seulement les clés permises avec les
+    // obligatoires.
+    function cles(permises, obligatoires) {
+      return request.resource.data.keys().hasOnly(permises)
+        && request.resource.data.keys().hasAll(obligatoires);
+    }
+
+    // Une clé facultative : absente, ou présente avec la bonne forme.
+    function absent(d, cle) {
+      return !(cle in d);
+    }
+
+    function texte(v, min, max) {
+      return v is string && v.size() >= min && v.size() <= max;
+    }
+
+    function entier(v, min, max) {
+      return v is int && v >= min && v <= max;
+    }
+
+    function liste(v, max) {
+      return v is list && v.size() <= max;
+    }
+
+    // Une liste courte dont les éléments mis bout à bout tiennent en
+    // `long` signes : chaque élément reste petit, sans en vérifier un à un
+    // (les règles n'ont pas de boucle, et une requête s'arrête à 1 000
+    // expressions). L'appli relit ces listes sans se fier à leur type.
+    function courte(v, max, long) {
+      return liste(v, max) && v.join(',').size() <= long;
+    }
+
+    // Un record des détails : `{exercice, kg, reps}`, rien d'autre.
+    function record(r) {
+      return r is map && r.size() == 3 && r.keys().hasOnly(['exercice', 'kg', 'reps'])
+        && r.exercice is string && r.exercice.size() <= 100
+        && r.kg is number && r.kg >= 0 && r.kg <= 2000
+        && r.reps is int && r.reps >= 0 && r.reps <= 1000;
+    }
+
+    // Quatre records au plus (ceux que le profil montre), vérifiés un à un :
+    // les règles n'ont pas de boucle, et chacun coûte assez d'expressions
+    // pour qu'un cinquième et un sixième frôlent les 1 000 permises.
+    function records(l) {
+      return l is list && l.size() <= 4
+        && (l.size() <= 0 || record(l[0]))
+        && (l.size() <= 1 || record(l[1]))
+        && (l.size() <= 2 || record(l[2]))
+        && (l.size() <= 3 || record(l[3]));
+    }
+
+    // --- Profils -----------------------------------------------------------
+
+    // La carte publique : lisible par toute personne connectée (recherche,
+    // fil). Le pseudo affiché garde ses majuscules ; `pseudoMin` est sa forme
+    // en minuscules, réservée dans `pseudos/` par le même lot.
+    function carteValide(uid) {
+      let d = request.resource.data;
+      return cles(['pseudo', 'pseudoMin', 'prenom', 'couleur', 'photo', 'acces', 'majLe'],
+                  ['pseudo', 'pseudoMin', 'prenom', 'couleur', 'acces', 'majLe'])
+        && d.pseudoMin is string
+        && d.pseudoMin.matches('^[a-z0-9._]{3,24}$')
+        && d.pseudo is string
+        && d.pseudo.lower() == d.pseudoMin
+        && texte(d.prenom, 0, 40)
+        && d.couleur is int
+        // Du base64 : un signe vaut un octet, la vignette tient en 40 Ko.
+        && (absent(d, 'photo') || (texte(d.photo, 0, 40000) && d.photo.matches('^[A-Za-z0-9+/=]*$')))
+        && d.acces in ['tous', 'amis', 'prive']
+        && d.majLe == request.time
+        // Le pseudo appartient à ce compte une fois le lot écrit.
+        && getAfter(chemin('pseudos/' + d.pseudoMin)).data.uid == uid;
+    }
+
+    // Le pseudo que portait la carte est rendu dans le même lot (ou n'est
+    // plus à ce compte) : un compte n'en garde jamais qu'un.
+    function ancienRendu(uid, ancien) {
+      return !existsAfter(chemin('pseudos/' + ancien))
+        || getAfter(chemin('pseudos/' + ancien)).data.uid != uid;
+    }
+
+    // Le reste du profil, lu selon l'accès de la carte. L'appli n'envoie que
+    // ce que `montre` autorise.
+    function detailsValides() {
+      let d = request.resource.data;
+      return cles(['phrase', 'ville', 'salle', 'depuis', 'montre', 'seances', 'heures',
+                   'serieSemaines', 'objectif', 'niveau', 'jours', 'records', 'badges',
+                   'fetiches', 'nbAmis', 'majLe'],
+                  ['majLe'])
+        && (absent(d, 'phrase') || texte(d.phrase, 0, 160))
+        && (absent(d, 'ville') || texte(d.ville, 0, 60))
+        && (absent(d, 'salle') || texte(d.salle, 0, 60))
+        // L'année de la première séance.
+        && (absent(d, 'depuis') || entier(d.depuis, 1900, 3000))
+        && (absent(d, 'montre') || courte(d.montre, 20, 400))
+        && (absent(d, 'seances') || entier(d.seances, 0, 100000))
+        // Bornées : ni l'infini ni NaN ne passent.
+        && (absent(d, 'heures') || (d.heures is number && d.heures >= 0 && d.heures <= 1000000))
+        && (absent(d, 'serieSemaines') || entier(d.serieSemaines, 0, 10000))
+        && (absent(d, 'objectif') || texte(d.objectif, 0, 60))
+        && (absent(d, 'niveau') || texte(d.niveau, 0, 40))
+        // Des jours comptés depuis 1970.
+        && (absent(d, 'jours') || courte(d.jours, 7, 60))
+        && (absent(d, 'records') || records(request.resource.data.records))
+        // Un compteur par grade : des noms courts, des entiers.
+        && (absent(d, 'badges') || (d.badges is map && d.badges.size() <= 20
+              && courte(d.badges.keys(), 20, 600) && courte(d.badges.values(), 20, 200)))
+        && (absent(d, 'fetiches') || courte(d.fetiches, 10, 1100))
+        && (absent(d, 'nbAmis') || entier(d.nbAmis, 0, 100000))
+        && d.majLe == request.time;
+    }
+
+    match /profils/{uid} {
+      // Une carte à la fois, ou la recherche de l'appli (20 au plus) : pas
+      // l'annuaire entier d'une requête.
+      allow get: if connecte();
+      allow list: if connecte() && request.query.limit <= 20;
+      allow create: if connecte() && moi() == uid && carteValide(uid);
+      allow update: if connecte() && moi() == uid && carteValide(uid)
+        && (resource.data.pseudoMin == request.resource.data.pseudoMin
+            || ancienRendu(uid, resource.data.pseudoMin));
+      // Effacer sa carte rend son pseudo dans le même lot.
+      allow delete: if connecte() && moi() == uid
+        && (resource == null || ancienRendu(uid, resource.data.pseudoMin));
+
+      match /details/{doc} {
+        allow read: if connecte() && (
+          moi() == uid
+          || (!aBloque(uid, moi()) && (
+                carte(uid).acces == 'tous'
+                || (carte(uid).acces == 'amis' && estAmi(uid, moi())))));
+        allow create, update: if connecte() && moi() == uid && doc == 'public' && detailsValides();
+        allow delete: if connecte() && moi() == uid;
+      }
+    }
+
+    // --- Pseudos -----------------------------------------------------------
+
+    // Un pseudo pris l'est par un seul compte. Le réserver ne se fait qu'avec
+    // la carte qui le porte (même lot), pour qu'un compte ne puisse pas en
+    // accaparer cent ; le rendre, qu'une fois la carte passée à un autre.
+    match /pseudos/{pseudoMin} {
+      allow get: if connecte();
+      allow create: if connecte()
+        && pseudoMin.matches('^[a-z0-9._]{3,24}$')
+        && request.resource.data.keys().hasOnly(['uid'])
+        && request.resource.data.uid == moi()
+        && getAfter(chemin('profils/' + moi())).data.pseudoMin == pseudoMin;
+      // Rendre un pseudo déjà rendu (deuxième téléphone) ne fait rien.
+      allow delete: if connecte()
+        && (resource == null || resource.data.uid == moi())
+        && (!existsAfter(chemin('profils/' + moi()))
+            || getAfter(chemin('profils/' + moi())).data.pseudoMin != pseudoMin);
+    }
+
+    // --- Demandes d'ami ----------------------------------------------------
+
+    // Identifiant `{de}_{vers}` : il n'y a qu'une demande par sens, et on
+    // peut vérifier l'existence d'une demande sans la lire.
+    match /demandes/{id} {
+      allow read: if connecte() && (
+        resource.data.de == moi() || resource.data.vers == moi()
+        || id.split('_')[0] == moi() || id.split('_')[1] == moi());
+      allow create: if connecte()
+        && cles(['de', 'vers', 'date'], ['de', 'vers', 'date'])
+        && request.resource.data.de == moi()
+        && request.resource.data.vers is string
+        && request.resource.data.vers != moi()
+        && id == moi() + '_' + request.resource.data.vers
+        && request.resource.data.date == request.time
+        && exists(chemin('profils/' + request.resource.data.vers))
+        && !bloques(moi(), request.resource.data.vers)
+        && !estAmi(moi(), request.resource.data.vers);
+      // `de` annule, `vers` refuse ou accepte. Lu dans l'identifiant (fixé à
+      // la création) : bloquer supprime les deux sens sans savoir s'ils
+      // existent.
+      allow delete: if connecte() && (id.split('_')[0] == moi() || id.split('_')[1] == moi());
+    }
+
+    // --- Amitiés -----------------------------------------------------------
+
+    match /amis/{uid}/liste/{autre} {
+      // Ses amis lisent sa liste (amis en commun) sauf si le profil est privé.
+      allow read: if connecte() && (
+        moi() == uid
+        || (estAmi(uid, moi()) && carte(uid).acces != 'prive'));
+
+      // Accepter : `vers` écrit les deux sens dans un lot, ce que permet la
+      // demande `{de}_{vers}` encore présente avant le lot. Le même lot
+      // efface les deux demandes (la croisée aussi) : une demande qui
+      // survivrait resterait une clé pour se refaire ami seul après un
+      // retrait. L'autre sens doit exister une fois le lot écrit.
+      allow create: if connecte()
+        && uid != autre
+        && cles(['depuis'], ['depuis'])
+        && request.resource.data.depuis == request.time
+        && (
+          (moi() == uid && exists(chemin('demandes/' + autre + '_' + uid)))
+          || (moi() == autre && exists(chemin('demandes/' + uid + '_' + autre))))
+        && existsAfter(chemin('amis/' + autre + '/liste/' + uid))
+        && !existsAfter(chemin('demandes/' + autre + '_' + uid))
+        && !existsAfter(chemin('demandes/' + uid + '_' + autre))
+        && !bloques(uid, autre);
+
+      // Retirer : chacun des deux supprime les deux sens, ensemble (un seul
+      // sens laisserait une amitié boiteuse).
+      allow delete: if connecte() && (moi() == uid || moi() == autre)
+        && !existsAfter(chemin('amis/' + autre + '/liste/' + uid));
+    }
+
+    // --- Blocages ----------------------------------------------------------
+
+    match /blocages/{uid}/liste/{autre} {
+      allow read: if connecte() && moi() == uid;
+      allow create: if connecte() && moi() == uid
+        && autre != uid
+        && cles(['date'], ['date'])
+        && request.resource.data.date == request.time;
+      allow delete: if connecte() && moi() == uid;
+    }
+
+    // --- Publications ------------------------------------------------------
+
+    function publicationValide() {
+      let d = request.resource.data;
+      return cles(['auteur', 'seanceId', 'titre', 'date', 'dureeSec', 'volumeKg', 'series',
+                   'exercices', 'records', 'note', 'visiblePar', 'majLe'],
+                  ['auteur', 'seanceId', 'titre', 'date', 'dureeSec', 'series', 'exercices',
+                   'records', 'visiblePar', 'majLe'])
+        && d.auteur == moi()
+        && texte(d.seanceId, 1, 100)
+        && texte(d.titre, 1, 80)
+        // La date de la séance : passée, à un jour près (fuseaux, horloges).
+        && d.date is timestamp
+        && d.date <= request.time + duration.value(1, 'd')
+        && entier(d.dureeSec, 0, 86400)
+        && (absent(d, 'volumeKg') || (d.volumeKg is number && d.volumeKg >= 0))
+        && entier(d.series, 0, 1000)
+        && courte(d.exercices, 6, 700)
+        && entier(d.records, 0, 1000)
+        && (absent(d, 'note') || texte(d.note, 0, 280))
+        && liste(d.visiblePar, 500)
+        && moi() in d.visiblePar
+        && d.majLe == request.time;
+    }
+
+    match /publications/{id} {
+      // L'auteur lit toutes les siennes (pour réécrire `visiblePar` de ses
+      // vieilles séances quand un ami part).
+      allow read: if connecte() && (moi() in resource.data.visiblePar || resource.data.auteur == moi());
+      // L'identifiant est `{auteur}_{seanceId}` (les « / » en « _ ») : personne
+      // ne prend celui d'un autre, ni ne recrée une publication effacée pour
+      // lire les commentaires restés dessous. Un profil privé ne publie rien ;
+      // il peut toujours retirer des lecteurs de `visiblePar` (jamais en
+      // ajouter) ou supprimer.
+      allow create: if connecte() && publicationValide()
+        && id == moi() + '_' + request.resource.data.seanceId.replace('/', '_')
+        && carte(moi()).acces != 'prive';
+      allow update: if connecte() && resource.data.auteur == moi() && publicationValide()
+        && request.resource.data.seanceId == resource.data.seanceId
+        && (carte(moi()).acces != 'prive' || request.resource.data.visiblePar.hasOnly(resource.data.visiblePar));
+      allow delete: if connecte() && resource.data.auteur == moi();
+
+      function publication() {
+        return get(chemin('publications/' + id)).data;
+      }
+
+      // L'auteur de la publication, lu dans l'identifiant : il nettoie ses
+      // réactions et commentaires, même une fois la publication effacée.
+      function aMoi() {
+        return id.split('_')[0] == moi();
+      }
+
+      // Lire, réagir, commenter : figurer dans `visiblePar`, et aucun blocage
+      // entre l'auteur et moi (une vieille séance peut encore porter celui
+      // qu'on a bloqué).
+      function peutLire() {
+        return moi() in publication().visiblePar && !bloques(publication().auteur, moi());
+      }
+
+      match /reactions/{uid} {
+        allow read: if connecte() && (aMoi() || peutLire());
+        allow create, update: if connecte() && moi() == uid
+          && cles(['type', 'date'], ['type', 'date'])
+          && request.resource.data.type in ['coeur', 'feu', 'biceps', 'bravo', 'etoiles']
+          && request.resource.data.date == request.time
+          && peutLire();
+        allow delete: if connecte() && (moi() == uid || aMoi());
+      }
+
+      match /commentaires/{cid} {
+        allow read: if connecte() && (aMoi() || peutLire());
+        allow create: if connecte()
+          && cles(['auteur', 'texte', 'date'], ['auteur', 'texte', 'date'])
+          && request.resource.data.auteur == moi()
+          && texte(request.resource.data.texte, 1, 500)
+          && request.resource.data.date == request.time
+          && peutLire();
+        // Pas de modification ; suppression par son auteur ou par celui de
+        // la publication.
+        allow delete: if connecte()
+          && (resource.data.auteur == moi() || aMoi() || publication().auteur == moi());
+      }
+    }
+
+    // --- Copie des données -------------------------------------------------
+
+    // Le résumé (`ResumeCopie.toJson`, plus `majLe`) et les morceaux de la
+    // sauvegarde compressée. Personne d'autre que le compte n'y touche.
+    match /copies/{uid} {
+      allow read, delete: if connecte() && moi() == uid;
+      allow create, update: if connecte() && moi() == uid
+        && cles(['date', 'seances', 'routines', 'morceaux', 'octets', 'prenom', 'majLe'],
+                ['date', 'seances', 'routines', 'morceaux', 'octets'])
+        && (request.resource.data.date is string || request.resource.data.date is timestamp)
+        && entier(request.resource.data.seances, 0, 1000000)
+        && entier(request.resource.data.routines, 0, 100000)
+        // 20 morceaux de 900 Ko au plus (18 Mo) : un seul compte ne remplit
+        // pas le Go de l'offre gratuite.
+        && entier(request.resource.data.morceaux, 0, 20)
+        && entier(request.resource.data.octets, 0, 1000000000)
+        // Compté en unités UTF-16 : 40 lettres avec des emojis en font plus.
+        && (absent(request.resource.data, 'prenom') || texte(request.resource.data.prenom, 0, 200))
+        && (absent(request.resource.data, 'majLe') || request.resource.data.majLe == request.time);
+
+      match /morceaux/{n} {
+        allow read, delete: if connecte() && moi() == uid;
+        allow create, update: if connecte() && moi() == uid
+          && n.matches('^1?[0-9]$')
+          && cles(['texte', 'n', 'majLe'], ['texte'])
+          && texte(request.resource.data.texte, 0, 900000)
+          && (absent(request.resource.data, 'n') || entier(request.resource.data.n, 0, 19))
+          && (absent(request.resource.data, 'majLe') || request.resource.data.majLe == request.time);
+      }
+    }
+
+    // Tout le reste : fermé.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

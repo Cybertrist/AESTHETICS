@@ -56,6 +56,13 @@ class CompteRepo extends ChangeNotifier {
   DateTime? _dernierEnvoi;
   String? _erreur;
   ChoixCopie? _choix;
+
+  /// Le téléphone et le serveur ont été comparés pour ce compte (gardé dans
+  /// le fichier [_fichier]) : sans cela, rien ne part. Un choix laissé en
+  /// plan, un réseau coupé pendant la connexion ou une appli tuée au mauvais
+  /// moment ne laissent donc jamais écraser la copie du serveur.
+  bool _accorde = false;
+  Future<void>? _accord;
   Timer? _minuteur;
   bool _aEnvoyer = false;
   Future<void>? _envoi;
@@ -79,7 +86,8 @@ class CompteRepo extends ChangeNotifier {
     final uid = j?['uid'];
     _dernierEnvoi = DateTime.tryParse('${j?['dernierEnvoi']}');
     // La copie locale ne vaut que pour le compte qui l'a envoyée.
-    if (_utilisateur == null || uid != _utilisateur!.uid) _dernierEnvoi = null;
+    _accorde = _utilisateur != null && uid == _utilisateur!.uid;
+    if (!_accorde) _dernierEnvoi = null;
     _etat = _utilisateur != null && _dernierEnvoi != null ? EtatCopie.aJour : EtatCopie.aucune;
     data.store.ecouteurs.add(_surEcriture);
     notifyListeners();
@@ -108,15 +116,37 @@ class CompteRepo extends ChangeNotifier {
       if (u == null) return false;
       _utilisateur = u;
       _dernierEnvoi = null;
+      _accorde = false;
       notifyListeners();
       await _accorder();
       return true;
     } catch (e) {
+      // Le compte reste connecté, mais les copies ne sont pas comparées :
+      // rien ne part avant que la comparaison ait abouti (au prochain
+      // changement, au retour dans l'appli).
       _erreur = 'La connexion n\'a pas abouti. Vérifie ta connexion à Internet et réessaie.';
       notifyListeners();
       return false;
     }
   }
+
+  /// Vrai quand le téléphone et le serveur restent à comparer pour ce
+  /// compte : la prochaine tentative d'envoi les compare d'abord.
+  bool get aComparer => connecte && !_accorde;
+
+  /// Compare de nouveau, une seule fois à la fois ; une erreur réseau est
+  /// notée, et l'essai suivant recommencera.
+  Future<void> _reaccorder() => _accord ??= () async {
+        _erreur = null;
+        try {
+          await _accorder();
+        } catch (_) {
+          _etat = EtatCopie.enAttente;
+          _erreur = 'Pas encore comparé avec le serveur : réessaie quand le réseau revient.';
+          notifyListeners();
+        }
+      }()
+          .whenComplete(() => _accord = null);
 
   /// Après une connexion : envoyer, reprendre, ou demander.
   Future<void> _accorder() async {
@@ -126,6 +156,7 @@ class CompteRepo extends ChangeNotifier {
     final telephone = CopieServeur.resumer(json, morceaux: 0, date: _horloge());
     if (serveur == null || serveur.vide) {
       // Rien sur le serveur : le téléphone fait foi.
+      _accorde = true;
       await envoyer();
     } else if (telephone.vide) {
       // Téléphone neuf : on reprend la copie du compte.
@@ -145,7 +176,9 @@ class CompteRepo extends ChangeNotifier {
 
   /// Garder les données de ce téléphone : elles remplacent la copie du serveur.
   Future<void> garderTelephone() async {
+    if (_choix == null) return;
     _choix = null;
+    _accorde = true;
     notifyListeners();
     await envoyer();
   }
@@ -163,6 +196,7 @@ class CompteRepo extends ChangeNotifier {
       final json = CopieServeur.recoller(await copies!.lire(uid, resume));
       await data.importBackup(json);
       _choix = null;
+      _accorde = true;
       _dernierEnvoi = resume.date;
       _aEnvoyer = false;
       _minuteur?.cancel();
@@ -191,6 +225,8 @@ class CompteRepo extends ChangeNotifier {
 
   Future<void> _envoyer() async {
     if (!disponible || !connecte || _choix != null) return;
+    // Jamais comparés : on compare d'abord (envoyer, reprendre ou demander).
+    if (!_accorde) return _reaccorder();
     final uid = _utilisateur!.uid;
     _minuteur?.cancel();
     _aEnvoyer = false;
@@ -200,11 +236,15 @@ class CompteRepo extends ChangeNotifier {
     try {
       final json = await _exporter();
       final morceaux = CopieServeur.decouper(json);
+      if (morceaux.length > CopieServeur.maxMorceaux) throw const FormatException('Tes données sont trop grosses pour la copie du serveur.');
       final resume = CopieServeur.resumer(json, morceaux: morceaux.length, date: _horloge());
       await copies!.envoyer(uid, resume, morceaux);
       _dernierEnvoi = resume.date;
       await _noter();
       _etat = EtatCopie.aJour;
+    } on FormatException catch (e) {
+      _etat = EtatCopie.enAttente;
+      _erreur = e.message;
     } catch (_) {
       // Pas de réseau à la salle : les données restent sur le téléphone et
       // l'envoi sera retenté au prochain changement ou au prochain lancement.
@@ -235,6 +275,7 @@ class CompteRepo extends ChangeNotifier {
     _utilisateur = null;
     _dernierEnvoi = null;
     _choix = null;
+    _accorde = false;
     _aEnvoyer = false;
     _etat = EtatCopie.aucune;
     _erreur = null;

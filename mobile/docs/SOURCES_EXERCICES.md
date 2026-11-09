@@ -1,6 +1,6 @@
 # Catalogue d'exercices : source, licence, limites
 
-Le catalogue, les animations et le personnage viennent d'un pack d'exercices acheté (RepDB, licence commerciale Standard, au nom de Tristan) : **701 exercices** en français, dont **544 animés** (pack v1.53 du 8 novembre 2026). Tout est embarqué, rien ne dépend du réseau.
+Le catalogue, les animations et le personnage viennent d'un pack d'exercices acheté (RepDB, licence commerciale Standard, au nom de Tristan) : **700 exercices** en français, dont **543 animés** (pack v1.53 du 8 novembre 2026). Tout est embarqué, rien ne dépend du réseau.
 
 ## Ce que l'appli embarque
 

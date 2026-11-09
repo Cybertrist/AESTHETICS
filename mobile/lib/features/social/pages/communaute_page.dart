@@ -23,18 +23,46 @@ class CommunautePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
+    final repo = context.watch<SocialRepo>();
     return SubPageScaffold(
       title: 'Ajouter des amis',
       body: ListView(
         padding: const EdgeInsets.fromLTRB(margeSociale, 4, margeSociale, 40),
         children: [
-          const BandeauApercu(),
-          const SizedBox(height: 16),
-          _Action(icone: Icons.contacts_outlined, titre: 'Trouver dans mes contacts', onTap: () => context.push(SocialPaths.contacts)),
-          const SizedBox(height: 12),
-          _Action(icone: Icons.search_rounded, titre: 'Chercher par nom', onTap: () => context.push(SocialPaths.ajouter)),
-          const SizedBox(height: 12),
-          _Action(titre: 'Partager mon lien', onTap: () => context.push(SocialPaths.lien)),
+          // Sans compte, pas de communauté : d'abord se connecter.
+          if (repo.aConnecter)
+            const InvitationConnexion()
+          else ...[
+            if (repo.apercu) ...[const BandeauApercu(), const SizedBox(height: 16)],
+            if (repo.etatPseudo == EtatPseudo.pris || repo.etatPseudo == EtatPseudo.invalide) ...[
+              CarteSociale(
+                onTap: () => context.push(SocialPaths.modifierProfil),
+                child: Row(
+                  children: [
+                    Icon(Icons.alternate_email_rounded, color: c.text, size: 26),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Text(
+                        repo.etatPseudo == EtatPseudo.pris ? 'Ton pseudo est déjà pris : choisis-en un autre pour qu\'on te trouve.' : 'Choisis un pseudo de 3 caractères au moins pour qu\'on te trouve.',
+                        style: ts(14.5, FontWeight.w600, c.text, hauteur: 1.35),
+                      ),
+                    ),
+                    Icon(Icons.chevron_right_rounded, color: c.text2),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+            // Le répertoire du téléphone n'est lu que dans l'aperçu.
+            if (repo.apercu) ...[
+              _Action(icone: Icons.contacts_outlined, titre: 'Trouver dans mes contacts', onTap: () => context.push(SocialPaths.contacts)),
+              const SizedBox(height: 12),
+            ],
+            _Action(icone: Icons.search_rounded, titre: repo.apercu ? 'Chercher par nom' : 'Chercher par pseudo', onTap: () => context.push(SocialPaths.ajouter)),
+            const SizedBox(height: 12),
+            _Action(titre: 'Partager mon lien', onTap: () => context.push(SocialPaths.lien)),
+          ],
         ],
       ),
     );
@@ -99,7 +127,7 @@ class CoachPage extends StatelessWidget {
     final repo = context.watch<SocialRepo>();
     return SubPageScaffold(
       title: 'Mon coach',
-      body: ListView(padding: const EdgeInsets.fromLTRB(margeSociale, 4, margeSociale, 40), children: [const BandeauApercu(), const SizedBox(height: 16), ..._coach(context, repo)]),
+      body: ListView(padding: const EdgeInsets.fromLTRB(margeSociale, 4, margeSociale, 40), children: [const BandeauApercu(coach: true), const SizedBox(height: 16), ..._coach(context, repo)]),
     );
   }
 

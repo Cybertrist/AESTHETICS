@@ -15,6 +15,10 @@ import 'core/env.dart';
 import 'core/theme/accent_controller.dart';
 import 'core/theme/tokens.dart';
 import 'core/ui/body/body_svg.dart';
+import 'features/compte/data/connexion_firebase.dart';
+import 'features/compte/data/copies_firebase.dart';
+import 'features/compte/data/firebase.dart';
+import 'features/compte/logic/compte_repo.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +51,15 @@ Future<void> main() async {
   // Personnage lu et analysé une fois pour toutes, sans blanc au premier affichage.
   unawaited(BodySvgRepository.precache());
 
-  runApp(AestheticApp(data: data, accent: accent));
+  // Le compte et la copie sur le serveur : ni en démo ni dans les tests, où
+  // le serveur reste éteint et l'appli tout en local.
+  CompteRepo? compte;
+  if (await ServeurFirebase.demarrer()) {
+    compte = CompteRepo(data, connexion: ConnexionFirebase(ServeurFirebase.auth!), copies: CopiesFirebase(ServeurFirebase.base!));
+    await compte.charger();
+  }
+
+  runApp(AestheticApp(data: data, accent: accent, compte: compte));
 }
 
 /// Mentions MIT des dessins embarqués : elles apparaissent dans

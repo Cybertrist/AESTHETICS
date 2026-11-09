@@ -43,6 +43,15 @@ String? asTexte(Object? v) {
   return s == null ? null : desechapper(s);
 }
 
+/// Exercices du catalogue fondus dans un autre : la même machine sous deux noms.
+const exercicesFondus = {'machine-chest-fly': 'pec-deck'};
+
+/// L'identifiant d'exercice d'un fichier, ramené à celui qui reste au catalogue.
+String asExercice(Object? v) {
+  final id = asString(v) ?? '';
+  return exercicesFondus[id] ?? id;
+}
+
 DateTime? asDate(Object? v) {
   if (v == null) return null;
   if (v is DateTime) return v;

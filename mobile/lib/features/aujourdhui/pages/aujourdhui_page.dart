@@ -12,6 +12,7 @@ import '../logic/pas_repo.dart';
 import '../routes.dart';
 import '../../social/data/social_repo.dart';
 import '../../social/pages/communaute_page.dart' show CartePublication;
+import '../../social/widgets/elements.dart' show InvitationConnexion;
 import '../widgets/accueil.dart';
 import '../widgets/cartes.dart';
 
@@ -122,7 +123,10 @@ class _AujourdhuiPageState extends State<AujourdhuiPage> with WidgetsBindingObse
         TitreDernieresSeances(lien: terminees.isNotEmpty),
         const SizedBox(height: 11.5),
       ],
-      if (cartes.isEmpty)
+      // La communauté allumée sans compte : le fil des amis invite à se connecter.
+      if (social != null && social.aConnecter && _fil == FiltreFil.amis)
+        const InvitationConnexion()
+      else if (cartes.isEmpty)
         (social != null && _fil == FiltreFil.amis)
             ? Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30),
