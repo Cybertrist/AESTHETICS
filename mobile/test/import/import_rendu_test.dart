@@ -135,6 +135,7 @@ class _Banc extends StatelessWidget {
         ChangeNotifierProvider<ExerciseRepo>.value(value: d.exercises),
         ChangeNotifierProvider<RoutineRepo>.value(value: d.routines),
         ChangeNotifierProvider<SessionRepo>.value(value: d.sessions),
+        ChangeNotifierProvider<ChargesRepo>.value(value: d.charges),
         ChangeNotifierProvider<HealthRepo>.value(value: d.health),
         ChangeNotifierProvider<NutritionRepo>.value(value: d.nutrition),
       ],

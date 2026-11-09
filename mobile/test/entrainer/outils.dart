@@ -222,6 +222,7 @@ class _AppEntrainerState extends State<AppEntrainer> {
         ChangeNotifierProvider<RoutineRepo>.value(value: d.routines),
         ChangeNotifierProvider<ProgramRepo>.value(value: d.programs),
         ChangeNotifierProvider<SessionRepo>.value(value: d.sessions),
+        ChangeNotifierProvider<ChargesRepo>.value(value: d.charges),
       ],
       child: MaterialApp.router(
         theme: _accent.theme,

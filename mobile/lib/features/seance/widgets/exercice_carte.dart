@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../../core/logic/format.dart';
+import '../../../core/logic/graduation.dart';
 import '../../../core/logic/unilateral.dart';
 import '../../../core/models/models.dart';
 import '../../../core/theme/theme.dart';
@@ -70,6 +72,7 @@ class ExerciceCarte extends StatelessWidget {
     this.precedent,
     this.reperes,
     this.plan,
+    this.graduation,
     this.afficherRpe = false,
     this.effortRir = false,
     this.position = 0,
@@ -100,6 +103,20 @@ class ExerciceCarte extends StatelessWidget {
     final cotes = se.series.any((x) => x.type == SetType.gauche || x.type == SetType.droite);
     return cotes ? Unilateral.prevues(p) : p;
   }
+  /// Les charges de l'exercice : sur une pile en livres, la ligne dit ce
+  /// que la machine affiche pour la prochaine série.
+  final Graduation? graduation;
+
+  /// « 59 kg · 130 lb » pour la prochaine série (sinon la dernière) d'une
+  /// pile en livres ; null ailleurs.
+  String? get _machine {
+    final g = graduation;
+    if (g == null || !g.enLivres || unite != UnitePoids.kg) return null;
+    final x = se.series.where((x) => !x.fait && (x.poids ?? 0) > 0).firstOrNull ?? se.series.where((x) => (x.poids ?? 0) > 0).lastOrNull;
+    final lb = x == null ? null : g.libelleMachine(x.poids!);
+    return lb == null ? null : '${Fmt.poids(x!.poids!)} · $lb';
+  }
+
   final bool afficherRpe;
   final bool effortRir;
   final int position;
@@ -253,6 +270,17 @@ class ExerciceCarte extends StatelessWidget {
                     child: Text(
                       'Superset $lettre',
                       style: TextStyle(fontFamily: AppTokens.fontUi, fontSize: k(11), fontWeight: FontWeight.w700, color: couleur),
+                    ),
+                  ),
+                // Ouvert, ce qu'affiche la machine graduée en livres.
+                if (ouvert && _machine != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 3),
+                    child: Text(
+                      'Sur la machine : $_machine',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontFamily: AppTokens.fontUi, fontSize: k(13), height: 1.3, color: c.text2, fontFeatures: AppTokens.tabular),
                     ),
                   ),
                 // Le compteur ne se montre que sur la ligne repliée.

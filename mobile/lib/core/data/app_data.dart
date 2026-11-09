@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'repos/charges_repo.dart';
 import 'repos/coach_repo.dart';
 import 'repos/exercise_repo.dart';
 import 'repos/health_repo.dart';
@@ -23,6 +24,7 @@ class AppData {
         nutrition = NutritionRepo(store),
         health = HealthRepo(store),
         coach = CoachRepo(store) {
+    charges = ChargesRepo(store, sessions: sessions, exercises: exercises, settings: settings);
     sessions.estUnilateral = (id) => exercises.byId(id)?.unilateral ?? false;
   }
 
@@ -39,6 +41,9 @@ class AppData {
   final NutritionRepo nutrition;
   final HealthRepo health;
   final CoachRepo coach;
+
+  /// Les charges de chaque exercice (pile, disques, haltères...).
+  late final ChargesRepo charges;
 
   static const backupVersion = 1;
 
@@ -69,6 +74,7 @@ class AppData {
       charger('nutrition', nutrition.load),
       charger('sante', health.load),
       charger('coach', coach.load),
+      charger('charges', charges.load),
     ]);
   }
 

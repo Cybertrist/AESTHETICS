@@ -1,4 +1,5 @@
 import 'package:aesthetic/core/data/data.dart';
+import 'package:aesthetic/core/logic/graduation.dart';
 import 'package:aesthetic/core/models/models.dart';
 import 'package:aesthetic/features/entrainer/bibliotheque/logic/exercise_notes.dart';
 import 'package:aesthetic/features/entrainer/bibliotheque/logic/fusion.dart';
@@ -73,6 +74,9 @@ void main() {
     final (data, perso) = await _donnees();
     final avant = data.sessions.bestsFor(perso.id);
 
+    const pile = Graduation.pile(pas: 15, depart: 10, appoints: [5]);
+    await data.charges.regler(perso.id, pile);
+
     final bilan = await FusionExercices.bilanDe(data, perso.id);
     expect(bilan.resume, '2 séances, 1 routine, 1 objectif');
     expect(bilan.favori, isTrue);
@@ -113,6 +117,9 @@ void main() {
     expect(notes.noteOf(perso.id), isNull);
     expect(notes.noteOf(_cible), 'Siège au cran 3.\n\nPrise neutre, coude collé.');
     expect(ObjectifsRepo.maybeInstance!.liste.single.exerciseId, _cible);
+    // Les charges réglées à la main suivent.
+    expect(data.charges.reglage(perso.id), isNull);
+    expect(data.charges.reglage(_cible)?.toJson(), pile.toJson());
     final memoire = await ImportJournal.lireCorrespondances(data.store);
     expect(memoire[cleNom('KB curl')], _cible);
     expect(memoire[cleNom('Squat barre')], 'squat');

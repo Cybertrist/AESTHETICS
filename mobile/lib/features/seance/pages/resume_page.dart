@@ -50,6 +50,7 @@ class ResumePage extends StatelessWidget {
     final unite = context.watch<ProfileRepo>().unite;
     final reglages = context.watch<SettingsRepo>().settings;
     final routines = context.watch<RoutineRepo>();
+    final charges = context.watch<ChargesRepo>();
     final c = context.colors;
     final s = repo.byId(sessionId);
     if (s == null) {
@@ -85,6 +86,7 @@ class ResumePage extends StatelessWidget {
       increment: reglages.incrementPoidsKg,
       unite: unite,
       avant: repo.sessions.where((x) => x.id != s.id && x.debut.isBefore(s.debut)),
+      graduation: charges.graduation,
     );
     final ecart = comparerAuPrecedent(s, repo.sessions);
     // Tous les records de la séance, chacun avec sa médaille.

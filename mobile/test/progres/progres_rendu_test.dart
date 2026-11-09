@@ -386,6 +386,7 @@ class _Banc extends StatelessWidget {
         ChangeNotifierProvider<SettingsRepo>.value(value: d.settings),
         ChangeNotifierProvider<ExerciseRepo>.value(value: d.exercises),
         ChangeNotifierProvider<SessionRepo>.value(value: d.sessions),
+        ChangeNotifierProvider<ChargesRepo>.value(value: d.charges),
         ChangeNotifierProvider<HealthRepo>.value(value: d.health),
       ],
       child: MaterialApp.router(

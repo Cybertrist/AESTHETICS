@@ -149,6 +149,7 @@ Future<(AppData, GoRouter)> _banc(
           ChangeNotifierProvider<SettingsRepo>.value(value: data.settings),
           ChangeNotifierProvider<ExerciseRepo>.value(value: data.exercises),
           ChangeNotifierProvider<SessionRepo>.value(value: data.sessions),
+          ChangeNotifierProvider<ChargesRepo>.value(value: data.charges),
           ChangeNotifierProvider<HealthRepo>.value(value: data.health),
         ],
         child: MaterialApp.router(

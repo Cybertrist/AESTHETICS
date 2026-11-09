@@ -649,6 +649,7 @@ class _SeanceEnCoursState extends State<_SeanceEnCours> {
             effortRir: context.watch<SettingsRepo>().settings.effortRir,
             precedent: repo.lastFor(s.exercices[i].exerciseId, routineId: context.watch<SettingsRepo>().settings.precedentMemeRoutine ? s.routineId : null)?.seriesFaites,
             plan: plan(s.exercices[i]),
+            graduation: context.watch<ChargesRepo>().graduation(s.exercices[i].exerciseId),
             position: i,
             total: s.exercices.length,
             ouvert: _ouvert == s.exercices[i].id,

@@ -74,6 +74,7 @@ Future<SerieEditee?> showSerieDialog(
   required UnitePoids unite,
   required int numero,
   double pas = 2.5,
+  Graduation? graduation,
   bool peutSupprimer = true,
 }) {
   return showModalBottomSheet<SerieEditee>(
@@ -82,17 +83,21 @@ Future<SerieEditee?> showSerieDialog(
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     barrierColor: Colors.black.withValues(alpha: 0.7),
-    builder: (_) => _SerieDialog(serie: serie, suivi: suivi, unite: unite, numero: numero, pas: pas, peutSupprimer: peutSupprimer),
+    builder: (_) => _SerieDialog(serie: serie, suivi: suivi, unite: unite, numero: numero, pas: pas, graduation: graduation, peutSupprimer: peutSupprimer),
   );
 }
 
 class _SerieDialog extends StatefulWidget {
-  const _SerieDialog({required this.serie, required this.suivi, required this.unite, required this.numero, required this.pas, required this.peutSupprimer});
+  const _SerieDialog({required this.serie, required this.suivi, required this.unite, required this.numero, required this.pas, this.graduation, required this.peutSupprimer});
   final PlannedSet serie;
   final ExerciseTracking suivi;
   final UnitePoids unite;
   final int numero;
   final double pas;
+
+  /// Les charges qui existent sur l'exercice : les boutons +/- passent de
+  /// l'une à l'autre (en kilos seulement).
+  final Graduation? graduation;
   final bool peutSupprimer;
 
   @override
@@ -404,6 +409,11 @@ class _SerieDialogState extends State<_SerieDialog> {
                                             min: 0,
                                             max: 1000,
                                             step: widget.unite == UnitePoids.kg ? widget.pas : 5,
+                                            cran: switch (widget.graduation) {
+                                              final g? when widget.unite == UnitePoids.kg && g.sorte != SorteCharges.libre =>
+                                                (v, sens) => sens > 0 ? g.suivante(v) : g.precedente(v),
+                                              _ => null,
+                                            },
                                             decimals: 2,
                                             unit: widget.unite.label,
                                             compact: true,

@@ -280,7 +280,9 @@ class _ExerciceProgresPageState extends State<ExerciceProgresPage> {
       ],
     );
 
-    final increment = context.read<SettingsRepo>().settings.incrementPoidsKg;
+    // Chaque charge conseillée tombe sur une charge qui existe : plaque de
+    // la pile, haltère du râtelier, disques.
+    final graduation = context.watch<ChargesRepo>().graduation(widget.exerciseId);
     final charges = unRm == null || unRm <= 0
         ? null
         : Carte(
@@ -300,7 +302,7 @@ class _ExerciceProgresPageState extends State<ExerciceProgresPage> {
                         const SizedBox(width: 10),
                         SizedBox(
                           width: 76,
-                          child: Text(Fmt.poids(Strength.arrondir(t.poids, increment), u), textAlign: TextAlign.right, maxLines: 1, style: ts(15, FontWeight.w700, c.text, hauteur: 1.35)),
+                          child: Text(Fmt.poids(graduation.arrondir(t.poids), u), textAlign: TextAlign.right, maxLines: 1, style: ts(15, FontWeight.w700, c.text, hauteur: 1.35)),
                         ),
                         SizedBox(width: 48, child: Text('${(t.pct * 100).round()} %', textAlign: TextAlign.right, maxLines: 1, style: ts(14, FontWeight.w400, c.text2, hauteur: 1.35))),
                       ],

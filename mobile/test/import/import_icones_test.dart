@@ -79,6 +79,7 @@ void main() {
         ChangeNotifierProvider<ExerciseRepo>.value(value: data.exercises),
         ChangeNotifierProvider<RoutineRepo>.value(value: data.routines),
         ChangeNotifierProvider<SessionRepo>.value(value: data.sessions),
+        ChangeNotifierProvider<ChargesRepo>.value(value: data.charges),
         ChangeNotifierProvider<HealthRepo>.value(value: data.health),
         ChangeNotifierProvider<NutritionRepo>.value(value: data.nutrition),
       ],

@@ -195,6 +195,11 @@ class Suggestion {
 /// d'un pas et l'on repart du bas. 30 kg × 5 puis 30 kg × 6 donne donc
 /// 30 kg × 7, pas 32,5 kg. Chaque proposition regarde aussi les séances
 /// d'[avant] sur l'exercice (progrès, recul, stagnation) et dit pourquoi.
+///
+/// La charge d'après est celle qui existe vraiment sur le matériel, d'après
+/// [graduation] (voir [ChargesRepo]) : la plaque suivante de la pile,
+/// l'haltère suivant, deux disques de plus. Sans [graduation], l'haltère
+/// suivant aux haltères et le pas fixe [increment] ailleurs.
 abstract final class Surcharge {
   static List<Suggestion> calculer(
     WorkoutSession s, {
@@ -203,6 +208,7 @@ abstract final class Surcharge {
     double increment = 2.5,
     UnitePoids unite = UnitePoids.kg,
     Iterable<WorkoutSession> avant = const [],
+    Graduation Function(String exerciseId)? graduation,
   }) {
     final out = <Suggestion>[];
     for (final e in s.exercices) {
@@ -257,11 +263,24 @@ abstract final class Surcharge {
       final jambes = ex != null &&
           ex.musclesPrincipaux.any((m) => m == Muscle.quadriceps || m == Muscle.ischios || m == Muscle.fessiers) &&
           (ex.equipement == 'barre' || ex.equipement == 'machine' || ex.equipement == 'smith');
-      // Aux haltères, la charge suivante est l'haltère d'après sur le râtelier,
-      // pas la charge plus un pas de disques.
+      // La charge suivante est celle qui existe : aux haltères, l'haltère
+      // d'après sur le râtelier ; sur une pile, la plaque d'après. Aux jambes,
+      // un cran franc : une plaque de pile sans appoint, 5 ou 10 kg sur la presse.
       final halteres = ex?.auxHalteres ?? false;
-      final pas = halteres ? haltereSuivant(top) - top : (jambes ? increment * 2 : increment);
+      final g = graduation?.call(e.exerciseId) ?? (halteres ? const Graduation.halteres() : Graduation.libre(pas: increment));
+      final suivante = jambes ? g.grandSaut(top) : g.suivante(top);
+      final pas = g.sorte == SorteCharges.libre ? (jambes ? g.pas * 2 : g.pas) : suivante - top;
       String charge(double p) => '$signe${Fmt.poids(p, unite)}';
+      // La charge nommée, avec ce qu'affiche la machine sur une pile en
+      // livres (« 59 kg · 130 lb ») ou le total avec le chariot de la presse.
+      String chargeMachine(double p) {
+        final lb = g.libelleMachine(p);
+        if (lb != null) return '${charge(p)} · $lb';
+        if (g.sorte == SorteCharges.disques && g.chariot && g.base > 0) {
+          return '${charge(p)} de disques, ${Fmt.poids(g.avecBase(p), unite)} avec le chariot';
+        }
+        return charge(p);
+      }
 
       // La fourchette de répétitions : celle de la routine si elle en donne
       // une ; sinon celle où tombent les répétitions faites. Un nombre fixe
@@ -309,7 +328,10 @@ abstract final class Surcharge {
       Suggestion proposer(double p, int r, String suite, {bool hausse = false}) => Suggestion(
             exerciseId: e.exerciseId,
             seId: e.id,
-            titre: '${charge(p)} × $r',
+            titre: switch (g.libelleMachine(p)) {
+              final lb? => '${charge(p)} × $r · $lb',
+              _ => '${charge(p)} × $r',
+            },
             raison: '$constat $suite',
             poids: p,
             reps: r,
@@ -325,8 +347,8 @@ abstract final class Surcharge {
         final r = math.max(bas, minReps);
         out.add(proposer(top, r, dur ? 'Séries poussées à bout : garde la charge et consolide.' : 'Sous la fourchette de $bas à $haut : garde la charge et consolide.'));
       } else if (minReps >= haut && (rpeMoy == null || rpeMoy <= 8.5)) {
-        final p = halteres ? haltereSuivant(top) : Strength.arrondir(top + pas, increment);
-        out.add(proposer(p, bas, '$haut répétitions sur toutes tes séries : monte à ${charge(p)} et repars à $bas.', hausse: true));
+        final p = suivante;
+        out.add(proposer(p, bas, '$haut répétitions sur toutes tes séries : monte à ${chargeMachine(p)} et repars à $bas.', hausse: true));
       } else if (maxReps > minReps) {
         // Des séries inégales (8, 7, 6) : d'abord les amener au niveau de la meilleure.
         final r = math.min(haut, maxReps);

@@ -1,6 +1,7 @@
 export 'app_data.dart';
 export 'collection.dart';
 export 'exercise_catalog.dart';
+export 'repos/charges_repo.dart';
 export 'repos/coach_repo.dart';
 export 'repos/exercise_repo.dart';
 export 'repos/health_repo.dart';

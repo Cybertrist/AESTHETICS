@@ -158,6 +158,7 @@ class _AppState extends State<_App> {
         ChangeNotifierProvider<RoutineRepo>.value(value: d.routines),
         ChangeNotifierProvider<ProgramRepo>.value(value: d.programs),
         ChangeNotifierProvider<SessionRepo>.value(value: d.sessions),
+        ChangeNotifierProvider<ChargesRepo>.value(value: d.charges),
         ChangeNotifierProvider<NutritionRepo>.value(value: d.nutrition),
         ChangeNotifierProvider<HealthRepo>.value(value: d.health),
         ChangeNotifierProvider<CoachRepo>.value(value: d.coach),

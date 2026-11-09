@@ -21,6 +21,7 @@ RoutineDuJour routinePrevue(BuildContext context, Routine routine, {String? prog
     semaine: prog.semaineCourante,
     sessions: context.read<SessionRepo>(),
     lookup: ex.byId,
+    graduation: context.read<ChargesRepo>().graduation,
   );
 }
 

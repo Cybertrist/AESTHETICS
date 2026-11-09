@@ -13,6 +13,7 @@ import '../../../commun/palette.dart';
 import '../../../commun/traits.dart';
 import '../../logic/erreurs_frequentes.dart';
 import '../../logic/exercise_notes.dart';
+import '../../widgets/charges_exercice.dart';
 import '../../widgets/exercise_media.dart';
 
 /// Exercices qui partagent le muscle principal, le plus proche d'abord.
@@ -153,6 +154,12 @@ class TabAPropos extends StatelessWidget {
             );
           },
         ),
+        // Les charges de l'exercice : ce que l'appli propose après une séance.
+        if (e.suivi.usesWeight)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(margeEcran, 10, margeEcran, 0),
+            child: LigneCharges(exerciseId: e.id),
+          ),
         titre('Muscles ciblés'),
         if (e.tousMuscles.isEmpty)
           Padding(padding: marge, child: Text('Aucun muscle renseigné pour cet exercice.', style: TexteEntrainer.detail(context)))

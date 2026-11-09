@@ -73,6 +73,12 @@ class _DisquesPageState extends State<DisquesPage> {
     final pasKg = context.watch<SettingsRepo>().settings.incrementPoidsKg;
     final repo = context.watch<SessionRepo>();
     final peutAjouter = widget.seId != null && repo.active?.exercices.any((e) => e.id == widget.seId) == true;
+    // Les charges de l'exercice de la séance : le pas de ses disques, et sur
+    // une presse, le chariot qui pèse à part.
+    final exerciseId = widget.seId == null ? null : repo.active?.exercices.where((e) => e.id == widget.seId).firstOrNull?.exerciseId;
+    final g = exerciseId == null ? null : context.watch<ChargesRepo>().graduation(exerciseId);
+    final disquesExo = g != null && g.sorte == SorteCharges.disques;
+    final chariot = disquesExo && g.chariot && g.base > 0;
     const titre = 'Disques et échauffement';
 
     if (_erreur) {
@@ -101,10 +107,12 @@ class _DisquesPageState extends State<DisquesPage> {
         final p = pr.prefs;
         final barres = p.barres.where((b) => b.active).toList();
         final barre = barres.where((b) => b.id == _barreId).firstOrNull ?? p.barre;
-        final barreKg = barre?.poidsKg ?? 0;
+        // Sur la presse, la charge notée est celle des disques seuls : pas de
+        // barre à retrancher, le chariot s'ajoute à part.
+        final barreKg = chariot ? 0.0 : barre?.poidsKg ?? 0;
         final disques = p.disques.where((d) => d.paires > 0).toList();
         final ch = Plates.charger(_cibleKg, barreKg, disques);
-        final pas = pasKg <= 0 ? 2.5 : pasKg;
+        final pas = disquesExo ? g.pas : (pasKg <= 0 ? 2.5 : pasKg);
         final paliers = Strength.echauffement(_cibleKg, barre: barreKg, pas: pas);
         final large = MediaQuery.sizeOf(context).width >= Breakpoints.expanded;
         final maxDisque = disques.isEmpty ? 1.0 : disques.map((d) => d.poidsKg).reduce((a, b) => a > b ? a : b);
@@ -163,6 +171,14 @@ class _DisquesPageState extends State<DisquesPage> {
                     BoutonRond(label: 'Plus', onTap: () => bouger(1), child: Trait(IconeSeance.plus, size: k(18), epaisseur: 2)),
                   ],
                 ),
+                if (chariot) ...[
+                  SizedBox(height: k(4)),
+                  Text(
+                    '${Fmt.poids(_cibleKg, u)} de disques, ${Fmt.poids(g.avecBase(_cibleKg), u)} avec le chariot',
+                    textAlign: TextAlign.center,
+                    style: gris,
+                  ),
+                ],
                 SizedBox(height: k(14)),
                 _Barre(parCote: ch.parCote, maxDisque: maxDisque, unite: u),
                 SizedBox(height: k(12)),
@@ -183,7 +199,9 @@ class _DisquesPageState extends State<DisquesPage> {
         final materiel = <Widget>[
           const Surtitre('Mon matériel'),
           SizedBox(height: k(8)),
-          if (barres.isEmpty)
+          if (chariot)
+            Text('Presse : le chariot (${Fmt.poids(g.base, u)}) ne compte pas dans la charge notée.', style: gris)
+          else if (barres.isEmpty)
             Text('Aucune barre active : le calcul se fait sans barre.', style: gris)
           else
             Wrap(

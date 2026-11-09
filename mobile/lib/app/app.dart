@@ -105,6 +105,7 @@ class _AestheticAppState extends State<AestheticApp> {
         ChangeNotifierProvider<NutritionRepo>.value(value: d.nutrition),
         ChangeNotifierProvider<HealthRepo>.value(value: d.health),
         ChangeNotifierProvider<CoachRepo>.value(value: d.coach),
+        ChangeNotifierProvider<ChargesRepo>.value(value: d.charges),
       ],
       // La communauté n'existe pour les écrans que si elle est allumée dans
       // les Réglages : coupée, ils lisent `null` et cachent amis, fil et

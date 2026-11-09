@@ -8,7 +8,7 @@ import 'exercise_notes.dart';
 
 /// Fusion d'un exercice perso avec un exercice du catalogue : l'identifiant
 /// du perso est remplacé partout par celui du catalogue (séances, séance en
-/// cours, routines, objectifs, favori, note, mémoire de l'import), puis le
+/// cours, routines, objectifs, favori, note, charges, mémoire de l'import), puis le
 /// perso est supprimé. Les records se recalculent depuis les séances : ils
 /// suivent d'eux-mêmes. Les programmes ne citent que des routines, ils
 /// suivent avec elles.
@@ -194,6 +194,13 @@ abstract final class FusionExercices {
     final memoire = await ImportJournal.lireCorrespondances(data.store);
     final memoireApres = correspondances(memoire, de, vers, nomPerso: perso.nom);
     if (memoireApres.entries.any((e) => memoire[e.key] != e.value)) await ImportJournal.ecrireCorrespondances(data.store, memoireApres);
+
+    // Les charges réglées à la main suivent, sauf si le catalogue a déjà les siennes.
+    final charges = data.charges.reglage(de);
+    if (charges != null) {
+      if (data.charges.reglage(vers) == null) await data.charges.regler(vers, charges);
+      await data.charges.revenirALaDeduction(de);
+    }
 
     final exercices = data.exercises;
     if (exercices.isFavori(de) && !exercices.isFavori(vers)) await exercices.toggleFavori(vers);

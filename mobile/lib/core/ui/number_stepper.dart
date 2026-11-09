@@ -21,6 +21,7 @@ class NumberStepper extends StatefulWidget {
     this.unit,
     this.label,
     this.compact = false,
+    this.cran,
   });
 
   final double value;
@@ -34,6 +35,10 @@ class NumberStepper extends StatefulWidget {
 
   /// Version réduite pour les listes.
   final bool compact;
+
+  /// La valeur d'après dans le sens [sens] (1 ou -1), à la place de
+  /// `valeur ± step` : la plaque suivante d'une pile, l'haltère d'après.
+  final double Function(double valeur, int sens)? cran;
 
   @override
   State<NumberStepper> createState() => _NumberStepperState();
@@ -49,7 +54,7 @@ class _NumberStepperState extends State<NumberStepper> {
   }
 
   void _bump(int dir) {
-    final next = (widget.value + dir * widget.step).clamp(widget.min, widget.max);
+    final next = (widget.cran?.call(widget.value, dir) ?? widget.value + dir * widget.step).clamp(widget.min, widget.max);
     final rounded = double.parse(next.toStringAsFixed(widget.decimals.clamp(0, 4) + 2));
     if (rounded != widget.value) {
       HapticFeedback.selectionClick();

@@ -82,6 +82,7 @@ class _AppOnglets extends StatelessWidget {
           ChangeNotifierProvider<RoutineRepo>.value(value: data.routines),
           ChangeNotifierProvider<ProgramRepo>.value(value: data.programs),
           ChangeNotifierProvider<SessionRepo>.value(value: data.sessions),
+          ChangeNotifierProvider<ChargesRepo>.value(value: data.charges),
         ],
         child: MaterialApp.router(theme: _accent.theme, routerConfig: router),
       );

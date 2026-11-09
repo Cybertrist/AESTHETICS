@@ -30,12 +30,18 @@ class RoutineDuJour {
     };
 
 /// Applique le plan d'un programme à une routine.
+///
+/// La charge monte jusqu'à la suivante qui existe sur le matériel de
+/// l'exercice, d'après [graduation] (voir [ChargesRepo]) : la plaque d'après
+/// sur une pile, l'haltère d'après, deux disques de plus. L'incrément du
+/// programme ne sert qu'aux exercices à pas fixe, et à tous sans [graduation].
 RoutineDuJour appliquerProgression({
   required Routine routine,
   required ProgramPlan plan,
   required int semaine,
   required SessionRepo sessions,
   required Exercise? Function(String) lookup,
+  Graduation Function(String exerciseId)? graduation,
 }) {
   final decharge = plan.estDecharge(semaine);
   final pas = plan.incrementKg <= 0 ? 2.5 : plan.incrementKg;
@@ -52,10 +58,19 @@ RoutineDuJour appliquerProgression({
     String? note;
     // Aux haltères, on ne charge pas un pas de disques : on prend l'haltère
     // suivant du râtelier, et tout arrondi tombe sur un haltère qui existe.
+    // Sur une pile, de même avec la plaque suivante.
     final halteres = ex?.auxHalteres ?? false;
-    double plus(double? base) => halteres && base != null ? Strength.haltereSuivant(base) - base : pas;
-    double arrondi(double kg) => halteres ? Strength.arrondirHaltere(kg) : Strength.arrondir(kg, pas);
-    final hausse = halteres ? 'haltère suivant' : '+${Fmt.n(pas)} kg';
+    final reglee = graduation?.call(re.exerciseId);
+    final g = reglee == null || reglee.sorte == SorteCharges.libre ? (halteres ? const Graduation.halteres() : Graduation.libre(pas: pas)) : reglee;
+    double plus(double? base) => base == null || g.sorte == SorteCharges.libre ? pas : g.suivante(base) - base;
+    double arrondi(double kg) => g.arrondir(kg);
+    final hausse = switch (g.sorte) {
+      SorteCharges.halteres => 'haltère suivant',
+      SorteCharges.kettlebell => 'kettlebell suivant',
+      SorteCharges.pile => 'plaque suivante de la pile',
+      SorteCharges.disques => '+${Fmt.n(g.pas, decimals: 2)} kg',
+      SorteCharges.libre => '+${Fmt.n(pas)} kg',
+    };
 
     if (suivi.usesWeight && plan.progression != ProgressionType.aucune && faites.isNotEmpty) {
       switch (plan.progression) {

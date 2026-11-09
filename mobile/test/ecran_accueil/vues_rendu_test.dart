@@ -36,6 +36,7 @@ void main() {
           ChangeNotifierProvider<RoutineRepo>.value(value: data.routines),
           ChangeNotifierProvider<ProgramRepo>.value(value: data.programs),
           ChangeNotifierProvider<SessionRepo>.value(value: data.sessions),
+          ChangeNotifierProvider<ChargesRepo>.value(value: data.charges),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -101,6 +102,7 @@ void main() {
               ChangeNotifierProvider<RoutineRepo>.value(value: data.routines),
               ChangeNotifierProvider<ProgramRepo>.value(value: data.programs),
               ChangeNotifierProvider<SessionRepo>.value(value: data.sessions),
+              ChangeNotifierProvider<ChargesRepo>.value(value: data.charges),
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,

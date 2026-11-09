@@ -95,6 +95,9 @@ class _RoutineEditorPageState extends State<RoutineEditorPage> {
   UnitePoids get _unite => context.read<ProfileRepo>().unite;
   double get _pas => context.read<SettingsRepo>().settings.incrementPoidsKg;
 
+  /// Les charges qui existent sur un exercice (pile, haltères, disques).
+  Graduation _graduation(String exerciseId) => context.read<ChargesRepo>().graduation(exerciseId);
+
   RoutineExercise _nouvelEmplacement(String exerciseId) {
     final ex = context.read<ExerciseRepo>().byId(exerciseId);
     final suivi = ex?.suivi ?? ExerciseTracking.poidsReps;
@@ -163,6 +166,7 @@ class _RoutineEditorPageState extends State<RoutineEditorPage> {
       unite: _unite,
       numero: numero == 0 ? index + 1 : numero,
       pas: _pas,
+      graduation: _graduation(re.exerciseId),
       // Un exercice garde au moins une série : sans série, il ne se lance pas.
       peutSupprimer: re.series.length > 1,
     );
@@ -192,7 +196,7 @@ class _RoutineEditorPageState extends State<RoutineEditorPage> {
   void _ajouterEchauffement(RoutineExercise re) {
     final premiereTravail = re.series.indexWhere((s) => s.type != SetType.echauffement);
     final ref = premiereTravail >= 0 ? re.series[premiereTravail] : null;
-    final ech = PlannedSet(type: SetType.echauffement, reps: 10, poids: ref?.poids == null ? null : Strength.arrondir(ref!.poids! * 0.5, _pas));
+    final ech = PlannedSet(type: SetType.echauffement, reps: 10, poids: ref?.poids == null ? null : _graduation(re.exerciseId).arrondir(ref!.poids! * 0.5));
     final i = premiereTravail < 0 ? re.series.length : premiereTravail;
     _majSeries(re, [...re.series]..insert(i, ech));
   }
