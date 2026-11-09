@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:aesthetic/core/data/data.dart';
 import 'package:aesthetic/core/models/models.dart';
 import 'package:aesthetic/core/theme/theme.dart';
+import 'package:aesthetic/features/aujourdhui/pages/notifications_page.dart';
 import 'package:aesthetic/features/aujourdhui/widgets/accueil.dart';
 import 'package:aesthetic/features/profil/data/photo_profil.dart';
 import 'package:aesthetic/features/profil/pages/profil_page.dart';
@@ -42,6 +43,8 @@ void main() {
     final social = SocialRepo();
     final router = GoRouter(initialLocation: chemin, routes: [
       ...socialRoutes(),
+      GoRoute(path: '/aujourdhui/notifications', builder: (context, state) => const NotificationsPage()),
+      GoRoute(path: '/seance/resume/:id', builder: (context, state) => const Scaffold(body: Text('bilan de ma séance'))),
       GoRoute(path: '/profil', builder: (context, state) => const ProfilPage()),
       GoRoute(path: '/reglages', builder: (context, state) => const ReglagesPage()),
     ]);
@@ -273,6 +276,7 @@ void main() {
     final social = SocialRepo();
     final router = GoRouter(routes: [
       GoRoute(path: '/', builder: (context, state) => Scaffold(body: SafeArea(child: Padding(padding: const EdgeInsets.all(20), child: EnTeteAccueil(maintenant: DateTime(2026, 10, 7, 9)))))),
+      GoRoute(path: '/aujourdhui/notifications', builder: (context, state) => const NotificationsPage()),
       ...socialRoutes(),
     ]);
     addTearDown(router.dispose);
@@ -300,6 +304,79 @@ void main() {
     await t.pump(const Duration(milliseconds: 300));
     expect(social.estAmi('tom'), isTrue);
     expect(find.text('Accepter'), findsOneWidget);
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('notifications : demandes, nouvelles des amis et mes records, rangés par date', (t) async {
+    final (social, router, _) = await monter(t, '/aujourdhui/notifications', taille: const Size(400, 1500), demo: true);
+    expect(find.text("Demandes d'amis"), findsOneWidget);
+    expect(find.text('Accepter'), findsNWidgets(2));
+    expect(find.textContaining('ont réagi à ta séance'), findsOneWidget);
+    expect(find.textContaining('a commenté ta séance'), findsOneWidget);
+    expect(find.textContaining('a battu un record'), findsWidgets);
+    expect(t.takeException(), isNull);
+    await capture(t, 'notifications');
+    // Les filtres du haut ne gardent qu'un type de nouvelle.
+    await t.tap(find.text('Commentaires'));
+    await t.pump(const Duration(milliseconds: 300));
+    expect(find.textContaining('a commenté ta séance'), findsOneWidget);
+    expect(find.textContaining('ont réagi à ta séance'), findsNothing);
+    expect(find.text('Accepter'), findsNothing);
+    await t.tap(find.text('Amis'));
+    await t.pump(const Duration(milliseconds: 300));
+    expect(find.text('Accepter'), findsNWidgets(2));
+    expect(find.textContaining('a accepté ta demande'), findsOneWidget);
+    expect(find.textContaining('a battu un record'), findsNothing);
+    await capture(t, 'notifications-amis');
+    await t.tap(find.text('Toutes'));
+    await t.pump(const Duration(milliseconds: 300));
+    // Retirer un ami retire ses nouvelles.
+    social.retirer('ines');
+    await t.pump(const Duration(milliseconds: 300));
+    expect(find.textContaining('a commenté ta séance'), findsNothing);
+    // Un record d'ami ouvre sa séance et ses commentaires.
+    await t.tap(find.textContaining('a battu un record').first);
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 600));
+    expect(router.state.uri.path, startsWith('/communaute/seance/'));
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('notifications sans rien : un écran vide qui le dit', (t) async {
+    final (social, _, _) = await monter(t, '/aujourdhui/notifications', taille: const Size(400, 800));
+    for (final a in [...social.amis]) {
+      social.retirer(a.id);
+    }
+    for (final a in [...social.demandes]) {
+      social.refuser(a.id);
+    }
+    await t.pump(const Duration(milliseconds: 300));
+    expect(find.text('Rien de nouveau'), findsOneWidget);
+    expect(t.takeException(), isNull);
+    await capture(t, 'notifications-vide');
+  });
+
+  testWidgets('commenter une séance : mon commentaire s’ajoute, se compte et se retire', (t) async {
+    final (social, _, _) = await monter(t, SocialPaths.publication('p1'), taille: const Size(400, 1300));
+    expect(find.text('Les trois chiffres, enfin. Bravo.'), findsOneWidget);
+    expect(find.text('Commentaires · 2'), findsOneWidget);
+    await capture(t, 'commentaires');
+    await t.enterText(find.byType(TextField), '  Bien joué !  ');
+    await t.pump();
+    await t.tap(find.bySemanticsLabel('Envoyer le commentaire'));
+    await t.pump(const Duration(milliseconds: 400));
+    expect(social.nbCommentaires('p1'), 3);
+    expect(find.text('Bien joué !'), findsOneWidget);
+    expect(find.text('Commentaires · 3'), findsOneWidget);
+    await t.tap(find.text('Supprimer'));
+    await t.pump(const Duration(milliseconds: 300));
+    expect(social.nbCommentaires('p1'), 2);
+    // Un texte vide n'envoie rien.
+    social.commenter('p1', '   ');
+    expect(social.nbCommentaires('p1'), 2);
+    // Les commentaires d'une personne bloquée disparaissent.
+    social.bloquer('malo');
+    expect(social.nbCommentaires('p1'), 1);
     expect(t.takeException(), isNull);
   });
 

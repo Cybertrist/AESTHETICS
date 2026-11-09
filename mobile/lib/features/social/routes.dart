@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'pages/ami_page.dart';
 import 'pages/communaute_page.dart';
 import 'pages/espace_coach_page.dart';
+import 'pages/publication_page.dart';
 import 'pages/trouver_page.dart';
 
 /// Chemins de la communauté : mes amis, mon profil public, mon coach. Le
@@ -24,6 +25,9 @@ abstract final class SocialPaths {
   static const confidentialite = '$racine/profil-public';
   static const espaceCoach = '$racine/espace-coach';
   static String ami(String id) => '$racine/ami/$id';
+
+  /// La séance d'un ami et ses commentaires.
+  static String publication(String id) => '$racine/seance/$id';
   static String eleve(String id) => '$espaceCoach/$id';
 }
 
@@ -45,6 +49,7 @@ List<RouteBase> socialRoutes() => [
           GoRoute(path: 'mon-profil', builder: (context, state) => const MonProfilPublicPage()),
           GoRoute(path: 'modifier-profil', builder: (context, state) => const ModifierProfilPage()),
           GoRoute(path: 'profil-public', builder: (context, state) => const ConfidentialitePage()),
+          GoRoute(path: 'seance/:id', builder: (context, state) => PublicationPage(id: state.pathParameters['id']!)),
           GoRoute(path: 'ami/:id', builder: (context, state) => AmiPage(id: state.pathParameters['id']!)),
           GoRoute(
             path: 'espace-coach',

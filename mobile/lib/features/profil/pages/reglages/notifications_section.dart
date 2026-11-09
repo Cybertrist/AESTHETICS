@@ -7,11 +7,13 @@ import '../../../../core/models/models.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/ui/ui.dart';
 import '../../data/prefs.dart';
+import '../../../social/data/social_repo.dart';
 import '../../data/reminders.dart';
 import '../../widgets/maquette.dart';
 import '../../widgets/setting_rows.dart';
 
-/// Réglages > Notifications : rappels de séance, compléments, eau.
+/// Réglages > Notifications : rappels de séance, compléments, eau, et ce
+/// que mes amis peuvent me faire savoir.
 class NotificationsSection extends StatefulWidget {
   const NotificationsSection({super.key});
 
@@ -272,6 +274,39 @@ class _NotificationsSectionState extends State<NotificationsSection> with Widget
                     ),
                   ],
                 ],
+              ),
+            ],
+            // Aperçu : ces choix sont gardés, mais rien n'arrive sans serveur.
+            if (context.watch<SocialRepo?>() != null) ...[
+              GroupeTitre(
+                titre: 'Amis',
+                lignes: [
+                  LigneBascule(
+                    trace: Trace.cloche,
+                    titre: 'Demandes d\'amis',
+                    detail: 'Quand quelqu\'un veut t\'ajouter',
+                    valeur: s.notifsDemandes,
+                    onChanged: (v) => _maj((x) => x.copyWith(notifsDemandes: v), activation: v),
+                  ),
+                  LigneBascule(
+                    trace: Trace.cloche,
+                    titre: 'Réactions et commentaires',
+                    detail: 'Sur tes séances',
+                    valeur: s.notifsReactions,
+                    onChanged: (v) => _maj((x) => x.copyWith(notifsReactions: v), activation: v),
+                  ),
+                  LigneBascule(
+                    trace: Trace.haltere,
+                    titre: 'Séances de tes amis',
+                    detail: 'Quand un ami termine une séance',
+                    valeur: s.notifsSeancesAmis,
+                    onChanged: (v) => _maj((x) => x.copyWith(notifsSeancesAmis: v), activation: v),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(e(20), e(6), e(20), 0),
+                child: Text('Aperçu : ces choix sont gardés, mais les notifications des amis n\'arriveront qu\'avec les comptes.', style: txt(11.5, FontWeight.w400, c.text3)),
               ),
             ],
             GroupeTitre(

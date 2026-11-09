@@ -39,7 +39,8 @@ enum Trait {
   coche(22, 2),
   lien(22, 1.8),
   lienCoupe(22, 1.8),
-  dossier(22, 1.7);
+  dossier(22, 1.7),
+  fiche(22, 1.7);
 
   const Trait(this.cadre, this.epaisseur, {this.plein = false});
 
@@ -101,6 +102,7 @@ Path _chemin(Trait t) {
     Trait.lien => p('M9.5 12.5a3.6 3.6 0 0 0 5.1 0l2.6-2.6a3.6 3.6 0 0 0-5.1-5.1l-1 1M12.5 9.5a3.6 3.6 0 0 0-5.1 0l-2.6 2.6a3.6 3.6 0 0 0 5.1 5.1l1-1'),
     Trait.lienCoupe => p('M12.1 5.8l1-1a3.6 3.6 0 0 1 5.1 5.1l-1 1M9.9 16.2l-1 1a3.6 3.6 0 0 1-5.1-5.1l1-1M4 4l14 14'),
     Trait.dossier => p('M3.5 6.5A1.5 1.5 0 0 1 5 5h3.6l2 2H17a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 17 18H5a1.5 1.5 0 0 1-1.5-1.5z'),
+    Trait.fiche => p('M7 3.5h5.5l4 4V17a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 17V5A1.5 1.5 0 0 1 7 3.5zM12.5 3.5v4h4M8.5 11.5h5M8.5 14.5h5'),
   };
 }
 

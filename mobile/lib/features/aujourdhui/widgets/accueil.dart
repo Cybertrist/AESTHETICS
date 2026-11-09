@@ -8,7 +8,6 @@ import 'package:path_drawing/path_drawing.dart';
 import 'package:provider/provider.dart';
 
 import '../../social/data/social_repo.dart';
-import '../../social/pages/communaute_page.dart' show LigneDemande;
 import '../../social/routes.dart';
 import '../../../app/navigation.dart';
 import '../../../core/data/data.dart';
@@ -269,8 +268,9 @@ class EnTeteAccueil extends StatelessWidget {
         ListenableBuilder(
           listenable: cloche,
           builder: (context, _) {
-            // Une demande d'ami qui attend allume aussi la cloche.
-            final nouveau = cloche.aDuNouveau(liste) || (context.watch<SocialRepo?>()?.enAttente ?? 0) > 0;
+            // Une demande d'ami qui attend ou une nouvelle d'un ami allument aussi la cloche.
+            final social = context.watch<SocialRepo?>();
+            final nouveau = cloche.aDuNouveau(liste) || (social?.enAttente ?? 0) > 0 || (cloche.charge && activitesAmis(social, sessions.sessions).any((a) => cloche.dateNouvelle(a.date)));
             return Semantics(
               button: true,
               label: nouveau ? 'Notifications, du nouveau' : 'Notifications',
@@ -280,7 +280,7 @@ class EnTeteAccueil extends StatelessWidget {
                 shape: const CircleBorder(),
                 clipBehavior: Clip.antiAlias,
                 child: InkWell(
-                  onTap: () => _ouvrirCloche(context, liste, cloche, maintenant),
+                  onTap: () => context.push(AujourdhuiPaths.notifications),
                   child: SizedBox.square(
                     dimension: CotesAccueil.bouton,
                     child: Stack(
@@ -313,100 +313,6 @@ class EnTeteAccueil extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-/// Les lignes des nouveautés dans le panneau de la cloche.
-Widget _lignesNouveautes(BuildContext context, List<Nouveaute> liste, Set<Nouveaute> nouvelles) {
-  final c = context.colors;
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      for (final n in liste)
-        InkWell(
-          borderRadius: AppTokens.radius12,
-          onTap: () => Navigator.pop(context, n),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 11),
-            child: Row(
-              children: [
-                Container(
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: nouvelles.contains(n) ? c.accent : c.surface3,
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(n.titre, maxLines: 2, overflow: TextOverflow.ellipsis, style: _txt(16, FontWeight.w700, c.text)),
-                      const SizedBox(height: 2),
-                      Text(n.detail, maxLines: 1, overflow: TextOverflow.ellipsis, style: _txt(14, FontWeight.w500, c.text2)),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Icon(Icons.chevron_right_rounded, color: c.text3, size: 22),
-              ],
-            ),
-          ),
-        ),
-    ],
-  );
-}
-
-Future<void> _ouvrirCloche(BuildContext context, List<Nouveaute> liste, ClocheRepo cloche, DateTime maintenant) async {
-  final nouvelles = {for (final n in liste) if (cloche.estNouvelle(n)) n};
-  cloche.marquerVu(maintenant);
-  final hote = GoRouter.of(context);
-  final choix = await showPanneauBas<Nouveaute>(
-    context,
-    titre: 'Notifications',
-    builder: (context) {
-      final c = context.colors;
-      // Les demandes d'amis d'abord : elles attendent une réponse.
-      final demandes = context.watch<SocialRepo?>()?.demandes ?? const <Ami>[];
-      if (demandes.isNotEmpty) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (final a in demandes)
-              LigneDemande(
-                a,
-                onProfil: () {
-                  Navigator.pop(context);
-                  hote.push(SocialPaths.ami(a.id));
-                },
-              ),
-            if (liste.isNotEmpty) ...[Divider(height: 18, color: c.line), _lignesNouveautes(context, liste, nouvelles)],
-          ],
-        );
-      }
-      if (liste.isEmpty) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 18),
-          child: Text(
-            'Rien de nouveau pour l\'instant. Tes records et tes bilans arriveront ici.',
-            textAlign: TextAlign.center,
-            style: _txt(15, FontWeight.w500, c.text2, hauteur: 1.4),
-          ),
-        );
-      }
-      return _lignesNouveautes(context, liste, nouvelles);
-    },
-  );
-  if (choix == null || !context.mounted) return;
-  switch (choix.cible) {
-    case CibleNouveaute.bilanMois:
-      context.push(AujourdhuiPaths.bilanMois(choix.id!));
-    case CibleNouveaute.seance:
-      ouvrirSeance(context, choix.id!);
-    case CibleNouveaute.semaine:
-      RetourOrigine.ouvrir(context, AujourdhuiPaths.bilanSemaine);
   }
 }
 

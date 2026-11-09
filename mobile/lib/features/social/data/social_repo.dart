@@ -100,7 +100,6 @@ class Publication {
     this.exercices = const [],
     this.records = 0,
     this.bravos = 0,
-    this.commentaires = 0,
     this.note,
   });
 
@@ -116,8 +115,52 @@ class Publication {
   final List<String> exercices;
   final int records;
   final int bravos;
-  final int commentaires;
   final String? note;
+}
+
+/// Un commentaire sous une séance. Sans [amiId], c'est le mien.
+class Commentaire {
+  const Commentaire({required this.id, required this.publicationId, required this.texte, required this.date, this.amiId});
+  final String id;
+  final String publicationId;
+  final String? amiId;
+  final String texte;
+  final DateTime date;
+
+  bool get mien => amiId == null;
+}
+
+/// Ce qu'une ligne d'activité raconte.
+enum TypeActivite {
+  /// Des amis ont réagi à une de mes séances.
+  reaction,
+
+  /// Un ami a commenté une de mes séances.
+  commentaire,
+
+  /// Un ami a accepté ma demande.
+  accepte,
+
+  /// Un ami a battu un record.
+  record,
+}
+
+/// Une ligne des notifications : ce que mes amis ont fait.
+class Activite {
+  const Activite({required this.type, required this.amis, required this.date, this.seanceId, this.publicationId, this.reaction, this.texte});
+  final TypeActivite type;
+
+  /// Ceux qui l'ont fait, le plus récent d'abord.
+  final List<String> amis;
+  final DateTime date;
+
+  /// Ma séance concernée, ou la séance publiée par l'ami.
+  final String? seanceId;
+  final String? publicationId;
+  final Reaction? reaction;
+
+  /// Le nom de la séance, ou le texte du commentaire.
+  final String? texte;
 }
 
 /// Un programme partagé par le coach.
@@ -387,7 +430,7 @@ class SocialRepo extends ChangeNotifier {
   };
 
   static List<Publication> _publications(DateTime n) {
-    Publication p(String id, String ami, String titre, Duration ilYa, int minutes, double volume, int series, List<String> exos, {int records = 0, int bravos = 0, int commentaires = 0, String? note}) => Publication(
+    Publication p(String id, String ami, String titre, Duration ilYa, int minutes, double volume, int series, List<String> exos, {int records = 0, int bravos = 0, String? note}) => Publication(
           id: id,
           amiId: ami,
           titre: titre,
@@ -398,26 +441,46 @@ class SocialRepo extends ChangeNotifier {
           exercices: exos,
           records: records,
           bravos: bravos,
-          commentaires: commentaires,
           note: note,
         );
     return [
-      p('p1', 'lea', 'Jambes', const Duration(hours: 2), 72, 14320, 22, ['squat', 'souleve-de-terre-roumain', 'presse-a-cuisses'], records: 1, bravos: 6, commentaires: 2, note: '100 kg au squat, enfin.'),
-      p('h1', 'hugo', 'Squat lourd', const Duration(hours: 5), 124, 18650, 19, ['squat', 'presse-a-cuisses', 'leg-extension'], records: 1, bravos: 41, commentaires: 7, note: '215 kg. Trois ans que je la visais.'),
-      p('s1', 'sarah', 'Bas du corps', const Duration(hours: 9), 63, 7420, 18, ['hip-thrust', 'presse-a-cuisses', 'leg-extension'], bravos: 8, commentaires: 1),
+      p('p1', 'lea', 'Jambes', const Duration(hours: 2), 72, 14320, 22, ['squat', 'souleve-de-terre-roumain', 'presse-a-cuisses'], records: 1, bravos: 6, note: '100 kg au squat, enfin.'),
+      p('h1', 'hugo', 'Squat lourd', const Duration(hours: 5), 124, 18650, 19, ['squat', 'presse-a-cuisses', 'leg-extension'], records: 1, bravos: 41, note: '215 kg. Trois ans que je la visais.'),
+      p('s1', 'sarah', 'Bas du corps', const Duration(hours: 9), 63, 7420, 18, ['hip-thrust', 'presse-a-cuisses', 'leg-extension'], bravos: 8),
       p('p2', 'malo', 'Push', const Duration(days: 1, hours: 3), 58, 5120, 18, ['developpe-couche', 'developpe-incline-halteres', 'developpe-militaire'], bravos: 3),
       p('t1', 'tom', 'Full body A', const Duration(days: 1, hours: 6), 52, 4210, 15, ['squat', 'developpe-couche', 'rowing-barre'], bravos: 2),
-      p('p3', 'ines', 'Haut du corps', const Duration(days: 2, hours: 1), 47, 3890, 16, ['tractions', 'rowing-barre', 'curl-marteau'], records: 2, bravos: 9, commentaires: 1),
-      p('h2', 'hugo', 'Développé couché', const Duration(days: 2, hours: 4), 96, 9840, 21, ['developpe-couche', 'developpe-militaire', 'pompes'], bravos: 18, commentaires: 2),
+      p('p3', 'ines', 'Haut du corps', const Duration(days: 2, hours: 1), 47, 3890, 16, ['tractions', 'rowing-barre', 'curl-marteau'], records: 2, bravos: 9),
+      p('h2', 'hugo', 'Développé couché', const Duration(days: 2, hours: 4), 96, 9840, 21, ['developpe-couche', 'developpe-militaire', 'pompes'], bravos: 18),
       p('p4', 'lea', 'Pull', const Duration(days: 3, hours: 2), 65, 5869, 20, ['tractions', 'tirage-vertical', 'face-pull'], bravos: 4),
-      p('p5', 'malo', 'Soulevé de terre', const Duration(days: 3, hours: 5), 81, 8230, 14, ['souleve-de-terre', 'rowing-barre', 'gainage'], records: 1, bravos: 7, commentaires: 3, note: '200 kg, propre.'),
+      p('p5', 'malo', 'Soulevé de terre', const Duration(days: 3, hours: 5), 81, 8230, 14, ['souleve-de-terre', 'rowing-barre', 'gainage'], records: 1, bravos: 7, note: '200 kg, propre.'),
       p('t2', 'tom', 'Full body B', const Duration(days: 3, hours: 7), 49, 3980, 15, ['souleve-de-terre', 'developpe-militaire', 'tirage-vertical'], bravos: 1),
       p('p6', 'lea', 'Fessiers', const Duration(days: 4, hours: 1), 61, 11240, 19, ['hip-thrust', 'souleve-de-terre-roumain', 'leg-extension'], bravos: 5),
       p('p7', 'ines', 'Bas du corps', const Duration(days: 5), 44, 4630, 15, ['squat', 'presse-a-cuisses', 'gainage'], bravos: 6),
     ];
   }
 
+  static List<Commentaire> _exemples(List<Publication> fil) {
+    final dates = {for (final p in fil) p.id: p.date};
+    var n = 0;
+    Commentaire c(String pub, String ami, int minutes, String texte) => Commentaire(id: 'c${n++}', publicationId: pub, amiId: ami, texte: texte, date: dates[pub]!.add(Duration(minutes: minutes)));
+    return [
+      c('p1', 'malo', 14, 'Les trois chiffres, enfin. Bravo.'),
+      c('p1', 'ines', 41, 'Tu me donnes envie d\'y retourner demain.'),
+      c('h1', 'malo', 9, 'Monstrueux.'),
+      c('h1', 'lea', 22, 'Trois ans de patience, ça paie.'),
+      c('h1', 'tom', 65, 'Tu descends à quelle profondeur ?'),
+      c('s1', 'ines', 30, 'Le hip thrust monte bien.'),
+      c('p3', 'lea', 12, 'Deux records d\'un coup, bien joué.'),
+      c('h2', 'malo', 18, 'On en reparle samedi à la salle.'),
+      c('h2', 'sarah', 50, 'Propre.'),
+      c('p5', 'lea', 6, '200 ! Félicitations.'),
+      c('p5', 'ines', 25, 'Et sans sangles ?'),
+      c('p5', 'hugo', 90, 'Bienvenue au club.'),
+    ];
+  }
+
   late final List<Publication> _fil;
+  late final List<Commentaire> _commentaires = _exemples(_fil);
   final Map<String, Reaction> _reactions = {'p3': Reaction.feu};
   bool _aUnCoach = true;
 
@@ -478,6 +541,61 @@ class SocialRepo extends ChangeNotifier {
       _reactions[publicationId] = r;
     }
     notifyListeners();
+  }
+
+  /// Les commentaires d'une séance, le plus ancien d'abord. Ceux d'une
+  /// personne bloquée ne s'affichent pas.
+  List<Commentaire> commentairesDe(String publicationId) => [
+        for (final c in _commentaires)
+          if (c.publicationId == publicationId && (c.mien || lien(c.amiId!) != Lien.bloque)) c,
+      ]..sort((a, b) => a.date.compareTo(b.date));
+
+  int nbCommentaires(String publicationId) => commentairesDe(publicationId).length;
+
+  /// Ajoute mon commentaire ; un texte vide n'ajoute rien.
+  void commenter(String publicationId, String texte, {DateTime? maintenant}) {
+    final t = texte.trim();
+    if (t.isEmpty) return;
+    _commentaires.add(Commentaire(id: 'm${_commentaires.length}', publicationId: publicationId, texte: t, date: maintenant ?? DateTime.now()));
+    notifyListeners();
+  }
+
+  /// Retire un de mes commentaires.
+  void retirerCommentaire(String id) {
+    _commentaires.removeWhere((c) => c.id == id && c.mien);
+    notifyListeners();
+  }
+
+  Publication? publication(String id) => _fil.where((p) => p.id == id).firstOrNull;
+
+  /// Ce que mes amis ont fait, le plus récent d'abord : leurs réactions et
+  /// leurs commentaires sur [maSeance] (ma dernière séance, s'il y en a
+  /// une), une demande acceptée, leurs records.
+  List<Activite> activites({String? maSeance, String? nomSeance, DateTime? finSeance}) {
+    // Rien ne peut arriver après maintenant.
+    DateTime apres(DateTime d, Duration ecart) {
+      final t = d.add(ecart);
+      return t.isAfter(_creation) ? _creation : t;
+    }
+
+    bool ami(String id) => estAmi(id);
+    return [
+      if (maSeance != null && finSeance != null) ...[
+        if (ami('lea') || ami('malo'))
+          Activite(
+            type: TypeActivite.reaction,
+            amis: [if (ami('lea')) 'lea', if (ami('malo')) 'malo'],
+            date: apres(finSeance, const Duration(minutes: 48)),
+            seanceId: maSeance,
+            reaction: Reaction.feu,
+            texte: nomSeance,
+          ),
+        if (ami('ines')) Activite(type: TypeActivite.commentaire, amis: const ['ines'], date: apres(finSeance, const Duration(minutes: 25)), seanceId: maSeance, texte: 'Solide. Tu progresses vite.'),
+      ],
+      if (ami('yann')) Activite(type: TypeActivite.accepte, amis: const ['yann'], date: _creation.subtract(const Duration(days: 3, hours: 4))),
+      for (final p in fil)
+        if (p.records > 0) Activite(type: TypeActivite.record, amis: [p.amiId], date: p.date, publicationId: p.id, texte: p.titre),
+    ]..sort((a, b) => b.date.compareTo(a.date));
   }
 
   void basculerBravo(String publicationId) => reagir(publicationId, aBravo(publicationId) ? null : Reaction.coeur);

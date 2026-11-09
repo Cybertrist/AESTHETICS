@@ -1,9 +1,12 @@
+import 'dart:math' as math;
+import 'dart:typed_data';
 import 'dart:io';
 
 import 'package:aesthetic/core/env.dart';
 import 'package:aesthetic/core/models/models.dart';
 import 'package:aesthetic/core/theme/theme.dart';
 import 'package:aesthetic/core/ui/ui.dart';
+import 'package:aesthetic/features/profil/photos/cadrage.dart';
 import 'package:aesthetic/features/profil/pages/reglages/a_propos_section.dart';
 import 'package:aesthetic/features/profil/pages/reglages/donnees_section.dart';
 import 'package:aesthetic/features/profil/pages/reglages_page.dart';
@@ -25,7 +28,7 @@ void main() {
     '/reglages/unites': 'Unités',
     '/reglages/entrainement': 'Paramètres de séance',
     '/reglages/entrainement/disques': 'Barres et disques',
-    '/reglages/notifications': 'Rappels',
+    '/reglages/notifications': 'Notifications',
     '/reglages/donnees': 'Mes données',
     '/reglages/donnees/sauvegardes': 'Copies du téléphone',
     '/reglages/donnees/effacer': 'Tout effacer',
@@ -140,7 +143,7 @@ void main() {
     expect(find.text('Repos par défaut'), findsOneWidget);
     await t.runAsync(() => photo(t, 'chasse-reglages'));
 
-    for (final ligne in ['Unités', 'Paramètres de séance', 'Rappels', 'Mes données', 'À propos']) {
+    for (final ligne in ['Unités', 'Paramètres de séance', 'Notifications', 'Mes données', 'À propos']) {
       await t.tap(find.text(ligne));
       await attendre(t);
       expect(t.widget<PageMaquette>(find.byType(PageMaquette).last).titre, ligne);
@@ -188,6 +191,160 @@ void main() {
   });
 
   group('photos : vignettes décodées à leur taille', () {
+    test("cadrage sur la personne : même taille de tronc d'une photo à l'autre, cadre toujours couvert", () {
+      const cadre = Size(180, 320);
+      // La même personne, loin puis près, décalée à gauche puis à droite.
+      const loin = Cadrage(Cadrage.entier, 0.75, Offset(0.4, 0.40), Offset(0.4, 0.55));
+      const pres = Cadrage(Cadrage.entier, 0.5625, Offset(0.55, 0.30), Offset(0.55, 0.52));
+      for (final c in [loin, pres]) {
+        final r = c.place(cadre);
+        // L'image couvre tout le cadre.
+        expect(r.left <= 0 && r.top <= 0 && r.right >= cadre.width && r.bottom >= cadre.height, isTrue, reason: '$r');
+        // Le tronc prend la même part de la hauteur, l'axe du corps est au milieu.
+        expect((c.hanches!.dy - c.epaules!.dy) * r.height, closeTo(cadre.height * Cadrage.partTronc, 0.01));
+        expect(r.left + c.epaules!.dx * r.width, closeTo(cadre.width / 2, 0.01));
+        expect(r.top + c.epaules!.dy * r.height, closeTo(cadre.height * Cadrage.ligneEpaules, 0.01));
+      }
+      // Un tronc couché ou minuscule n'est pas retenu.
+      expect(Cadrage.tronc({'leftShoulder': (0.4, 0.3, 0.9), 'rightShoulder': (0.6, 0.3, 0.9), 'leftHip': (0.8, 0.35, 0.9), 'rightHip': (0.9, 0.35, 0.9)}, 0.75), isNull);
+      expect(Cadrage.tronc({'leftShoulder': (0.4, 0.3, 0.9), 'rightShoulder': (0.6, 0.3, 0.9), 'leftHip': (0.45, 0.5, 0.9), 'rightHip': (0.55, 0.5, 0.2)}, 0.75), isNull);
+      expect(Cadrage.tronc({'leftShoulder': (0.4, 0.3, 0.9), 'rightShoulder': (0.6, 0.3, 0.9), 'leftHip': (0.45, 0.5, 0.9), 'rightHip': (0.55, 0.5, 0.9)}, 0.75), isNotNull);
+    });
+
+    test('cadrage d\'une paire : même échelle, même ligne d\'épaules, lumière rapprochée', () {
+      const cadre = Size(180, 320);
+      // « Avant » : la tête touche le haut de la photo, il faut agrandir pour couvrir.
+      const avant = Cadrage(Cadrage.entier, 0.5625, Offset(0.5, 0.12), Offset(0.5, 0.42), [200, 170, 150]);
+      const apres = Cadrage(Cadrage.entier, 0.5625, Offset(0.5, 0.35), Offset(0.5, 0.57), [140, 100, 70]);
+      final ra = avant.placeAvec(apres, cadre), rb = apres.placeAvec(avant, cadre);
+      for (final r in [ra, rb]) {
+        expect(r.left <= 0.001 && r.top <= 0.001 && r.right >= cadre.width - 0.001 && r.bottom >= cadre.height - 0.001, isTrue, reason: '$r');
+      }
+      // Les deux troncs font la même taille à l'écran, les épaules sont à la même hauteur.
+      expect(0.30 * ra.height, closeTo(0.22 * rb.height, 0.01));
+      expect(ra.top + 0.12 * ra.height, closeTo(rb.top + 0.35 * rb.height, 0.01));
+      // Chacune va vers l'autre : la claire s'assombrit, la sombre s'éclaircit, sans excès.
+      final ga = avant.gainsAvec(apres)!, gb = apres.gainsAvec(avant)!;
+      expect(ga.every((g) => g < 1 && g > 0.7), isTrue, reason: '$ga');
+      expect(gb.every((g) => g > 1 && g < 1.45), isTrue, reason: '$gb');
+      // Même lumière : aucun filtre.
+      expect(avant.gainsAvec(avant), isNull);
+      // Sans personne reconnue d'un côté : chacune se cadre seule.
+      expect(avant.placeAvec(const Cadrage(Cadrage.entier, 0.75), cadre), avant.place(cadre));
+    });
+
+    test('cadrage : 80 photos au hasard, grille et paires toujours pleines, mêmes troncs, mêmes épaules', () {
+      final alea = math.Random(3);
+      double entre(double a, double b) => a + alea.nextDouble() * (b - a);
+      Cadrage photo() {
+        // Format, bandes noires, taille et place de la personne : tout varie.
+        final ratio = [9 / 16, 3 / 4, 2 / 3, 1.0][alea.nextInt(4)];
+        final bande = alea.nextBool() ? entre(0, 0.2) : 0.0, bandeV = alea.nextInt(4) == 0 ? entre(0, 0.12) : 0.0;
+        final zone = Rect.fromLTRB(bande, bandeV, 1 - bande, 1 - bandeV);
+        final tronc = entre(0.12, 0.30), haut = entre(zone.top + 0.02, zone.bottom - tronc - 0.05), axe = entre(zone.left + 0.15, zone.right - 0.15);
+        return Cadrage(zone, ratio, Offset(axe + entre(-0.01, 0.01), haut), Offset(axe, haut + tronc));
+      }
+
+      bool plein(Cadrage c, Rect r, Size cadre) =>
+          r.left + c.zone.left * r.width <= 0.01 &&
+          r.top + c.zone.top * r.height <= 0.01 &&
+          r.left + c.zone.right * r.width >= cadre.width - 0.01 &&
+          r.top + c.zone.bottom * r.height >= cadre.height - 0.01;
+      double tronc(Cadrage c, Rect r) => (Offset(c.hanches!.dx * r.width, c.hanches!.dy * r.height) - Offset(c.epaules!.dx * r.width, c.epaules!.dy * r.height)).distance;
+      double ligne(Cadrage c, Rect r) => r.top + c.epaules!.dy * r.height;
+
+      for (var i = 0; i < 80; i++) {
+        final a = photo(), b = photo();
+        // Seule, dans la grille (3:4) et dans la comparaison (9:16).
+        for (final cadre in const [Size(120, 160), Size(180, 320), Size(192, 288)]) {
+          final r = a.place(cadre);
+          expect(r.width.isFinite && r.height.isFinite && r.left.isFinite && r.top.isFinite, isTrue, reason: 'photo $i : $r');
+          expect(plein(a, r, cadre), isTrue, reason: 'photo $i seule dans $cadre : $r');
+          final ra = a.placeAvec(b, cadre), rb = b.placeAvec(a, cadre);
+          expect(plein(a, ra, cadre) && plein(b, rb, cadre), isTrue, reason: 'paire $i dans $cadre : $ra $rb');
+          // Dans une paire : même longueur de tronc, mêmes épaules.
+          expect(tronc(a, ra), closeTo(tronc(b, rb), 0.01), reason: 'paire $i, échelle');
+          expect(ligne(a, ra), closeTo(ligne(b, rb), 0.01), reason: 'paire $i, épaules');
+        }
+      }
+    });
+
+    test('cadrage par la silhouette : tête coupée, le tronc est estimé des épaules au sol', () {
+      // 100 lignes : rien jusqu'à 10 %, un cou étroit, puis le buste de 14 % à 55 %, les jambes jusqu'à 80 %.
+      List<(double, double)?> silhouette({required int pieds}) => [
+            for (var y = 0; y < 100; y++)
+              y < 10 || y >= pieds
+                  ? null
+                  : y < 14
+                      ? (0.45, 0.55)
+                      : y < 55
+                          ? (0.30, 0.70)
+                          : (0.38, 0.62),
+          ];
+      final m = Cadrage.mesures(silhouette(pieds: 80))!;
+      expect(m.haut, closeTo(0.10, 0.001));
+      expect(m.epaules, closeTo(0.14, 0.001));
+      expect(m.bas, closeTo(0.80, 0.001));
+      expect(m.axe, closeTo(0.50, 0.001));
+      final t = Cadrage.troncDeSilhouette(silhouette(pieds: 80), Cadrage.entier)!;
+      expect(t.$1.dy, closeTo(0.14 + 0.66 * Cadrage.epaulesSousSilhouette, 0.001));
+      expect(t.$2.dy - t.$1.dy, closeTo(0.66 * Cadrage.troncSurHauteur, 0.001));
+      // Pieds coupés par le bas de la photo, ou pas de corps : pas d'estimation.
+      expect(Cadrage.troncDeSilhouette(silhouette(pieds: 100), Cadrage.entier), isNull);
+      expect(Cadrage.troncDeSilhouette([for (var y = 0; y < 100; y++) null], Cadrage.entier), isNull);
+      expect(Cadrage.troncDeSilhouette(const [], Cadrage.entier), isNull);
+    });
+
+    test('cadrage d\'une série : même tronc pour toutes, cadre toujours plein, une photo coupée ne gâche pas les autres', () {
+      const cadre = Size(360, 640);
+      final serie = [
+        const Cadrage(Cadrage.entier, 0.5625, Offset(0.5, 0.30), Offset(0.5, 0.52)),
+        const Cadrage(Cadrage.entier, 0.75, Offset(0.45, 0.35), Offset(0.46, 0.60)),
+        const Cadrage(Rect.fromLTRB(0.1, 0, 0.9, 1), 0.5625, Offset(0.52, 0.25), Offset(0.5, 0.45)),
+        // Tête coupée par la photo : les épaules sont tout en haut.
+        const Cadrage(Cadrage.entier, 0.5625, Offset(0.5, 0.04), Offset(0.5, 0.30)),
+      ];
+      final places = [for (final c in serie) c.placeParmi(serie, cadre)];
+      for (var i = 0; i < serie.length; i++) {
+        final c = serie[i], r = places[i];
+        expect(r.left + c.zone.left * r.width <= 0.01 && r.top + c.zone.top * r.height <= 0.01, isTrue, reason: 'photo $i : $r');
+        expect(r.left + c.zone.right * r.width >= cadre.width - 0.01 && r.top + c.zone.bottom * r.height >= cadre.height - 0.01, isTrue, reason: 'photo $i : $r');
+      }
+      double tronc(int i) => ((serie[i].hanches! - serie[i].epaules!).scale(places[i].width, places[i].height)).distance;
+      double ligne(int i) => places[i].top + serie[i].epaules!.dy * places[i].height;
+      for (var i = 1; i < serie.length; i++) {
+        expect(tronc(i), closeTo(tronc(0), 0.01), reason: 'tronc de la photo $i');
+      }
+      // Les trois photos entières partagent la même ligne d'épaules.
+      expect(ligne(1), closeTo(ligne(0), 0.01));
+      expect(ligne(2), closeTo(ligne(0), 0.01));
+      // Une photo sans personne reconnue se cadre seule.
+      const vide = Cadrage(Cadrage.entier, 0.75);
+      expect(vide.placeParmi([...serie, vide], cadre), vide.place(cadre));
+    });
+
+    test('cadrage : les bandes noires sont rognées, une photo sombre reste entière', () {
+      Uint8List image(int l, int h, bool Function(int x, int y) clair) {
+        final o = Uint8List(l * h * 4);
+        for (var y = 0; y < h; y++) {
+          for (var x = 0; x < l; x++) {
+            final v = clair(x, y) ? 180 : 6;
+            o.setRange((y * l + x) * 4, (y * l + x) * 4 + 4, [v, v, v, 255]);
+          }
+        }
+        return o;
+      }
+
+      // Une photo au milieu d'un cadre noir : 20 px de chaque côté, 10 en haut et en bas.
+      final z = Cadrage.utile(image(100, 100, (x, y) => x >= 20 && x < 80 && y >= 10 && y < 90), 100, 100);
+      expect(z, const Rect.fromLTRB(0.21, 0.11, 0.79, 0.89));
+      // Sans bande : rien n'est rogné.
+      expect(Cadrage.utile(image(100, 100, (x, y) => true), 100, 100), Cadrage.entier);
+      // Toute noire, ou presque : on ne rogne pas.
+      expect(Cadrage.utile(image(100, 100, (x, y) => false), 100, 100), Cadrage.entier);
+      expect(Cadrage.utile(image(100, 100, (x, y) => x > 45 && x < 55 && y > 45 && y < 55), 100, 100), Cadrage.entier);
+    });
+
     test('largeur de décodage', () {
       // Une vignette de 110 sur 147 à la densité 2,6 : environ 510 px,
       // loin des 3000 ou 4000 d'une photo de téléphone.
@@ -218,6 +375,8 @@ void main() {
         }
       });
       await monter(t, data, ProfilPaths.photos);
+      // Le temps de trouver le cadrage de chaque photo.
+      await attendre(t, 6);
       final images = t.widgetList<Image>(find.descendant(of: find.byType(VignettePhoto), matching: find.byType(Image))).toList();
       expect(images, isNotEmpty);
       for (final i in images) {

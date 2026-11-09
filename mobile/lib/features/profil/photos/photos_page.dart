@@ -15,14 +15,19 @@ import '../data/mensurations.dart';
 import '../routes.dart';
 import '../widgets/maquette.dart';
 import 'ajout_page.dart';
+import 'cadrage.dart';
+import 'evolution_page.dart';
 import 'import_photos.dart';
 
 /// Vignette d'une photo de progression : l'image (ou une silhouette grise
 /// si le fichier manque) et sa date en étiquette.
 class VignettePhoto extends StatelessWidget {
-  const VignettePhoto({super.key, required this.photo, this.ratio = 3 / 4, this.onTap, this.choisie = false});
+  const VignettePhoto({super.key, required this.photo, this.ratio = 3 / 4, this.onTap, this.choisie = false, this.paire});
 
   final ProgressPhoto? photo;
+
+  /// L'autre photo d'une comparaison : les deux sont alignées l'une sur l'autre.
+  final ProgressPhoto? paire;
   final double ratio;
   final VoidCallback? onTap;
 
@@ -56,24 +61,19 @@ class VignettePhoto extends StatelessWidget {
             decoration: BoxDecoration(
               color: c.surface2,
               borderRadius: BorderRadius.circular(e(12)),
-              border: choisie ? Border.all(color: c.text, width: e(1.5)) : null,
             ),
+            // Le cadre blanc d'une photo retenue se pose par-dessus l'image,
+            // net sur tout le tour.
+            foregroundDecoration: choisie
+                ? BoxDecoration(borderRadius: BorderRadius.circular(e(12)), border: Border.all(color: c.text, width: e(3)))
+                : null,
             clipBehavior: Clip.antiAlias,
             child: Stack(
               fit: StackFit.expand,
               children: [
                 if (existe)
-                  // Décodée à la taille de la vignette, pas en pleine
-                  // résolution : une grille de photos de 12 Mpx tient en
-                  // mémoire.
-                  LayoutBuilder(
-                    builder: (context, cadre) => Image.file(
-                      fichier,
-                      fit: BoxFit.cover,
-                      cacheWidth: largeurDecodage(cadre.biggest, MediaQuery.devicePixelRatioOf(context)),
-                      errorBuilder: (context, _, _) => const _Silhouette(),
-                    ),
-                  )
+                  // Bandes noires rognées : le corps remplit la vignette.
+                  PhotoCadree(fichier: fichier, paire: paire == null ? null : File(paire!.chemin), secours: const _Silhouette())
                 else
                   const _Silhouette(),
                 if (p != null)
@@ -242,9 +242,16 @@ class _PhotosPageState extends State<PhotosPage> {
           ? 'Aucune photo pour l\'instant'
           : '$n ${n >= 2 ? 'photos' : 'photo'} depuis ${Mensurations.moisDe(toutes.last.date)}',
       action: BoutonRond(trace: Trace.plus, label: 'Ajouter une photo', onTap: _ajouter),
-      bas: BoutonPrincipal(
-        label: 'Comparer deux photos',
-        onPressed: photos.length < 2 ? null : () => context.push(ProfilPaths.comparer(vue: _vue)),
+      bas: Row(
+        children: [
+          Expanded(
+            child: BoutonDuo(label: 'Voir l\'évolution', secondaire: true, onPressed: photos.length < 2 ? null : () => EvolutionPage.ouvrir(context, _vue)),
+          ),
+          SizedBox(width: e(8)),
+          Expanded(
+            child: BoutonDuo(label: 'Comparer deux photos', onPressed: photos.length < 2 ? null : () => context.push(ProfilPaths.comparer(vue: _vue))),
+          ),
+        ],
       ),
       enfants: [
         Bloc(
@@ -287,7 +294,6 @@ class PhotoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
     final sante = context.watch<HealthRepo>();
     final unite = context.watch<ProfileRepo>().unite;
     final p = sante.photos.where((x) => x.id == id).firstOrNull;
@@ -340,25 +346,35 @@ class PhotoPage extends StatelessWidget {
         Bloc(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(e(16)),
-            child: AspectRatio(
-              aspectRatio: 3 / 4,
-              child: fichier.existsSync()
-                  ? ColoredBox(
-                      color: c.surface2,
-                      child: InteractiveViewer(
-                        maxScale: 4,
-                        // Une photo de la galerie garde sa taille d'origine :
-                        // décodée au double de l'écran, assez pour zoomer.
-                        child: Image.file(
-                          fichier,
-                          fit: BoxFit.contain,
-                          cacheWidth: (MediaQuery.sizeOf(context).width * MediaQuery.devicePixelRatioOf(context) * 2).ceil().clamp(64, 2400),
-                          errorBuilder: (context, _, _) => const _Silhouette(),
+            // La photo reste petite : la date, l'angle et le poids se lisent
+            // sans faire défiler. Un appui l'ouvre en grand.
+            child: Center(
+              child: SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.4,
+                child: !fichier.existsSync()
+                    ? VignettePhoto(photo: null, ratio: 3 / 4)
+                    : AspectRatio(
+                        aspectRatio: 3 / 4,
+                        child: Semantics(
+                          button: true,
+                          image: true,
+                          label: 'Photo du ${Mensurations.jourLong(p.date)}, ouvrir en grand',
+                          excludeSemantics: true,
+                          child: GestureDetector(
+                            onTap: () => LecteurPhoto.ouvrir(context, fichier),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(e(16)),
+                              child: ColoredBox(
+                                color: context.colors.surface2,
+                                child: PhotoCadree(fichier: fichier, secours: const _Silhouette()),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    )
-                  : VignettePhoto(photo: null, ratio: 3 / 4),
+              ),
             ),
+
           ),
         ),
         Bloc(
@@ -398,6 +414,60 @@ class PhotoPage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Une photo en grand, entière et sans ses bandes noires, sur fond noir : on
+/// zoome en pinçant, on ferme d'un appui sur la croix.
+class LecteurPhoto extends StatelessWidget {
+  const LecteurPhoto({super.key, required this.fichier});
+  final File fichier;
+
+  static Future<void> ouvrir(BuildContext context, File fichier) => Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute<void>(fullscreenDialog: true, builder: (_) => LecteurPhoto(fichier: fichier)),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: InteractiveViewer(
+                maxScale: 5,
+                child: Center(
+                  child: FutureBuilder<Cadrage>(
+                    future: Cadrage.de(fichier),
+                    initialData: Cadrage.connu(fichier.path),
+                    builder: (context, cadrage) {
+                      final k = cadrage.data;
+                      if (cadrage.hasError) return Image.file(fichier, fit: BoxFit.contain, errorBuilder: (context, _, _) => const _Silhouette());
+                      if (k == null) return const SizedBox.shrink();
+                      // Le cadre a la forme de la photo sans ses bandes noires.
+                      return AspectRatio(
+                        aspectRatio: k.ratio * k.zone.width / k.zone.height,
+                        child: PhotoCadree(fichier: fichier, entiere: true, secours: const _Silhouette()),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              left: e(8),
+              top: e(4),
+              child: IconButton(
+                onPressed: () => Navigator.maybePop(context),
+                icon: const Icon(Icons.close_rounded, color: Colors.white),
+                tooltip: 'Fermer',
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -1,9 +1,11 @@
 // Défauts cherchés sur l'accueil (écran 01) : bords de mois et d'année,
 // changement d'heure, semaine réglable, cloche, cartes de séance, menu et
 // suppression, état vide, Fold ouvert.
+import 'package:go_router/go_router.dart';
 import 'package:aesthetic/core/data/data.dart';
 import 'package:aesthetic/core/logic/logic.dart';
 import 'package:aesthetic/core/models/models.dart';
+import 'package:aesthetic/features/aujourdhui/pages/notifications_page.dart';
 import 'package:aesthetic/features/aujourdhui/logic/accueil.dart';
 import 'package:aesthetic/features/aujourdhui/logic/resume_jour.dart';
 import 'package:aesthetic/features/aujourdhui/pages/aujourdhui_page.dart';
@@ -315,12 +317,12 @@ void main() {
       await t.tap(find.bySemanticsLabel('Notifications, du nouveau'));
       await _pomper(t);
       expect(t.takeException(), isNull);
-      expect(find.text('Ton résumé de septembre 2026 est prêt'), findsOneWidget);
-      expect(find.text('Un record battu'), findsOneWidget);
-      expect(find.text('Objectif de la semaine atteint'), findsOneWidget);
-      expect(find.text('1 / 1 séance'), findsOneWidget);
+      expect(find.textContaining('Ton résumé de septembre 2026 est prêt'), findsOneWidget);
+      expect(find.textContaining('Un record battu'), findsOneWidget);
+      expect(find.textContaining('Objectif de la semaine atteint'), findsOneWidget);
+      expect(find.textContaining('1 / 1 séance'), findsOneWidget);
       await t.runAsync(() => rendreCapture(t, 'defauts-cloche-panneau'));
-      await t.tapAt(const Offset(180, 40));
+      GoRouter.of(t.element(find.byType(NotificationsPage))).pop();
       await _pomper(t);
       expect(find.bySemanticsLabel('Notifications, du nouveau'), findsNothing);
       expect(find.bySemanticsLabel('Notifications'), findsOneWidget);

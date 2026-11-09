@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../core/data/data.dart';
 import '../../../core/logic/logic.dart';
 import '../../../core/models/models.dart';
+import '../../social/data/social_repo.dart';
 import 'resume_jour.dart';
 
 /// Mois dont le résumé s'affiche sur l'accueil : le mois précédent, du 1er
@@ -109,6 +110,15 @@ List<Nouveaute> nouveautes({
   return out;
 }
 
+/// Ce que mes amis ont fait, pour les notifications : leurs réactions et
+/// leurs commentaires portent sur ma dernière séance terminée.
+List<Activite> activitesAmis(SocialRepo? social, List<WorkoutSession> sessions) {
+  if (social == null) return const [];
+  final finies = sessions.where((s) => !s.enCours).toList()..sort((a, b) => (b.fin ?? b.debut).compareTo(a.fin ?? a.debut));
+  final s = finies.firstOrNull;
+  return social.activites(maSeance: s?.id, nomSeance: s == null ? null : nomSeance(s), finSeance: s?.fin ?? s?.debut);
+}
+
 /// Retient quand la cloche a été ouverte pour la dernière fois (petit fichier
 /// du module, `aujourdhui_cloche`).
 class ClocheRepo extends ChangeNotifier {
@@ -147,7 +157,10 @@ class ClocheRepo extends ChangeNotifier {
   bool aDuNouveau(List<Nouveaute> liste) =>
       _charge && liste.any((n) => _vuLe == null || n.date.isAfter(_vuLe!));
 
-  bool estNouvelle(Nouveaute n) => _vuLe == null || n.date.isAfter(_vuLe!);
+  bool estNouvelle(Nouveaute n) => dateNouvelle(n.date);
+
+  /// Vrai pour ce qui est arrivé depuis la dernière ouverture.
+  bool dateNouvelle(DateTime d) => _vuLe == null || d.isAfter(_vuLe!);
 
   Future<void> marquerVu(DateTime now) async {
     _vuLe = now;

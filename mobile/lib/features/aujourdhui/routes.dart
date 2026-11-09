@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/models/models.dart';
 import 'pages/aujourdhui_page.dart';
 import 'pages/nutrition_jour_page.dart';
+import 'pages/notifications_page.dart';
 import 'pages/pas_page.dart';
 import 'pages/poids_page.dart';
 import 'pages/records_page.dart';
@@ -25,6 +26,9 @@ abstract final class AujourdhuiPaths {
   static const poids = '$base/poids';
   static const semaine = '$base/semaine';
   static const records = '$base/records';
+
+  /// La cloche : demandes d'amis, nouvelles des amis, mes records et mes bilans.
+  static const notifications = '$base/notifications';
 
   /// La flamme : semaines d'affilée et calendrier de la série.
   static const serie = '$base/serie';
@@ -82,6 +86,7 @@ List<RouteBase> aujourdhuiRoutes() => [
           GoRoute(path: 'aujourdhui/poids', builder: (context, state) => const PoidsPage()),
           GoRoute(path: 'aujourdhui/semaine', builder: (context, state) => const SemainePage()),
           GoRoute(path: 'aujourdhui/records', builder: (context, state) => const RecordsPage()),
+          GoRoute(path: 'aujourdhui/notifications', builder: (context, state) => const NotificationsPage()),
           GoRoute(path: 'aujourdhui/serie', builder: (context, state) => const SeriePage()),
           GoRoute(
             path: 'aujourdhui/seance/:id',

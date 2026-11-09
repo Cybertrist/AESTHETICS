@@ -7,6 +7,7 @@ import 'package:aesthetic/core/data/data.dart';
 import 'package:aesthetic/core/demo/demo_data.dart';
 import 'package:aesthetic/core/models/models.dart';
 import 'package:aesthetic/core/theme/accent_controller.dart';
+import 'package:aesthetic/features/aujourdhui/pages/notifications_page.dart';
 import 'package:aesthetic/features/aujourdhui/pages/aujourdhui_page.dart';
 import 'package:aesthetic/features/aujourdhui/routes.dart';
 import 'package:flutter/material.dart';
@@ -137,7 +138,9 @@ class _AppState extends State<_App> {
     if (widget.maintenant == null)
       ...aujourdhuiRoutes()
     else
-      GoRoute(path: '/', builder: (_, _) => widget.page ?? AujourdhuiPage(maintenant: widget.maintenant)),
+      GoRoute(path: '/', builder: (_, _) => widget.page ?? AujourdhuiPage(maintenant: widget.maintenant), routes: [
+        GoRoute(path: 'aujourdhui/notifications', builder: (_, _) => NotificationsPage(maintenant: widget.maintenant)),
+      ]),
     for (final p in ['/seance', '/coach', '/entrainer', '/nutrition', '/progres', '/sante', '/profil'])
       GoRoute(path: p, builder: (_, _) => Scaffold(body: Center(child: Text(p)))),
   ]);

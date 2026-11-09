@@ -14,6 +14,7 @@ import '../../../core/ui/ui.dart';
 import '../data/mensurations.dart';
 import '../widgets/maquette.dart';
 import 'photos_page.dart';
+import 'transformation_page.dart';
 
 /// Comparer deux photos : avant et après côte à côte, le poids à chaque
 /// date et l'écart entre les deux.
@@ -114,11 +115,11 @@ class _ComparerPhotosPageState extends State<ComparerPhotosPage> {
     final zone = bilan.zone;
     final texteZone = zone == null ? null : '${zone.label} ${Mensurations.ecartTexte(Affichage.ecartLongueur(bilan.ecartZone), unite: Affichage.longueur)}';
 
-    Widget cote(ProgressPhoto p, double? poids, String label) => Expanded(
+    Widget cote(ProgressPhoto p, ProgressPhoto autre, double? poids, String label) => Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              VignettePhoto(photo: p, ratio: 9 / 16),
+              VignettePhoto(photo: p, paire: autre, ratio: 9 / 16),
               SizedBox(height: e(8)),
               Text(poids == null ? 'Poids inconnu' : Fmt.poids(poids, unite), style: txt(15, FontWeight.w700, poids == null ? c.text2 : c.text)),
               Text(label, style: txt(11, FontWeight.w400, c.text2)),
@@ -147,9 +148,9 @@ class _ComparerPhotosPageState extends State<ComparerPhotosPage> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      cote(a, bilan.poidsAvant, 'Avant'),
+                      cote(a, b, bilan.poidsAvant, 'Avant'),
                       SizedBox(width: e(8)),
-                      cote(b, bilan.poidsApres, 'Après'),
+                      cote(b, a, bilan.poidsApres, 'Après'),
                     ],
                   ),
                 ),
@@ -179,6 +180,28 @@ class _ComparerPhotosPageState extends State<ComparerPhotosPage> {
             ),
           ),
         ),
+        // L'animation ne raconte qu'une perte de poids : il faut les deux
+        // pesées, et au moins un burger d'écart.
+        if (kg != null && kg <= -BurgersPerdus.kgBurger)
+          Bloc(
+            child: BoutonDuo(
+              label: 'Voir l\'animation',
+              secondaire: true,
+              onPressed: () => Navigator.of(context, rootNavigator: true).push(
+                MaterialPageRoute<void>(
+                  fullscreenDialog: true,
+                  builder: (_) => TransformationPage(
+                    avant: a,
+                    apres: b,
+                    poidsAvant: bilan.poidsAvant!,
+                    poidsApres: bilan.poidsApres!,
+                    unite: unite,
+                    ecart: titreEcart,
+                  ),
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }

@@ -5,6 +5,8 @@ import 'package:aesthetic/core/models/models.dart';
 import 'package:aesthetic/core/theme/theme.dart';
 import 'package:aesthetic/core/ui/ui.dart';
 import 'package:aesthetic/features/profil/data/mensurations.dart';
+import 'package:aesthetic/features/profil/photos/cadrage.dart';
+import 'package:aesthetic/features/profil/photos/transformation_page.dart';
 import 'package:aesthetic/features/profil/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -455,6 +457,73 @@ void main() {
       router.go(ProfilPaths.comparer(vue: PhotoVue.face, avant: 'p0', apres: 'p2'));
       await attendre(t);
       expect(find.text('+0,7 kg en 4 jours'), findsOneWidget);
+    });
+
+    test('le poids perdu compté en burgers', () {
+      expect(BurgersPerdus.nombre(17.1), 68);
+      expect(BurgersPerdus.nombre(0.1), 1);
+    });
+
+    testWidgets('animation de transformation : proposée pour une perte de poids, jouée sans erreur', (t) async {
+      await polices(t);
+      ecran(t);
+      final data = await donnees(t);
+      await t.runAsync(() async {
+        await data.health.savePhoto(ProgressPhoto(id: 'p1', date: DateTime(2026, 6, 26, 9), chemin: image('p1').path, poidsKg: 129.9));
+        await data.health.savePhoto(ProgressPhoto(id: 'p2', date: DateTime(2026, 10, 9, 9), chemin: image('p2').path, poidsKg: 112.8));
+        await data.health.savePhoto(ProgressPhoto(id: 'p3', date: DateTime(2026, 10, 10, 9), chemin: image('p3').path, poidsKg: 113.5));
+      });
+      final router = await monter(t, data, ProfilPaths.comparer(vue: PhotoVue.face, avant: 'p1', apres: 'p2'));
+      await t.tap(find.text('Voir l\'animation'));
+      await attendre(t, 2);
+      expect(find.text('Transformation'), findsOneWidget);
+      await t.pump(const Duration(seconds: 2));
+      await t.runAsync(() => photo(t, 'transformation-burgers-debut'));
+      await t.pump(const Duration(seconds: 4));
+      expect(find.text('× 68'), findsOneWidget);
+      expect(find.text('68 burgers de moins à porter.\nSans les frites.'), findsOneWidget);
+      await t.runAsync(() => photo(t, 'transformation-burgers-fin'));
+
+      expect(find.text('Partager la vidéo'), findsOneWidget);
+      expect(t.takeException(), isNull);
+      await t.tap(find.byTooltip('Fermer'));
+      await attendre(t, 2);
+
+      // Une prise de poids : pas d'animation.
+      router.go(ProfilPaths.comparer(vue: PhotoVue.face, avant: 'p2', apres: 'p3'));
+      await attendre(t);
+      expect(find.text('Voir l\'animation'), findsNothing);
+    });
+
+    testWidgets('évolution : les photos d\'un angle s\'enchaînent, avec la date et le poids', (t) async {
+      await polices(t);
+      ecran(t);
+      final data = await donnees(t);
+      await t.runAsync(() async {
+        await data.health.savePhoto(ProgressPhoto(id: 'p1', date: DateTime(2026, 6, 26, 9), chemin: image('p1').path, poidsKg: 129.9));
+        await data.health.savePhoto(ProgressPhoto(id: 'p2', date: DateTime(2026, 8, 14, 9), chemin: image('p2').path, poidsKg: 120.4));
+        await data.health.savePhoto(ProgressPhoto(id: 'p3', date: DateTime(2026, 10, 9, 9), chemin: image('p3').path, poidsKg: 112.8));
+      });
+      await monter(t, data, ProfilPaths.photos);
+      // Un test précédent a pu laisser un calcul de cadrage en suspens.
+      Cadrage.oublierEnCours();
+      await t.tap(find.text('Voir l\'évolution'));
+      await attendre(t, 2);
+      // Le temps de trouver le cadrage des trois photos.
+      for (var i = 0; i < 40 && find.text('Préparation des photos…').evaluate().isNotEmpty; i++) {
+        await attendre(t, 2);
+      }
+      await attendre(t, 1);
+      expect(find.text('Évolution · face'), findsOneWidget);
+      expect(find.text('Partager la vidéo'), findsOneWidget);
+      // Une des trois dates est à l'écran, avec son poids.
+      expect(find.textContaining(RegExp('26 juin|14 août|9 octobre')), findsOneWidget);
+      expect(find.textContaining(RegExp(r'^(129,9|120,4|112,8) kg$'), findRichText: true), findsOneWidget);
+      await t.runAsync(() => photo(t, 'evolution'));
+      expect(t.takeException(), isNull);
+      await t.tap(find.byTooltip('Fermer'));
+      await attendre(t, 2);
+      expect(find.text('Comparer deux photos'), findsOneWidget);
     });
 
     testWidgets('grille de choix avec beaucoup de photos, en 360 de large', (t) async {

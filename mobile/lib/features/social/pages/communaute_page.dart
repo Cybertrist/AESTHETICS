@@ -270,7 +270,7 @@ class _ChampCode extends StatelessWidget {
 
 /// Une séance d'un ami dans le fil.
 class CartePublication extends StatelessWidget {
-  const CartePublication(this.p, {super.key, this.auteur, this.avecAuteur = true, this.charges, this.actif = true, this.maintenant});
+  const CartePublication(this.p, {super.key, this.auteur, this.avecAuteur = true, this.charges, this.actif = true, this.maintenant, this.onCommenter});
   final Publication p;
 
   /// Celui qui l'a publiée ; par défaut, la personne du dépôt.
@@ -286,6 +286,9 @@ class CartePublication extends StatelessWidget {
   final bool actif;
   final DateTime? maintenant;
 
+  /// Ce que fait « Commenter » ; par défaut, ouvrir la séance et ses commentaires.
+  final VoidCallback? onCommenter;
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
@@ -295,6 +298,7 @@ class CartePublication extends StatelessWidget {
     final kilos = charges ?? (ami?.montre.contains(Visible.charges) ?? false);
     final quand = Fmt.ilYa(p.date, now: maintenant);
     final unite = context.watch<ProfileRepo?>()?.unite ?? UnitePoids.kg;
+    final commentaires = repo.nbCommentaires(p.id);
     return CarteSociale(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -382,7 +386,7 @@ class CartePublication extends StatelessWidget {
               children: [
                 BoutonReaction(p, actif: actif),
                 const SizedBox(width: 10),
-                Pilule(label: p.commentaires == 0 ? 'Commenter' : 'Commentaires · ${p.commentaires}', icone: Icons.chat_bubble_outline_rounded, onTap: actif ? () => _bientot(context, 'Les commentaires') : () {}),
+                Pilule(label: commentaires == 0 ? 'Commenter' : 'Commentaires · $commentaires', icone: Icons.chat_bubble_outline_rounded, onTap: actif ? (onCommenter ?? () => context.push(SocialPaths.publication(p.id))) : () {}),
               ],
             ),
           ),
