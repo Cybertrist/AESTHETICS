@@ -86,7 +86,7 @@ void main() {
             for (var reps2 = 3; reps2 < reps; reps2++) {
               final b = _s('b', kg2, reps2);
               final ra = Strength.setOneRm(a), rb = Strength.setOneRm(b);
-              if (rb > ra && rb.round() == ra.round()) {
+              if (rb > ra && (rb * 10).round() == (ra * 10).round()) {
                 premiere = a;
                 seconde = b;
                 break recherche;
@@ -111,7 +111,8 @@ void main() {
           _seance('s$i', DateTime(2026, 3, 1 + 7 * i), [_s('s$i-1', kg, reps), _s('s$i-2', kg, reps - 1)]),
       ]);
       for (final t in TypeRecord.pour(suivi)) {
-        final textes = [for (final r in progressionRecord(stats, t)) r.valeurTexte(UnitePoids.kg)];
+        // Le poids maximal s'écrit avec sa série : 65 kg × 8 bat 65 kg × 7.
+        final textes = [for (final r in progressionRecord(stats, t)) '${r.valeurTexte(UnitePoids.kg)} ${r.detail(suivi, UnitePoids.kg)}'];
         expect(textes.toSet(), hasLength(textes.length), reason: '${t.label} : $textes');
       }
     });

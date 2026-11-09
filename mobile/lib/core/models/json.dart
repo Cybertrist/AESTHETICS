@@ -32,6 +32,17 @@ bool asBool(Object? v, [bool fallback = false]) {
 
 String? asString(Object? v) => v?.toString();
 
+/// Les « \u00E9 » laissés tels quels par l'export d'une autre appli
+/// redeviennent « é » : « S\u00E9ance du soir » → « Séance du soir ».
+final _echappe = RegExp(r'\\u([0-9A-Fa-f]{4})');
+String desechapper(String s) => s.contains(r'\u') ? s.replaceAllMapped(_echappe, (m) => String.fromCharCode(int.parse(m[1]!, radix: 16))) : s;
+
+/// Un texte écrit par l'utilisateur (nom, note), réparé de ses « \u00E9 ».
+String? asTexte(Object? v) {
+  final s = asString(v);
+  return s == null ? null : desechapper(s);
+}
+
 DateTime? asDate(Object? v) {
   if (v == null) return null;
   if (v is DateTime) return v;

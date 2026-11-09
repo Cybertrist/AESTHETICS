@@ -44,7 +44,8 @@ class RecordFiche {
   /// « 17 kg », « 15 », « 554 kg »... : c'est ce texte qui dit si deux records sont égaux.
   String valeurTexte(UnitePoids u) => switch (type) {
         // Arrondi dans l'unité affichée (en livres, arrondir les kg d'abord donne des décimales).
-        TypeRecord.unRm => '${Fmt.n(Fmt.poidsAffiche(valeur, u), decimals: 0)} ${u.label}',
+        // Une décimale : 28 kg × 11 (38,3) et 30 kg × 8 (37,6) ne s'écrivent pas pareil.
+        TypeRecord.unRm => '${Fmt.n(Fmt.poidsAffiche(valeur, u), decimals: 1)} ${u.label}',
         TypeRecord.poidsMax => ExFmt.kg(valeur, u),
         TypeRecord.repsMax => '${valeur.round()}',
         TypeRecord.volumeSeance || TypeRecord.volumeSerie => ExFmt.volumeColle(valeur, u),
@@ -56,9 +57,18 @@ class RecordFiche {
   /// records qui s'écrivent pareil (« 85 kg ») sont égaux, et un record égal
   /// n'est pas un nouveau record.
   double get valeurComparee => switch (type) {
-        TypeRecord.poidsMax => (valeur * 10).roundToDouble() / 10,
+        TypeRecord.poidsMax || TypeRecord.unRm => (valeur * 10).roundToDouble() / 10,
         TypeRecord.distanceMax => valeur,
         _ => valeur.roundToDouble(),
+      };
+
+  /// Ce qui départage deux records de même valeur : plus de répétitions à
+  /// la même charge (30 kg × 8 bat 30 kg × 5), ou plus lourd pour le même
+  /// nombre de répétitions.
+  double get departage => switch (type) {
+        TypeRecord.poidsMax => (serie?.reps ?? 0).toDouble(),
+        TypeRecord.repsMax => serie?.poids ?? 0,
+        _ => 0,
       };
 
   /// « 12 kg × 12 » ou « 4 séries ».
@@ -123,7 +133,14 @@ List<RecordFiche> progressionRecord(ExerciseStats stats, TypeRecord type) {
     final r = _dansSeance(p, type);
     // Battre un record, c'est faire mieux à l'affichage : 85,2 après 84,9
     // s'écrivent tous deux « 85 kg » et ne font pas un nouveau record.
-    if (r != null && (out.isEmpty || r.valeurComparee > out.last.valeurComparee)) out.add(r);
+    // À valeur égale, le départage compte : 30 kg × 8 après 30 kg × 5 est un record.
+    if (r == null) continue;
+    final dernier = out.lastOrNull;
+    if (dernier == null ||
+        r.valeurComparee > dernier.valeurComparee ||
+        (r.valeurComparee == dernier.valeurComparee && r.departage > dernier.departage)) {
+      out.add(r);
+    }
   }
   return out;
 }

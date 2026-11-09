@@ -209,7 +209,7 @@ class RoutineExercise {
         series: asList(j['series'], PlannedSet.fromJson),
         reposSec: asInt(j['reposSec']) ?? 90,
         supersetId: asString(j['supersetId']),
-        notes: asString(j['notes']),
+        notes: asTexte(j['notes']),
       );
 
   Json toJson() => compact({
@@ -269,9 +269,9 @@ class Routine {
 
   factory Routine.fromJson(Json j) => Routine(
         id: asString(j['id']) ?? '',
-        nom: asString(j['nom']) ?? 'Routine',
+        nom: asTexte(j['nom']) ?? 'Routine',
         folderId: asString(j['folderId']),
-        notes: asString(j['notes']),
+        notes: asTexte(j['notes']),
         exercices: asList(j['exercices'], RoutineExercise.fromJson),
         creeLe: asDate(j['creeLe']) ?? DateTime.now(),
         modifieLe: asDate(j['modifieLe']),
@@ -306,7 +306,7 @@ class Folder {
 
   factory Folder.fromJson(Json j) => Folder(
         id: asString(j['id']) ?? '',
-        nom: asString(j['nom']) ?? 'Dossier',
+        nom: asTexte(j['nom']) ?? 'Dossier',
         ordre: asInt(j['ordre']) ?? 0,
         replie: asBool(j['replie']),
       );
@@ -394,7 +394,7 @@ class Program {
 
   factory Program.fromJson(Json j) => Program(
         id: asString(j['id']) ?? '',
-        nom: asString(j['nom']) ?? 'Programme',
+        nom: asTexte(j['nom']) ?? 'Programme',
         description: asString(j['description']),
         dureeSemaines: asInt(j['dureeSemaines']) ?? 8,
         joursParSemaine: asInt(j['joursParSemaine']) ?? 3,
@@ -552,7 +552,7 @@ class SessionExercise {
         series: asList(j['series'], WorkoutSet.fromJson),
         reposSec: asInt(j['reposSec']) ?? 90,
         supersetId: asString(j['supersetId']),
-        notes: asString(j['notes']),
+        notes: asTexte(j['notes']),
       );
 
   Json toJson() => compact({
@@ -664,13 +664,13 @@ class WorkoutSession {
     }
     return WorkoutSession(
         id: asString(j['id']) ?? '',
-        nom: asString(j['nom']) ?? 'Séance',
+        nom: asTexte(j['nom']) ?? 'Séance',
         debut: debut ?? debutInconnu,
         fin: asDate(j['fin']),
         routineId: asString(j['routineId']),
         programId: asString(j['programId']),
         exercices: exercices,
-        notes: asString(j['notes']),
+        notes: asTexte(j['notes']),
         ressenti: asInt(j['ressenti']),
         photo: asString(j['photo']),
         source: asString(j['source']),

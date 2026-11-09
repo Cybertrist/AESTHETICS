@@ -225,6 +225,30 @@ void main() {
       expect(progressionRecord(st, TypeRecord.poidsMax).single.sessionId, 'a');
     });
 
+    test('même charge, plus de répétitions : le poids maximal passe à la nouvelle série', () {
+      // Développé couché haltères : 30 × 4, puis 30 × 5, puis 30 × 8.
+      final st = _stats([
+        _seance('a', j1, [_s('a1', 30, 4)]),
+        _seance('b', j2, [_s('b1', 30, 5), _s('b2', 22, 8)]),
+        _seance('c', j3, [_s('c1', 30, 8), _s('c2', 28, 6)]),
+      ]);
+      final poids = progressionRecord(st, TypeRecord.poidsMax);
+      expect(poids.map((r) => r.sessionId), ['a', 'b', 'c']);
+      expect(poids.last.serie!.reps, 8);
+      expect(Strength.bests('x', st.points.map((p) => p.session)).poidsMax!.reps, 8);
+    });
+
+    test("1RM estimé à une décimale : 28 × 11 et 30 × 8 ne s'écrivent pas pareil", () {
+      final st = _stats([
+        _seance('a', j1, [_s('a1', 28, 11)]),
+        _seance('b', j2, [_s('b1', 30, 8)]),
+      ]);
+      final unRm = progressionRecord(st, TypeRecord.unRm);
+      expect(unRm.single.sessionId, 'a');
+      expect(unRm.single.valeurTexte(UnitePoids.kg), '38,3 kg');
+      expect(Fmt.n(Strength.oneRepMax(30, 8), decimals: 1), '37,6');
+    });
+
     test('poids du corps sans lest : seules les répétitions donnent un record', () {
       final st = _stats([_seance('a', j1, [_s('a1', null, 12), _s('a2', 0, 9)])]);
       final r = recordsDe(st, ExerciseTracking.poidsDuCorpsLeste);
@@ -261,8 +285,8 @@ void main() {
       final st = _stats([_seance('a', j1, [_s('a1', 100, 5)])]);
       final r = recordsDe(st, ExerciseTracking.poidsReps).first;
       expect(r.type, TypeRecord.unRm);
-      expect(r.valeurTexte(UnitePoids.kg), '115 kg');
-      expect(r.valeurTexte(UnitePoids.lb), '253 lb');
+      expect(r.valeurTexte(UnitePoids.kg), '114,6 kg');
+      expect(r.valeurTexte(UnitePoids.lb), '252,6 lb');
     });
 
     test('historique : du plus ancien au plus récent quel que soit l\'ordre reçu', () {

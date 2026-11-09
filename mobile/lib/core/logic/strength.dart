@@ -92,7 +92,10 @@ abstract final class Strength {
           vol += p * r;
           PersonalRecord rec(RecordType t, double v) =>
               PersonalRecord(exerciseId: exerciseId, type: t, valeur: v, date: date, sessionId: s.id, poids: p, reps: r);
-          if (p > 0 && (poidsMax == null || p > poidsMax.valeur)) poidsMax = rec(RecordType.poidsMax, p);
+          // À charge égale, plus de répétitions l'emporte : 30 kg × 8 après 30 kg × 5.
+          if (p > 0 && (poidsMax == null || p > poidsMax.valeur || (p == poidsMax.valeur && r > (poidsMax.reps ?? 0)))) {
+            poidsMax = rec(RecordType.poidsMax, p);
+          }
           final orm = setOneRm(set);
           if (orm > 0 && (unRm == null || orm > unRm.valeur)) unRm = rec(RecordType.unRmEstime, orm);
           if (p * r > 0 && (volSerie == null || p * r > volSerie.valeur)) volSerie = rec(RecordType.volumeSerie, p * r);

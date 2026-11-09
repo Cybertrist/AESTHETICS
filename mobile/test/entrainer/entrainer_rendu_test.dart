@@ -495,7 +495,7 @@ void main() {
     for (final r in ['1RM estimé', 'Poids maximal', 'Max. rép', 'Volume de séance maximal', 'Volume maximal en une série']) {
       expect(find.text(r), findsOneWidget, reason: r);
     }
-    expect(find.text('17 kg'), findsOneWidget);
+    expect(find.text('16,8 kg'), findsOneWidget);
     expect(find.text('12 kg'), findsOneWidget);
     expect(find.text('554 kg'), findsOneWidget);
     expect(find.text('150 kg'), findsOneWidget);

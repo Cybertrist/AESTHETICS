@@ -128,7 +128,7 @@ void main() {
     test('les cinq records, leur date et leur série', () {
       final r = {for (final x in recordsDe(stats, suivi)) x.type: x};
       expect(r.keys, TypeRecord.pour(suivi));
-      expect(r[TypeRecord.unRm]!.valeurTexte(UnitePoids.kg), '17 kg');
+      expect(r[TypeRecord.unRm]!.valeurTexte(UnitePoids.kg), '16,8 kg');
       expect(r[TypeRecord.unRm]!.detail(suivi, UnitePoids.kg), '12 kg × 12');
       expect(r[TypeRecord.poidsMax]!.valeurTexte(UnitePoids.kg), '12 kg');
       expect(r[TypeRecord.poidsMax]!.sessionId, 's25');

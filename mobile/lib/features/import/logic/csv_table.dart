@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import '../../../core/models/json.dart' show desechapper;
+
 /// Une ligne de données, lue par nom de colonne normalisé.
 class CsvRow {
   CsvRow(this._table, this.valeurs, this.ligne);
@@ -86,7 +88,8 @@ class CsvTable {
     var t = texte;
     if (t.startsWith('﻿')) t = t.substring(1);
     final sep = separateur ?? detecterSeparateur(t);
-    final toutes = _decouper(t, sep);
+    // Certains exports écrivent « S\u00E9ance » : on rend les accents.
+    final toutes = [for (final l in _decouper(t, sep)) [for (final c in l) desechapper(c)]];
     var debut = 0;
     while (debut < toutes.length && toutes[debut].every((c) => c.trim().isEmpty)) {
       debut++;
