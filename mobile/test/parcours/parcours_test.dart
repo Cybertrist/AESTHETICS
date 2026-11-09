@@ -377,9 +377,14 @@ Future<void> _jouer(WidgetTester t, Size taille, {double texte = 1}) async {
   // 4. Entraîner : programme, routine, séance complète.
   p.etape('entraîner, programmes');
   await p.onglet('Entraînement');
-  // La démo fait la même routine ce jour de la semaine : elle est proposée.
+  // La démo fait la même routine ce jour de la semaine : elle est proposée,
+  // sauf le soir, quand la séance du jour de la démo est déjà passée.
   await p.toucher(find.descendant(of: find.byType(SelecteurSegmente<VoletEntrainer>), matching: find.text('Routines')), 'volet Routines');
-  p.present(find.text('Commencer'), 'suggestion de la routine du jour');
+  if (suggererRoutine(maintenant: DateTime.now(), seances: data.sessions.sessions) != null) {
+    p.present(find.text('Commencer'), 'suggestion de la routine du jour');
+  } else {
+    p.attendu(find.text('Commencer').evaluate().isEmpty, 'pas de suggestion : la routine du jour est faite');
+  }
   await p.ecran('routines');
   await p.toucher(find.descendant(of: find.byType(SelecteurSegmente<VoletEntrainer>), matching: find.text('Programmes')), 'volet Programmes');
   await p.ecran('programmes');

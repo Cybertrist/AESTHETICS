@@ -272,6 +272,30 @@ Future<void> ouvrirLienAmi(BuildContext context, String pseudo, {bool remplacer 
   }
 }
 
+/// Un lien d'ami ouvert depuis une autre appli : la demande part, et la page
+/// laisse place au profil de la personne.
+class AjoutParLienPage extends StatefulWidget {
+  const AjoutParLienPage({super.key, required this.pseudo});
+
+  final String pseudo;
+
+  @override
+  State<AjoutParLienPage> createState() => _AjoutParLienPageState();
+}
+
+class _AjoutParLienPageState extends State<AjoutParLienPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) ouvrirLienAmi(context, widget.pseudo, remplacer: true);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => const Scaffold(body: Center(child: CircularProgressIndicator()));
+}
+
 /// Scanner le code QR d'un ami, en plein écran.
 class ScannerAmiPage extends StatefulWidget {
   const ScannerAmiPage({super.key});

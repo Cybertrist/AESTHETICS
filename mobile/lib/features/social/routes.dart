@@ -26,6 +26,11 @@ abstract final class SocialPaths {
   static const espaceCoach = '$racine/espace-coach';
   static String ami(String id) => '$racine/ami/$id';
 
+  /// Un lien d'ami ouvert hors de l'appli (`https://…/ami/<pseudo>`) : il
+  /// arrive sur [lienRecu], qui mène à [ajoutParLien].
+  static const lienRecu = '/ami/:pseudo';
+  static String ajoutParLien(String pseudo) => '$racine/ajout/${Uri.encodeComponent(pseudo)}';
+
   /// La séance d'un ami et ses commentaires.
   static String publication(String id) => '$racine/seance/$id';
   static String eleve(String id) => '$espaceCoach/$id';
@@ -33,6 +38,7 @@ abstract final class SocialPaths {
 
 /// Les pages de la communauté, en plein écran par-dessus les onglets.
 List<RouteBase> socialRoutes() => [
+      GoRoute(path: SocialPaths.lienRecu, redirect: (context, state) => SocialPaths.ajoutParLien(state.pathParameters['pseudo']!)),
       GoRoute(
         path: SocialPaths.racine,
         builder: (context, state) => const CommunautePage(),
@@ -51,6 +57,7 @@ List<RouteBase> socialRoutes() => [
           GoRoute(path: 'profil-public', builder: (context, state) => const ConfidentialitePage()),
           GoRoute(path: 'seance/:id', builder: (context, state) => PublicationPage(id: state.pathParameters['id']!)),
           GoRoute(path: 'ami/:id', builder: (context, state) => AmiPage(id: state.pathParameters['id']!)),
+          GoRoute(path: 'ajout/:pseudo', builder: (context, state) => AjoutParLienPage(pseudo: state.pathParameters['pseudo']!)),
           GoRoute(
             path: 'espace-coach',
             builder: (context, state) => const EspaceCoachPage(),

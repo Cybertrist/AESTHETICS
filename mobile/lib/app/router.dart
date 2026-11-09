@@ -53,6 +53,12 @@ GoRouter createRouter(AppData data) => GoRouter(
         // Communauté coupée dans les Réglages : ses pages ne s'ouvrent plus,
         // même par un lien.
         if (!data.settings.settings.communaute && state.matchedLocation.startsWith(SocialPaths.racine)) {
+          if (state.matchedLocation.startsWith('${SocialPaths.racine}/ajout/')) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              final c = appNavigatorKey.currentContext;
+              if (c != null) Toasts.show(c, 'Active la Communauté dans les Réglages pour ajouter tes amis.');
+            });
+          }
           return Paths.aujourdhui;
         }
         return null;

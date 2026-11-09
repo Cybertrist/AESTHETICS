@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "fr.cybertrist.aesthetic",
+    "sha256_cert_fingerprints": ["BF:DC:A1:43:1C:62:88:A5:CB:79:02:A2:75:74:AF:F2:3B:15:21:39:21:58:DD:FB:33:F3:F6:1A:F2:1E:C3:10"]
+  }
+}]

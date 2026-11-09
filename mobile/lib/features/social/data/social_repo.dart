@@ -186,15 +186,23 @@ class SocialRepo extends ChangeNotifier {
     return id;
   }
 
-  /// Le lien d'ami que portent le code QR et le partage.
-  static String lienAmi(String pseudo) => 'aesthetics://ami?pseudo=${Uri.encodeQueryComponent(pseudo.trim().toLowerCase())}';
+  /// Le site qui porte les liens d'ami : Android l'ouvre dans l'appli
+  /// (serveur/public/.well-known/assetlinks.json), sinon une page explique.
+  static const siteLiens = 'aesthetics-cybertrist.web.app';
 
-  /// Le pseudo porté par un lien d'ami, ou null si ce n'en est pas un.
+  /// Le lien d'ami que portent le code QR et le partage.
+  static String lienAmi(String pseudo) => 'https://$siteLiens/ami/${Uri.encodeComponent(pseudo.trim().toLowerCase())}';
+
+  /// Le pseudo porté par un lien d'ami, ou null si ce n'en est pas un. Les
+  /// anciens codes (`aesthetics://ami?pseudo=…`) restent lus.
   static String? pseudoDuLien(String? lien) {
-    final u = Uri.tryParse(lien ?? '');
-    if (u == null || u.scheme != 'aesthetics' || u.host != 'ami') return null;
-    final p = (u.queryParameters['pseudo'] ?? '').trim();
-    return p.isEmpty ? null : p;
+    final u = Uri.tryParse(lien?.trim() ?? '');
+    if (u == null) return null;
+    String? p;
+    if (u.scheme == 'aesthetics' && u.host == 'ami') p = u.queryParameters['pseudo'];
+    if (u.scheme == 'https' && u.host == siteLiens && u.pathSegments.length >= 2 && u.pathSegments.first == 'ami') p = u.pathSegments[1];
+    p = p?.trim();
+    return p == null || p.isEmpty ? null : p;
   }
 
   // ---- le coach : un aperçu en mémoire, hors du serveur pour l'instant.

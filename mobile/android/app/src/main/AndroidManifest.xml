@@ -51,6 +51,14 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <!-- Liens d'ami (https://aesthetics-cybertrist.web.app/ami/<pseudo>) : ouverts dans
+                 l'appli, vérifiés par serveur/public/.well-known/assetlinks.json. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="aesthetics-cybertrist.web.app" android:pathPrefix="/ami/" />
+            </intent-filter>
             <!-- Explication des autorisations santé (Android 13 et moins). -->
             <intent-filter>
                 <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />

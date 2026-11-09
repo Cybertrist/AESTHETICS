@@ -88,6 +88,14 @@ void main() {
     final data = await donnees(demo: true);
     await data.profile.update((p) => p.copyWith(prenom: prenom, pseudo: _pseudo(prenom), montre: montre ?? tout, acces: acces));
     await data.settings.update((s) => s.copyWith(communaute: true));
+    // La séance du jour de la démo, finie le soir, partirait à la connexion :
+    // reculée de deux jours, seules les séances finies par le test partent.
+    final n = DateTime.now();
+    for (final s in [...data.sessions.sessions]) {
+      if (!s.enCours && n.difference(s.fin ?? s.debut) < const Duration(hours: 30)) {
+        await data.sessions.save(s.copyWith(debut: s.debut.subtract(const Duration(days: 2)), fin: s.fin?.subtract(const Duration(days: 2))));
+      }
+    }
     final source = SourceFirestore(base);
     final repo = SocialRepo(source: source);
     final synchro = SynchroSociale(data, source, delai: const Duration(hours: 1));
